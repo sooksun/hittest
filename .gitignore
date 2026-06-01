@@ -1,0 +1,5 @@
+/vendor/
+/uploads/*
+!/uploads/.gitkeep
+/database/*.sql
+/config/botnoi.php

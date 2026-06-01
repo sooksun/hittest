@@ -1,0 +1,513 @@
+/* =====================================================================
+   HIT-TEST · Playful Theme — Design System กลาง
+   ระบบประเมินการอ่านภาษาไทย (ป.1–ป.6) สำหรับโรงเรียนพื้นที่พิเศษ
+   ฟอนต์: Sarabun · ธีม: สดใส เป็นมิตรกับเด็ก · เน้น "คำ" อ่านง่ายคมชัด
+   โหลดฟอนต์ใน header.php:
+   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+   ===================================================================== */
+
+/* ---------- 1. Tokens (ตัวแปรกลาง) ---------- */
+:root {
+  /* สีหลัก (multi-color playful) */
+  --c-blue:    #4D96FF;   /* Primary  — ฟ้าสดใส */
+  --c-green:   #6BCB77;   /* Secondary— เขียวสด */
+  --c-coral:   #FF6B6B;   /* Accent   — ส้ม/ปะการัง */
+  --c-yellow:  #FFD93D;   /* เหลืองสดใส */
+  --c-purple:  #9B72CF;   /* ม่วงพาสเทล */
+
+  /* เฉดอ่อน (พื้นการ์ด/แถบสี) */
+  --c-blue-soft:   #E8F1FF;
+  --c-green-soft:  #E6F7EA;
+  --c-coral-soft:  #FFEAEA;
+  --c-yellow-soft: #FFF6D6;
+  --c-purple-soft: #F1EAFA;
+
+  /* เฉดเข้ม (ข้อความบนพื้นอ่อน / hover) */
+  --c-blue-ink:   #2563C9;
+  --c-green-ink:  #2E8B40;
+  --c-coral-ink:  #D63E3E;
+  --c-yellow-ink: #B8860B;
+  --c-purple-ink: #6D4AA0;
+
+  /* พื้นหลัง / ข้อความ */
+  --bg-cream:   #FFF9F0;   /* พื้นหลังหลัก ขาวอมครีม */
+  --bg-sky:     #F2F8FF;   /* พื้นหลังทางเลือก ฟ้าอ่อนมาก */
+  --surface:    #FFFFFF;   /* พื้นการ์ด */
+  --ink:        #2D3142;   /* ข้อความหลัก เทาเข้ม */
+  --ink-soft:   #6B7088;   /* ข้อความรอง */
+  --ink-faint:  #A6AABC;   /* ข้อความจาง / placeholder */
+  --line:       #ECE7DD;   /* เส้นขอบ/เส้นคั่นบนครีม */
+  --line-cool:  #E2EAF4;   /* เส้นขอบบนฟ้าอ่อน */
+
+  /* มุมโค้ง */
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+  --r-xl:  28px;
+  --r-pill: 999px;
+
+  /* เงานุ่ม */
+  --sh-sm: 0 2px 8px rgba(45,49,66,.06);
+  --sh-md: 0 8px 24px rgba(45,49,66,.10);
+  --sh-lg: 0 16px 40px rgba(45,49,66,.14);
+  --sh-pop: 0 10px 22px rgba(77,150,255,.28);   /* เงาสีปุ่ม primary */
+
+  /* ระยะห่าง (spacing scale) */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+
+  /* ฟอนต์ */
+  --font: 'Sarabun', system-ui, sans-serif;
+
+  /* transition */
+  --ease: cubic-bezier(.34,1.56,.64,1);   /* เด้งเบา ๆ */
+}
+
+/* ---------- 2. Base ---------- */
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--bg-sky);
+  /* ลวดลายฟองสบู่จาง ๆ ให้พื้นหลังสดใสไม่จืด */
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(77,150,255,.06) 0, transparent 26%),
+    radial-gradient(circle at 88% 12%, rgba(255,217,61,.10) 0, transparent 24%),
+    radial-gradient(circle at 78% 88%, rgba(107,203,119,.07) 0, transparent 26%),
+    radial-gradient(circle at 20% 92%, rgba(155,114,207,.06) 0, transparent 24%);
+  background-attachment: fixed;
+}
+
+body.bg-cream { background-color: var(--bg-cream); }
+
+h1,h2,h3,h4,h5 { font-weight: 800; color: var(--ink); margin: 0 0 .4em; line-height: 1.25; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.25rem; font-weight: 700; }
+p  { margin: 0 0 1em; }
+a  { color: var(--c-blue-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+::selection { background: var(--c-yellow); color: var(--ink); }
+
+/* ---------- 3. Layout helpers ---------- */
+.ht-container { max-width: 1180px; margin: 0 auto; padding: var(--s-6) var(--s-5); }
+.ht-stack   { display: flex; flex-direction: column; gap: var(--s-4); }
+.ht-row     { display: flex; gap: var(--s-4); align-items: center; flex-wrap: wrap; }
+.ht-grid    { display: grid; gap: var(--s-5); }
+.ht-grid-2  { grid-template-columns: repeat(2, 1fr); }
+.ht-grid-3  { grid-template-columns: repeat(3, 1fr); }
+.ht-grid-4  { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px){ .ht-grid-3,.ht-grid-4{ grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 560px){ .ht-grid-2,.ht-grid-3,.ht-grid-4{ grid-template-columns: 1fr;} }
+
+/* ---------- 4. Card ---------- */
+.ht-card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+  padding: var(--s-6);
+  border: 1px solid rgba(255,255,255,.6);
+}
+.ht-card--soft { box-shadow: var(--sh-sm); }
+.ht-card__title { font-size: 1.2rem; font-weight: 700; margin-bottom: var(--s-4); }
+
+/* การ์ดมีแถบสีหัว (ใช้กับการ์ดสถิติ/รอบ Hit) */
+.ht-card--top { padding-top: 0; overflow: hidden; }
+.ht-card--top > .ht-card__band {
+  margin: 0 calc(-1 * var(--s-6)) var(--s-5);
+  height: 8px;
+}
+
+/* ---------- 5. Stat card (การ์ดสถิติแยกสี) ---------- */
+.ht-stat {
+  position: relative;
+  border-radius: var(--r-lg);
+  padding: var(--s-5) var(--s-5) var(--s-5) calc(var(--s-5) + 64px);
+  box-shadow: var(--sh-md);
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,.02);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.ht-stat:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+.ht-stat__icon {
+  position: absolute; left: var(--s-5); top: var(--s-5);
+  width: 52px; height: 52px; border-radius: 16px;
+  display: grid; place-items: center; font-size: 26px;
+}
+.ht-stat__value { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+.ht-stat__label { color: var(--ink-soft); font-weight: 600; margin-top: 4px; }
+
+/* ตัวแปรสีของ stat / การ์ด — ใส่ class คู่กับ ht-stat หรือ ht-card */
+.t-blue   { --t: var(--c-blue);   --t-ink: var(--c-blue-ink);   --t-soft: var(--c-blue-soft); }
+.t-green  { --t: var(--c-green);  --t-ink: var(--c-green-ink);  --t-soft: var(--c-green-soft); }
+.t-coral  { --t: var(--c-coral);  --t-ink: var(--c-coral-ink);  --t-soft: var(--c-coral-soft); }
+.t-yellow { --t: var(--c-yellow); --t-ink: var(--c-yellow-ink); --t-soft: var(--c-yellow-soft); }
+.t-purple { --t: var(--c-purple); --t-ink: var(--c-purple-ink); --t-soft: var(--c-purple-soft); }
+
+.ht-stat.t-blue,.ht-stat.t-green,.ht-stat.t-coral,.ht-stat.t-yellow,.ht-stat.t-purple {
+  border-top: 5px solid var(--t);
+}
+.ht-stat__icon { background: var(--t-soft); color: var(--t-ink); }
+.ht-stat__value { color: var(--t-ink); }
+.ht-card__band { background: var(--t); }
+
+/* ---------- 6. Buttons (ปุ่มอวบ กดง่าย) ---------- */
+.ht-btn {
+  --btn: var(--c-blue); --btn-ink: #fff;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  font-family: var(--font); font-size: 1rem; font-weight: 700;
+  padding: 12px 24px; min-height: 48px;
+  border: none; border-radius: var(--r-pill);
+  background: var(--btn); color: var(--btn-ink);
+  box-shadow: 0 6px 0 rgba(0,0,0,.12), 0 8px 18px rgba(45,49,66,.16);
+  cursor: pointer; user-select: none;
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), filter .15s ease;
+}
+.ht-btn:hover   { filter: brightness(1.04); transform: translateY(-2px); }
+.ht-btn:active  { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.12), 0 3px 8px rgba(45,49,66,.16); }
+.ht-btn:focus-visible { outline: 3px solid var(--c-yellow); outline-offset: 3px; }
+
+.ht-btn--green  { --btn: var(--c-green); }
+.ht-btn--coral  { --btn: var(--c-coral); }
+.ht-btn--purple { --btn: var(--c-purple); }
+.ht-btn--yellow { --btn: var(--c-yellow); --btn-ink: var(--ink); }
+.ht-btn--ghost  {
+  background: var(--surface); color: var(--c-blue-ink);
+  box-shadow: inset 0 0 0 2px var(--c-blue-soft), var(--sh-sm);
+}
+.ht-btn--ghost:hover { background: var(--c-blue-soft); }
+.ht-btn--lg { font-size: 1.25rem; padding: 18px 36px; min-height: 64px; }
+.ht-btn--block { display: flex; width: 100%; }
+.ht-btn--icon { padding: 0; width: 48px; height: 48px; border-radius: 50%; }
+
+/* ปุ่มตัดสินใหญ่ในหน้าสอบ (ถูก/ผิด) */
+.ht-judge {
+  display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 12px;
+  font-family: var(--font); font-weight: 800; font-size: 1.6rem;
+  padding: var(--s-6) var(--s-7); min-width: 240px;
+  border: none; border-radius: var(--r-xl); color: #fff; cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0,0,0,.14), 0 14px 30px rgba(45,49,66,.2);
+  transition: transform .12s var(--ease), filter .15s ease;
+}
+.ht-judge .ht-judge__emoji { font-size: 1.7rem; line-height: 1; }
+.ht-judge:hover  { filter: brightness(1.05); transform: translateY(-3px); }
+.ht-judge:active { transform: translateY(5px); box-shadow: 0 3px 0 rgba(0,0,0,.14), 0 5px 12px rgba(45,49,66,.2); }
+.ht-judge--correct { background: var(--c-green); }
+.ht-judge--wrong   { background: var(--c-coral); }
+
+/* ---------- 7. Badge / pill สถานะ ---------- */
+.ht-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .92rem; font-weight: 700; line-height: 1;
+  padding: 7px 14px; border-radius: var(--r-pill);
+  background: var(--t-soft, var(--c-blue-soft)); color: var(--t-ink, var(--c-blue-ink));
+}
+.ht-badge--dot::before { content:""; width:8px; height:8px; border-radius:50%; background: var(--t, var(--c-blue)); }
+.ht-badge--done    { background: var(--c-green-soft); color: var(--c-green-ink); }
+.ht-badge--pending { background: var(--c-yellow-soft); color: var(--c-yellow-ink); }
+.ht-badge--missing { background: #F0F1F4; color: var(--ink-soft); }
+.ht-badge--special { background: var(--c-purple-soft); color: var(--c-purple-ink); }
+
+/* ---------- 8. Forms ---------- */
+.ht-field { display: flex; flex-direction: column; gap: 6px; }
+.ht-label { font-weight: 700; font-size: .95rem; color: var(--ink); }
+.ht-input, .ht-select {
+  font-family: var(--font); font-size: 1.05rem; color: var(--ink);
+  background: var(--surface);
+  padding: 14px 16px; border: 2px solid var(--line); border-radius: var(--r-md);
+  transition: border-color .15s ease, box-shadow .15s ease;
+  width: 100%;
+}
+.ht-input::placeholder { color: var(--ink-faint); }
+.ht-input:focus, .ht-select:focus {
+  outline: none; border-color: var(--c-blue);
+  box-shadow: 0 0 0 4px var(--c-blue-soft);
+}
+.ht-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236B7088' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px;
+}
+
+/* ---------- 9. Table ---------- */
+.ht-table-wrap { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--sh-md); overflow: hidden; }
+.ht-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+.ht-table thead th {
+  text-align: left; font-weight: 700; color: var(--ink-soft);
+  background: var(--bg-sky); padding: 16px 18px;
+  border-bottom: 2px solid var(--line-cool); white-space: nowrap;
+}
+.ht-table tbody td { padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.ht-table tbody tr:last-child td { border-bottom: none; }
+.ht-table tbody tr { transition: background .15s ease; }
+.ht-table tbody tr:hover { background: var(--c-yellow-soft); }
+.ht-table .num { font-variant-numeric: tabular-nums; }
+
+/* ---------- 10. Progress bar (ร้อยละ) ---------- */
+.ht-progress { background: #EFEFF4; border-radius: var(--r-pill); height: 14px; overflow: hidden; }
+.ht-progress > span {
+  display: block; height: 100%; border-radius: var(--r-pill);
+  background: var(--t, var(--c-blue)); transition: width .6s var(--ease);
+}
+.ht-progress--lg { height: 22px; }
+
+/* ---------- 11. Navbar (header.php) ---------- */
+.ht-nav {
+  background: var(--surface); box-shadow: var(--sh-sm);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 50;
+}
+.ht-nav__inner { max-width: 1180px; margin: 0 auto; padding: 10px var(--s-5); display: flex; align-items: center; gap: var(--s-4); }
+.ht-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+.ht-brand__logo {
+  width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--c-blue), var(--c-purple)); color: #fff; font-size: 22px;
+  box-shadow: var(--sh-pop);
+}
+.ht-nav__links { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.ht-nav__link {
+  padding: 9px 16px; border-radius: var(--r-pill); font-weight: 700; color: var(--ink-soft);
+  transition: background .15s ease, color .15s ease;
+}
+.ht-nav__link:hover, .ht-nav__link.active { background: var(--c-blue-soft); color: var(--c-blue-ink); text-decoration: none; }
+
+/* ---------- 12. หน้าสอบ — การ์ดคำ (เน้นอ่านง่าย คมชัด) ---------- */
+.ht-wordcard {
+  background: var(--surface); border-radius: var(--r-xl);
+  box-shadow: var(--sh-lg); padding: clamp(20px, 3vw, 40px);
+  text-align: center; position: relative; overflow: hidden;
+  border: 4px solid #fff;
+}
+/* ลูกเล่นสดใส "รอบ ๆ" การ์ด ไม่แตะตัวคำ */
+.ht-wordcard::before, .ht-wordcard::after {
+  content: ""; position: absolute; border-radius: 50%; opacity: .5;
+}
+.ht-wordcard::before { width: 160px; height: 160px; background: var(--c-yellow-soft); top: -50px; left: -50px; }
+.ht-wordcard::after  { width: 200px; height: 200px; background: var(--c-blue-soft);  bottom: -70px; right: -60px; }
+.ht-word {
+  position: relative; z-index: 1;
+  font-size: clamp(26px, 5vw, 66px); font-weight: 800; line-height: 1.1;
+  color: var(--ink); letter-spacing: .5px;
+}
+
+/* ---------- 13. Utilities ---------- */
+.text-muted { color: var(--ink-soft); }
+.text-center { text-align: center; }
+.fw-7 { font-weight: 700; } .fw-8 { font-weight: 800; }
+.mt-0{margin-top:0}.mb-0{margin-bottom:0}
+.gap-2{gap:var(--s-2)}.gap-4{gap:var(--s-4)}.gap-6{gap:var(--s-6)}
+
+/* การ์ดเด้งเบาตอน hover (ใช้ทั่วไป) */
+.ht-hover-pop { transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+.ht-hover-pop:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+
+/* ---------- 14. Project additions (ปุ่มเล็ก / ยกเลิกการสอบ / เซลล์ตาราง) ---------- */
+.ht-btn--sm {
+  font-size: .95rem; padding: 8px 16px; min-height: 40px;
+  box-shadow: 0 4px 0 rgba(0,0,0,.10), 0 5px 12px rgba(45,49,66,.12);
+}
+.ht-cancel {
+  width: 34px; height: 34px; border: none; border-radius: 50%; cursor: pointer;
+  background: var(--c-coral-soft); color: var(--c-coral-ink);
+  font-weight: 800; font-size: 1rem; line-height: 1;
+  display: inline-grid; place-items: center;
+  transition: transform .12s var(--ease), filter .15s ease, background .15s ease;
+}
+.ht-cancel:hover { transform: scale(1.08); background: var(--c-coral); color: #fff; }
+a.ht-badge { text-decoration: none; }
+a.ht-badge:hover { filter: brightness(.97); }
+.ht-pct { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 56px; }
+
+/* ---------- 15. Exam pages (teacher_page / student_page) ---------- */
+.ht-exam {
+  min-height: 100vh; display: flex; flex-direction: column;
+  background: linear-gradient(160deg, #EAF2FF 0%, #F2F8FF 50%, #FBF1FF 100%);
+}
+.exam-top {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 14px 24px; background: var(--surface); box-shadow: var(--sh-sm);
+  position: sticky; top: 0; z-index: 10;
+}
+.exam-top__brand { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+.exam-top__info { color: var(--ink-soft); font-weight: 600; flex: 1; min-width: 200px; }
+.exam-score { font-weight: 800; color: var(--c-coral-ink); font-size: 1.2rem; }
+.exam-timer {
+  font-weight: 800; font-size: 1.5rem; color: #fff; font-variant-numeric: tabular-nums;
+  background: var(--ink); padding: 6px 18px; border-radius: var(--r-pill); box-shadow: var(--sh-sm);
+}
+.exam-main {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 18px 20px; width: min(960px, 100%); margin: 0 auto;
+}
+.exam-main .ht-wordcard { width: 100%; }
+.exam-illus img { max-height: 450px; max-width: 100%; border-radius: var(--r-lg); }
+.exam-actions { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: center; }
+.exam-judges { display: flex; gap: 20px; }
+
+/* ---- layout 3 คอลัมน์: เวที (2 ส่วน) + ผลการอ่าน (1 ส่วน แคบกว่า) ---- */
+.exam-layout {
+  flex: 1; width: min(1280px, 100%); margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr; gap: var(--s-5);
+  padding: 18px 20px; align-items: stretch;
+}
+.exam-stage {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+}
+.exam-stage .ht-wordcard { width: 100%; }
+
+/* แผงผลการอ่านรายข้อ (sticky ตามจอ) */
+.exam-results {
+  position: sticky; top: 86px; align-self: start;
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 4px solid #fff; border-radius: var(--r-xl);
+  box-shadow: var(--sh-md); padding: var(--s-5); max-height: calc(100vh - 104px);
+}
+.exam-results__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  margin-bottom: var(--s-3); padding-bottom: var(--s-3); border-bottom: 2px solid var(--c-blue-soft);
+}
+.exam-results__title { font-size: 1.15rem; font-weight: 800; }
+.exam-results__sum { font-weight: 700; font-size: .9rem; color: var(--ink-soft); white-space: nowrap; }
+.exam-results__list {
+  list-style: none; margin: 0; padding: 4px; flex: 1; min-height: 0;
+  display: flex; flex-direction: column; gap: 6px; overflow-y: auto;
+}
+.exr {
+  display: grid; grid-template-columns: 34px 1fr 30px; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: var(--r-sm); border: 2px solid transparent; background: #F7F8FB;
+  transition: background .15s ease, border-color .15s ease;
+}
+.exr__no   { font-weight: 800; text-align: center; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.exr__word { font-weight: 700; color: var(--ink); min-height: 1.45em; line-height: 1.45; }
+.exr__mark { font-weight: 900; font-size: 1.25rem; text-align: center; line-height: 1; }
+.exr.is-current { background: var(--c-blue-soft); border-color: var(--c-blue); }
+.exr.is-current .exr__no { color: var(--c-blue-ink); }
+.exr.is-correct { background: var(--c-green-soft); }
+.exr.is-correct .exr__no, .exr.is-correct .exr__mark { color: var(--c-green-ink); }
+.exr.is-wrong { background: var(--c-coral-soft); }
+.exr.is-wrong .exr__no, .exr.is-wrong .exr__mark { color: var(--c-coral-ink); }
+
+/* แท็บเล็ต/จอแคบ: ยุบเหลือคอลัมน์เดียว แผงผลไปอยู่ด้านล่าง */
+@media (max-width: 992px) {
+  .exam-layout { grid-template-columns: 1fr; }
+  .exam-results { position: static; max-height: 380px; }
+}
+@media (max-width: 560px) { .ht-judge { min-width: 150px; padding: 20px; font-size: 1.3rem; } }
+
+/* จอนักเรียน: คำใหญ่เต็มจอ ไร้สิ่งรบกวน */
+.student-screen .ht-word { font-size: clamp(90px, 22vw, 300px); }
+.student-screen .exam-illus img { max-height: 320px; }
+
+/* ============================================================
+   16. Responsive / Mobile-first
+   ============================================================ */
+
+/* container + ตัวอักษร บนจอเล็ก */
+@media (max-width: 768px) {
+  .ht-container { padding: var(--s-4) var(--s-3); }
+  body { font-size: 16px; }
+  h1 { font-size: 1.55rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.15rem; }
+}
+
+/* Navbar */
+@media (max-width: 768px) {
+  .ht-nav__inner { flex-wrap: wrap; padding: 8px 14px; gap: 6px 8px; }
+  .ht-brand { font-size: 1.05rem; }
+  .ht-brand__logo { width: 36px; height: 36px; font-size: 19px; border-radius: 12px; }
+  .ht-nav__links { gap: 2px; flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; }
+  .ht-nav__link { padding: 6px 10px; font-size: .92rem; }
+}
+
+/* ตารางทั่วไป: เลื่อนแนวนอนได้ */
+@media (max-width: 768px) {
+  .ht-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .ht-table { font-size: .95rem; }
+}
+
+/* ตารางแบบการ์ด (students_list): reflow ต่อแถวเป็นการ์ด */
+@media (max-width: 768px) {
+  .ht-table-wrap--cards { background: transparent; box-shadow: none; overflow: visible; border-radius: 0; }
+  .ht-table--cards thead { display: none; }
+  .ht-table--cards, .ht-table--cards tbody { display: block; width: 100%; }
+  .ht-table--cards tbody tr {
+    display: block; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--sh-sm); margin-bottom: 14px; overflow: hidden;
+  }
+  .ht-table--cards tbody td {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 10px 16px; border: none; border-bottom: 1px solid var(--line); text-align: right;
+  }
+  .ht-table--cards tbody tr td:last-child { border-bottom: none; }
+  .ht-table--cards tbody td::before {
+    content: attr(data-label); font-weight: 700; color: var(--ink-soft);
+    text-align: left; white-space: nowrap;
+  }
+  .ht-table--cards td.cardhead {
+    background: var(--bg-sky); justify-content: flex-start; font-weight: 800; font-size: 1.05rem;
+  }
+  .ht-table--cards td.cardhead::before { content: none; }
+  .ht-table--cards td.cardhide { display: none; }
+}
+
+/* หน้าสอบ (teacher_page / student_page) */
+@media (max-width: 600px) {
+  .exam-top { padding: 10px 14px; gap: 6px 10px; }
+  .exam-top__brand { font-size: 1rem; }
+  .exam-top__info { order: 3; min-width: 100%; font-size: .9rem; }
+  .exam-timer { font-size: 1.25rem; padding: 5px 14px; }
+  .exam-main { padding: 14px 12px; gap: 14px; }
+  .exam-layout { padding: 14px 12px; gap: 14px; }
+  .exam-stage { gap: 14px; }
+  .exam-illus img { max-height: 330px; }
+  .exam-actions { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
+  .exam-judges { display: flex; gap: 10px; }
+  .exam-judges .ht-btn { flex: 1 1 0; padding: 14px 6px; }
+  .exam-actions #btn2 .ht-btn, .exam-actions #btn3 .ht-btn, .exam-actions > a.ht-btn { width: 100%; }
+}
+
+/* ---------- Sidebar layout (เมนูด้านซ้าย) — เฉพาะหน้าที่ใช้ header.php (body.ht-app) ---------- */
+body.ht-app { display: flex; align-items: stretch; min-height: 100vh; }
+.ht-sidebar {
+  flex: 0 0 248px; width: 248px;
+  background: var(--surface); border-right: 1px solid var(--line); box-shadow: var(--sh-sm);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 18px 14px; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 55;
+}
+.ht-app > .ht-container { flex: 1 1 auto; min-width: 0; }
+.ht-sidebar .ht-brand { margin: 2px 6px 14px; }
+.ht-side-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--r-md); font-weight: 700; color: var(--ink-soft);
+  transition: background .15s ease, color .15s ease;
+}
+.ht-side-link:hover, .ht-side-link.active { background: var(--c-blue-soft); color: var(--c-blue-ink); text-decoration: none; }
+.ht-side-label { margin: 14px 14px 4px; font-size: .76rem; font-weight: 800; letter-spacing: .03em; color: var(--ink-soft); opacity: .65; text-transform: uppercase; }
+.ht-side-spacer { margin-top: auto; }
+.ht-side-school { margin: 10px 6px 6px; font-size: .9rem; }
+.ht-burger { display: none; }
+.ht-backdrop { display: none; }
+
+@media (max-width: 900px) {
+  .ht-burger {
+    display: grid; position: fixed; top: 12px; left: 12px; z-index: 60;
+    width: 46px; height: 46px; place-items: center; cursor: pointer;
+    border-radius: 13px; background: var(--surface); border: 1px solid var(--line);
+    box-shadow: var(--sh-sm); font-size: 22px; line-height: 1;
+  }
+  .ht-sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh;
+    transform: translateX(-100%); transition: transform .25s ease;
+  }
+  .ht-sidebar.open { transform: translateX(0); }
+  .ht-app > .ht-container { padding-top: 68px; }
+  .ht-backdrop.open { display: block; position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index: 54; }
+}

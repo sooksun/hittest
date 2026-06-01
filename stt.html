@@ -1,0 +1,368 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- App style -->	
+    
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+        body {
+        font-family: "Sarabun", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        }
+        p {
+            color:blue;
+            text-align: center;
+        }
+
+        H1,H3,H4,H5 {
+        font-family: "Sarabun", sans-serif;
+        font-weight: 600;
+        font-style: normal;
+        }
+
+      .interim { 
+        font-size: 24px;
+        color: gray;
+
+      }
+      .final {
+        font-size: 24px;
+        color: black;
+        padding-right: 3px;
+      }
+      .center {
+        text-align: center;
+      }
+      .hidden{
+        display: none;
+      }
+      .slideContainer {
+            text-align: center;
+            margin: 20px;
+        }
+      .slideImage {
+            max-width: 100%;
+            height: 300px;
+            width:  auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.5); 
+            box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.5);
+        }
+        .slideText {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+    </style>
+
+    <title>ฝึกอ่าน</title>
+  </head>
+  <body>
+    <div class='center' >
+        <br><br>
+
+      <button id="start-btn" class="hidden">Start</button>
+      <h3>อ่านคำ</h3>
+      <h5>ทั้งหมด <span id="cnts"></span> คำ อ่านถูกต้อง <span id="scores"></span> คำ</h5>
+      <div class="slideContainer">
+        <img id="slideImage" class="slideImage" src="" alt="Slide Image">
+        <div id="slideWord" class="slideText"></div>
+
+        <blockquote class="blockquote">
+          <div id="results">
+            <span class="final" id="label1"></span>
+            <span class="final" id="final_span"></span>
+            <span class="interim" id="interim_span"></span>
+          </div>
+        </blockquote>
+        <button type="button" id='btn-transcribe' class="btn btn-primary"><i class="fa fa-commenting-o" aria-hidden="true"></i> อ่าน</button>
+        <br>
+        <br>
+        <div>
+          <button type="button" id='btn-next' class="btn btn-primary" onclick="nextSlide()">ต่อไป <i class="fa fa-hand-o-right" aria-hidden="true"></i></button>
+        </div>
+
+      </div>
+
+
+    </div>	
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://releases.jquery.com/git/jquery-git.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script>
+      // REF
+      // * https://www.google.com/intl/en/chrome/demos/speech.html
+      // * https://mdn.github.io/web-speech-api/speech-color-changer/
+      var maxword=20;
+      var score=0;
+      var cnt=0;
+      var final_transcript = '';
+      var recognizing = false;
+      var ignore_onend;
+      var start_timestamp;
+      var lastDebounceTranscript;
+      var my_array = [];
+      var timelimit=30000; //กำหนดเวลาในการอ่านแต่ละคำ 30=30000 วินาที
+      // utility tools
+      var two_line = /\n\n/g;
+      var one_line = /\n/g;
+      // random item in exams
+      function generateRandomArray() {
+      var pool = [];
+      for (var i = 1; i <= 100; i++) {
+          pool.push(i);
+      }
+
+      var randomArray = [];
+      pool.forEach(function() {
+          if (randomArray.length <= maxword) {
+              var randomIndex = Math.floor(Math.random() * pool.length);
+              var randomNumber = pool[randomIndex];
+              randomArray.push(randomNumber);
+              pool.splice(randomIndex, 1);
+          }
+      });
+
+      return randomArray;
+      }
+
+    var dataArray = generateRandomArray();
+
+      function linebreak(s) {
+        return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+      }
+
+      var first_char = /\S/;
+      function capitalize(s) {
+        return s.replace(first_char, function(m) { return m.toUpperCase(); });
+      }
+
+
+      function upgrade(){
+        alert('Browser is not support');
+      }
+
+      function startButton(event) {
+        if (recognizing) {
+          recognition.stop();
+          return;
+        }
+        final_transcript = '';
+        recognition.lang ='th-TH';
+        recognition.start();
+        ignore_onend = false;
+        final_span.innerHTML = '';
+        interim_span.innerHTML = '';
+        start_timestamp = event.timeStamp;
+      }
+
+      // initialize recognition
+      var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+      var recognition = new SpeechRecognition();
+
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onstart = function() {
+        recognizing = true;
+      };
+
+      recognition.onerror = function(event) {
+        if (event.error == 'no-speech') {
+          ignore_onend = true;
+        }
+        if (event.error == 'audio-capture') {
+          ignore_onend = true;
+        }
+      };
+
+      recognition.onend = function() {
+        recognizing = false;
+        if (ignore_onend) {
+          return;
+        }
+        if (!final_transcript) {
+          return;
+        }
+
+        /* select all text
+        if (window.getSelection) {
+          window.getSelection().removeAllRanges();
+          var range = document.createRange();
+          range.selectNode(document.getElementById('final_span'));
+          window.getSelection().addRange(range);
+        }
+        */
+      };
+
+      recognition.onresult = function(event) {
+        var interim_transcript = '';
+        if (typeof(event.results) == 'undefined') {
+          recognition.onend = null;
+          recognition.stop();
+          upgrade();
+          return;
+        }
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+          var transcript = event.results[i][0].transcript;
+          var confidence = event.results[i][0].confidence;
+          var isFinal = event.results[i].isFinal && (confidence > 0);
+
+          if (isFinal) {
+            /*
+            // check duplicate result on android
+            if(transcript+confidence == lastDebounceTranscript) { return; }
+            lastDebounceTranscript = transcript+confidence;
+            console.log(lastDebounceTranscript);
+            */
+            final_transcript += transcript;
+          } else {
+            interim_transcript += transcript;
+          }
+        }
+        final_transcript = capitalize(final_transcript);
+        final_span.innerHTML = linebreak(final_transcript);
+        interim_span.innerHTML = linebreak(interim_transcript);
+        if (final_transcript || interim_transcript) {
+          // do something
+        let answer = document.getElementById("slideWord").innerText;
+		    if (final_transcript == answer) 
+
+            {
+                    clearTimeout(my_array[cnt]);
+                    //toastr.success("อ่าน "+ answer+" ได้ถูกต้องค่ะ");
+                    score++;
+                    document.getElementById('scores').innerText =score;
+                    Swal.fire({
+                              position: "top-end",
+                              icon: "success",
+                              title:  "อ่าน "+ answer+" ได้ถูกต้องค่ะ",
+                              showConfirmButton: false,
+                              timer: 3000
+                            }).then((result) => {
+                              nextSlide()
+                            });
+                    $('#btn-transcribe').click();
+                    $('#btn-transcribe').addClass('btn-primary');
+            }
+        }
+      };
+
+      // handle transcribe button
+      $('#btn-transcribe').click((evt) => {
+        let thiz = evt.target;
+        let ready_text = "<i class='fa fa-commenting-o' aria-hidden='true'></i> อ่าน";
+        let working_text = 'หยุดอ่าน';
+        let working = $(thiz).html() == working_text;
+ 
+        if(!working){ // press to start
+          // ui
+          $('#btn-transcribe').html(working_text);
+          $('#btn-transcribe').removeClass('btn-primary');
+          $('#btn-transcribe').addClass('btn-danger');
+
+          // start
+          startButton(evt);
+        }
+        else { // press to stop
+          // ui
+          $('#btn-transcribe').html(ready_text);
+          $('#btn-transcribe').removeClass('btn-danger');
+          $('#btn-transcribe').addClass('btn-primary');
+
+          // stop
+          recognizing = false;
+          recognition.stop();
+        }
+      });
+
+      let currentSlideId = 1;
+
+      function fetchSlide() {
+          fetch(`fetch_slide2.php?id=${dataArray[currentSlideId-1]}`)
+              .then(response => response.json())
+              .then(data => {
+                  if (!data.error & currentSlideId<=maxword) {
+                      document.getElementById('slideWord').innerText = data.word;
+                      document.getElementById('slideImage').src = data.image_path;
+                      document.getElementById('cnts').innerText =currentSlideId;
+                  } else {
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "info",
+                      title: "ครบ "+maxword +" คำแล้วค่ะ",
+                      showConfirmButton: false,
+                      timer: 3000  
+                    }).then((result) => {
+                         stopSlide()
+                      });
+                  }
+              });
+      }
+
+
+      my_array[cnt] =setTimeout(() => {timeout()},timelimit);
+
+      function timeout(){
+        $('#btn-transcribe').addClass('btn-secondary');
+        document.getElementById("btn-transcribe").disabled = true;
+        
+      Swal.fire({
+                position: "top-end",
+                icon: "info",
+                title: "หมดเวลา! ลองใหม่คำต่อไปค่ะ",
+                showConfirmButton: false,
+                timer: 3000
+              }).then((result) => {
+                nextSlide()
+              });
+            }
+
+
+      function nextSlide() {
+          // Increment currentSlideId. You might want to fetch the total number of slides from the server to limit this.
+          cnt=currentSlideId++;
+          fetchSlide();
+          clearTimeout(my_array[cnt-1]);
+          my_array[cnt] =setTimeout(() => {timeout()},timelimit);
+          $('#btn-transcribe').removeClass('btn-secondary');
+           $('#btn-transcribe').addClass('btn-primary'); 
+           document.getElementById("btn-transcribe").disabled = false;
+           document.getElementById("final_span").innerHTML = "";
+          document.getElementById("interim_span").innerHTML = "";
+          $('#btn-transcribe').click();
+      }
+      function stopSlide() { 
+           clearTimeout(my_array[cnt]);
+           $('#btn-transcribe').removeClass('btn-danger');
+           $('#btn-transcribe').addClass('btn-secondary');
+           $('#btn-next').removeClass('btn-primary');
+           $('#btn-next').addClass('btn-secondary');
+           document.getElementById("btn-transcribe").disabled = true;
+           document.getElementById("btn-next").disabled = true;
+      }
+      // Fetch the initial slide
+      fetchSlide();
+      $('#btn-transcribe').click();
+  </script>
+
+  </body>
+</html>

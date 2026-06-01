@@ -1,0 +1,18 @@
+19:04:00:829 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:830 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:831 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:831 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:836 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:836 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:837 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:837 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:841 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:841 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:842 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:842 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:847 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:847 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:847 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:847 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 
+19:04:00:852 [ERROR]	WinHTTP Secure failure. CERT_CN_INVALID.
+19:04:00:852 [WARN]	Request Failed. ErrorCode: 112175 errorMessage: Platform Status, CERT_CN_INVALID. Send Request Failed. WinHTTP Secure Failure. last error code = 12175 

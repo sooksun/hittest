@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="ฝึกอ่าน:ตรวจคำอ่านอัตโนมัติ">
+    <meta name="theme-color" content="#007bff">
+
+    <title>ฝึกอ่าน:ตรวจคำอ่านอัตโนมัติ</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --secondary-color: #6c757d;
+        }
+        body {
+            font-family: "Sarabun", sans-serif;
+            font-weight: 400;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .score-display { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 1rem; }
+        .slide-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .slide-image {
+            max-width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .slide-text {
+            font-size: 50px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .speech-result {
+            min-height: 100px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .interim { font-size: 50px; text-align: center; color: var(--secondary-color); }
+        .final { font-size: 50px; text-align: center; color: black; }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn:disabled { transform: none; box-shadow: none; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="mb-4">ตรวจคำอ่านอัตโนมัติ</h1>
+            <div class="score-display">
+                <span>ทั้งหมด <span id="cnts">0</span> คำ</span>
+                <span class="ms-3">อ่านถูกต้อง <span id="scores">0</span> คำ</span>
+            </div>
+        </div>
+
+        <div class="slide-container">
+            <img id="slideImage" class="slide-image" src="" alt="คำที่ต้องอ่าน">
+            <div id="slideWord" class="slide-text"></div>
+
+            <div id="results" class="speech-result">
+                <span id="final_span" class="final"></span>
+                <span id="interim_span" class="interim"></span>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" id="btn-transcribe" class="btn btn-primary">
+                    <i class="fas fa-microphone"></i> อ่าน
+                </button>
+                <button type="button" id="btn-next" class="btn btn-primary">
+                    ต่อไป <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            maxWords: 20,
+            timeLimit: 30000,
+            language: 'th-TH',
+            autoStartDelay: 300 // ลดเวลารอเริ่มอ่านอัตโนมัติเหลือ 300ms
+        };
+
+        // State management
+        const state = {
+            score: 0,
+            currentSlideId: 1,
+            recognizing: false,
+            finalTranscript: '',
+            timeouts: [],
+            dataArray: generateRandomArray(),
+            currentSpokenWord: '',
+            isAutoStarting: false,
+            startTime: null, // เพิ่มตัวแปรเก็บเวลาเริ่มต้น
+            timeoutId: null // เพิ่มตัวแปรเก็บ ID ของ timeout
+        };
+
+        // Speech Recognition Setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert('เบราว์เซอร์ของคุณไม่รองรับ Web Speech API');
+        }
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = CONFIG.language;
+
+        // DOM Elements
+        const elements = {
+            slideImage: document.getElementById('slideImage'),
+            slideWord: document.getElementById('slideWord'),
+            finalSpan: document.getElementById('final_span'),
+            interimSpan: document.getElementById('interim_span'),
+            btnTranscribe: document.getElementById('btn-transcribe'),
+            btnNext: document.getElementById('btn-next'),
+            cnts: document.getElementById('cnts'),
+            scores: document.getElementById('scores')
+        };
+
+        // Utility Functions
+        function generateRandomArray() {
+            const pool = Array.from({length: 100}, (_, i) => i + 1);
+            const result = [];
+            while (result.length < CONFIG.maxWords && pool.length > 0) {
+                const randomIndex = Math.floor(Math.random() * pool.length);
+                result.push(pool.splice(randomIndex, 1)[0]);
+            }
+            return result;
+        }
+
+        // สำหรับภาษาไทย ฟังก์ชันนี้ไม่จำเป็นมากนัก แต่เก็บไว้เผื่อใช้กับภาษาอื่น
+        function capitalize(s) {
+            return s.trim(); // *** MODIFIED ***: ใช้ trim() เพื่อตัดช่องว่างหน้า-หลัง ซึ่งสำคัญกว่า
+        }
+
+        function showSuccessMessage(word) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: `อ่านคำว่า "${word}" ได้ถูกต้องค่ะ`,
+                showConfirmButton: false,
+                timer: 1000  // ลดเวลาลงเหลือ 1 วินาที
+            }).then(() => {
+                nextSlide();
+            });
+        }
+
+        function startTimer() {
+            // ล้าง timeout เก่า
+            if (state.timeoutId) {
+                clearTimeout(state.timeoutId);
+            }
+            
+            // เก็บเวลาเริ่มต้น
+            state.startTime = Date.now();
+            
+            // ตั้ง timeout ใหม่
+            state.timeoutId = setTimeout(() => {
+                const elapsedTime = Date.now() - state.startTime;
+                if (elapsedTime >= CONFIG.timeLimit) {
+                    showTimeoutMessage();
+                }
+            }, CONFIG.timeLimit);
+        }
+
+        function stopTimer() {
+            if (state.timeoutId) {
+                clearTimeout(state.timeoutId);
+                state.timeoutId = null;
+            }
+            state.startTime = null;
+        }
+
+        function nextSlide() {
+            // หยุด recognition ถ้ายังทำงานอยู่
+            if (state.recognizing) {
+                recognition.stop();
+            }
+
+            // หยุด timer
+            stopTimer();
+
+            state.currentSlideId++;
+            state.finalTranscript = '';
+            
+            // รีเซ็ตค่าและ UI
+            elements.finalSpan.textContent = '';
+            elements.interimSpan.textContent = '';
+            elements.btnTranscribe.disabled = false;
+            elements.btnTranscribe.classList.remove('btn-secondary');
+            elements.btnTranscribe.classList.add('btn-primary');
+
+            // เรียก fetchSlide
+            fetchSlide();
+        }
+
+        async function fetchSlide() {
+            try {
+                // ตรวจสอบว่าถึงคำสุดท้ายหรือยังก่อน fetch
+                if (state.currentSlideId > CONFIG.maxWords) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "info",
+                        title: `ครบ ${CONFIG.maxWords} คำแล้วค่ะ`,
+                        text: `ทำคะแนนได้ ${state.score} / ${CONFIG.maxWords}`,
+                        showConfirmButton: false,
+                        timer: 4000
+                    }).then(() => {
+                        stopSlide();
+                        window.location.href = 'menu.php';
+                    });
+                    return;
+                }
+                
+                const response = await fetch(`fetch_slide2.php?id=${state.dataArray[state.currentSlideId - 1]}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (!data.error) {
+                    elements.slideWord.textContent = data.word;
+                    elements.slideImage.src = data.image_path;
+                    elements.cnts.textContent = state.currentSlideId;
+                    state.currentSpokenWord = data.spoken_word || data.word;
+
+                    // เริ่มการอ่านอัตโนมัติหลังจากโหลดข้อมูลเสร็จ
+                    state.isAutoStarting = true;
+                    setTimeout(() => {
+                        if (!state.recognizing) {
+                            state.finalTranscript = '';
+                            elements.finalSpan.textContent = '';
+                            elements.interimSpan.textContent = '';
+                            recognition.start();
+                            // เริ่มนับเวลาเมื่อเริ่มอ่าน
+                            startTimer();
+                        }
+                    }, CONFIG.autoStartDelay);
+
+                } else {
+                    throw new Error(data.error || 'ไม่พบข้อมูลคำศัพท์');
+                }
+            } catch (error) {
+                console.error('Error fetching slide:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาดในการเชื่อมต่อ',
+                    text: 'ไม่สามารถโหลดข้อมูลจากเซิร์ฟเวอร์ได้'
+                });
+                stopSlide();
+            }
+        }
+
+        function showTimeoutMessage() {
+            // ตรวจสอบว่ามีการอ่านหรือยัง
+            if (!state.finalTranscript) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "info",
+                    title: "หมดเวลา! ลองใหม่คำต่อไปค่ะ",
+                    showConfirmButton: false,
+                    timer: 1500  // ลดเวลาลงเหลือ 1.5 วินาที
+                }).then(() => nextSlide());
+            }
+        }
+
+        function stopSlide() {
+            stopTimer();
+            elements.btnNext.disabled = true;
+            elements.btnNext.classList.add('btn-secondary');
+            if (state.recognizing) {
+                recognition.stop();
+            }
+        }
+
+        // Speech Recognition Event Handlers
+        recognition.onstart = () => {
+            state.recognizing = true;
+            state.isAutoStarting = false;
+            elements.btnTranscribe.innerHTML = '<i class="fas fa-stop"></i> หยุดอ่าน';
+            elements.btnTranscribe.classList.replace('btn-primary', 'btn-danger');
+        };
+
+        recognition.onend = () => {
+            state.recognizing = false;
+            elements.btnTranscribe.innerHTML = '<i class="fas fa-microphone"></i> อ่าน';
+            elements.btnTranscribe.classList.replace('btn-danger', 'btn-primary');
+            
+            // ถ้าเป็นการเริ่มอ่านอัตโนมัติและยังไม่ได้อ่าน ให้เริ่มใหม่
+            if (state.isAutoStarting && !state.finalTranscript) {
+                setTimeout(() => {
+                    if (!state.recognizing) {
+                        recognition.start();
+                    }
+                }, 500);
+            }
+        };
+
+        recognition.onresult = (event) => {
+            let interimTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                const confidence = event.results[i][0].confidence;
+                
+                if (event.results[i].isFinal && confidence > 0) {
+                    state.finalTranscript = capitalize(transcript);
+                    elements.finalSpan.textContent = state.finalTranscript;
+                    
+                    // แยกคำพ้องเสียงออกเป็นอาร์เรย์
+                    const spokenForms = state.currentSpokenWord.split(',');
+                    let isCorrect = false;
+
+                    // ตรวจสอบกับทุกคำที่เป็นไปได้
+                    for (const spokenForm of spokenForms) {
+                        if (state.finalTranscript === spokenForm.trim()) {
+                            isCorrect = true;
+                            break;
+                        }
+                    }
+
+                    if (isCorrect) {
+                        state.score++;
+                        elements.scores.textContent = state.score;
+                        showSuccessMessage(elements.slideWord.textContent);
+                    }
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+            
+            elements.interimSpan.textContent = interimTranscript;
+        };
+
+        // Event Listeners
+        elements.btnTranscribe.addEventListener('click', () => {
+            if (state.recognizing) {
+                recognition.stop();
+            } else {
+                state.finalTranscript = '';
+                elements.finalSpan.textContent = '';
+                elements.interimSpan.textContent = '';
+                recognition.start();
+            }
+        });
+
+        elements.btnNext.addEventListener('click', nextSlide);
+
+        // Initialize
+        (function initialize() {
+            fetchSlide();
+            // ตั้ง timeout สำหรับคำแรก
+            startTimer();
+        })();
+
+    </script>
+</body>
+</html>
