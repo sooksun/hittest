@@ -48,7 +48,7 @@ require __DIR__ . '/includes/header.php';
 
 <div class="ht-card mb-4 no-print" style="border-left:6px solid var(--c-blue)">
     <strong>ป.<?= $classid ?></strong> · นักเรียน <?= count($students) ?> คน
-    <div class="text-muted" style="font-size:.9rem">นักเรียนเข้าระบบที่ <code>student_login.php</code> โดยใช้ <strong>รหัสนักเรียน</strong> เป็นทั้งชื่อผู้ใช้และรหัสผ่าน (หรือสแกน QR บนการ์ด)</div>
+    <div class="text-muted" style="font-size:.9rem">นักเรียนเข้าระบบที่ <code>student_login.php</code> โดยกรอก <strong>รหัสนักเรียน</strong> ช่องเดียว — หรือ<strong>สแกน QR บนการ์ดแล้วกดปุ่มเข้าระบบได้เลย</strong> (ไม่ต้องพิมพ์)</div>
 </div>
 
 <?php if (!$students): ?>
@@ -61,7 +61,7 @@ require __DIR__ . '/includes/header.php';
             <small><?= htmlspecialchars($className) ?> · ห้อง <?= (int)$s['rooms'] ?></small>
             <div class="pin-no"><?= htmlspecialchars($sid) ?></div>
             <div class="qr" data-stuid="<?= htmlspecialchars($sid, ENT_QUOTES) ?>"></div>
-            <small>รหัสนักเรียน = ชื่อผู้ใช้ + รหัสผ่าน</small>
+            <small>สแกน QR แล้วกด "เข้าสู่ระบบ"</small>
         </div>
     <?php endforeach; ?>
 </div>

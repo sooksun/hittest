@@ -20,19 +20,17 @@ $error = '';
 $ip    = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = trim($_POST['username'] ?? '');     // รหัสนักเรียน
-    $pass = trim($_POST['password'] ?? '');     // รหัสนักเรียน (เดียวกัน)
-    $keys = ["ip:$ip", "id:$user:$ip"];
+    $stuid = trim($_POST['stuid'] ?? '');       // รหัสนักเรียน (ช่องเดียว)
+    $keys  = ["ip:$ip", "id:$stuid:$ip"];
 
     $gate = throttle_check($keys);
     if ($gate['blocked']) {
         $error = $gate['message'];
-    } elseif ($user === '' || $pass !== $user) {
-        // username/password ต้องเป็นรหัสนักเรียนเดียวกัน
+    } elseif ($stuid === '') {
         throttle_fail($keys);
-        $error = 'รหัสนักเรียนหรือรหัสผ่านไม่ถูกต้อง';
+        $error = 'กรุณากรอกรหัสนักเรียน';
     } else {
-        $stu = student_login_by_id($user);
+        $stu = student_login_by_id($stuid);
         if ($stu) {
             throttle_reset($keys);
             student_session_set($stu);
@@ -40,9 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         throttle_fail($keys);
-        $error = 'รหัสนักเรียนหรือรหัสผ่านไม่ถูกต้อง';
+        $error = 'ไม่พบรหัสนักเรียนนี้';
     }
 }
+
+// prefill จาก QR (?u=รหัสนักเรียน) หรือค่าที่เพิ่งกรอก
+$prefill = trim($_POST['stuid'] ?? $_GET['u'] ?? '');
 ?>
 <!doctype html>
 <html lang="th">
@@ -79,18 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="post" class="ht-stack" style="gap:16px" autocomplete="off">
             <div class="ht-field">
-                <label class="ht-label">รหัสนักเรียน (ชื่อผู้ใช้)</label>
-                <input class="ht-input" name="username" inputmode="numeric" placeholder="เช่น 9000000003" required autofocus
-                       value="<?= htmlspecialchars($_POST['username'] ?? $_GET['u'] ?? '') ?>">
+                <label class="ht-label">รหัสนักเรียน</label>
+                <input class="ht-input stu-pin" name="stuid" inputmode="numeric" placeholder="เช่น 9000000001" required
+                       value="<?= htmlspecialchars($prefill) ?>"<?= $prefill === '' ? ' autofocus' : '' ?>>
             </div>
-            <div class="ht-field">
-                <label class="ht-label">รหัสผ่าน</label>
-                <input class="ht-input" name="password" type="password" placeholder="••••••" required>
-            </div>
-            <button class="ht-btn ht-btn--lg ht-btn--block" type="submit">เข้าสู่ระบบ 🚀</button>
+            <button class="ht-btn ht-btn--lg ht-btn--block" type="submit"<?= $prefill !== '' ? ' autofocus' : '' ?>>เข้าสู่ระบบ 🚀</button>
         </form>
 
-        <p class="stu-hint mb-0">💡 รหัสผ่าน = <code>รหัสนักเรียน</code> ตัวเดียวกัน (สอบถามคุณครูได้)</p>
+        <p class="stu-hint mb-0">💡 ใช้ <code>รหัสนักเรียน</code> ของหนูเข้าระบบ — หรือสแกน QR จากคุณครูแล้วกดปุ่มได้เลย</p>
         <p class="stu-hint mt-2 mb-0">เป็นครู/ผู้ดูแล? <a href="login.php" style="color:var(--c-blue-ink);font-weight:700">เข้าระบบครู →</a></p>
     </div>
 </body>
