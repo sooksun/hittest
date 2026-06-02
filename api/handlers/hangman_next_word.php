@@ -1,11 +1,11 @@
 <?php
-// GET /api/hangman/next-word?grade=1&difficulty=1&stuid=xxx&excludeWordIds=[1,2,3]
+// GET /api/hangman/next-word?grade=1&difficulty=1&excludeWordIds=[1,2,3]
 // Returns {error:false,sessionId,wordId,maskedWord[],hints[],remainingLives,imagePath,soundPath}
 // LEFT JOINs readthai.wordstest for real sound/image paths.
 
 $grade      = max(1, min(6, (int)($_GET['grade']      ?? 1)));
 $difficulty = max(1, min(3, (int)($_GET['difficulty'] ?? 1)));
-$stuid      = (string)($_GET['stuid'] ?? $me['stuid'] ?? '');
+$stuid      = $me['stuid']; // always the authenticated user — never from client input
 
 $excludeIds = [];
 if (!empty($_GET['excludeWordIds'])) {
@@ -82,7 +82,7 @@ $pdo->prepare(
      VALUES (?,?,?,?,?,?,?,?,0,NOW())'
 )->execute([
     $me['sc_id'],
-    $stuid ?: $me['stuid'],
+    $stuid,
     $grade,
     $difficulty,
     (int)$word['id'],

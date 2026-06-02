@@ -16,6 +16,13 @@ $isTeacher = !empty($_SESSION['sc_id']);
 if (!$isStudent && !$isTeacher) {
     json_response(['error' => true, 'message' => 'ยังไม่ได้เข้าสู่ระบบ'], 401);
 }
+
+// Capture caller identity for rate-limiting + audit before releasing the session
+$actorId = $isStudent
+    ? (string)($_SESSION['stu']['stuid'] ?? '')
+    : ('teacher:' . (string)($_SESSION['sc_id'] ?? ''));
+$actorSc = (string)($_SESSION['sc_id'] ?? ($_SESSION['stu']['sc_id'] ?? ''));
+
 session_write_close();
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -28,9 +35,15 @@ if (!defined('BOTNOI_TOKEN') || BOTNOI_TOKEN === '') {
 // ── Parse JSON body ───────────────────────────────────────────────────────────
 $body    = json_decode(file_get_contents('php://input'), true) ?: [];
 $text    = trim((string)($body['text'] ?? ''));
-$speaker = (string)($body['speaker'] ?? (defined('BOTNOI_SPEAKER') ? BOTNOI_SPEAKER : '1'));
-$speed   = (float)($body['speed']   ?? (defined('BOTNOI_SPEED')   ? BOTNOI_SPEED   : 1.0));
-$volume  = (float)($body['volume']  ?? 1.0);
+
+// Validate and normalise speaker, speed, volume before forwarding to Botnoi.
+// Normalisation also ensures cache-key stability (e.g. 1.0 === 1.00).
+$rawSpeaker = (string)($body['speaker'] ?? (defined('BOTNOI_SPEAKER') ? BOTNOI_SPEAKER : '1'));
+$speaker    = ctype_digit($rawSpeaker) && (int)$rawSpeaker >= 1 && (int)$rawSpeaker <= 99
+    ? $rawSpeaker
+    : '1';
+$speed  = round(max(0.5, min(2.0, (float)($body['speed']  ?? (defined('BOTNOI_SPEED') ? BOTNOI_SPEED : 1.0)))), 1);
+$volume = round(max(0.0, min(1.0, (float)($body['volume'] ?? 1.0))), 1);
 
 if ($text === '') {
     json_response(['error' => true, 'message' => 'No text'], 400);
@@ -50,6 +63,22 @@ try {
         json_response(['audioUrl' => $cached]);
     }
 } catch (Throwable $e) { /* table may not exist yet */ }
+
+// ── Rate limit (only on cache MISS → an actual paid Botnoi call) ─────────────
+$rateMax = defined('TTS_RATE_MAX')        ? TTS_RATE_MAX        : 30;
+$rateWin = defined('TTS_RATE_WINDOW_SEC') ? TTS_RATE_WINDOW_SEC : 60;
+if ($actorId !== '' && tts_rate_exceeded($pdo, $actorId, $rateMax, $rateWin)) {
+    audit_log_event($pdo, [
+        'sc_id' => $actorSc, 'stuid' => $actorId, 'action' => 'tts_rate_limited',
+        'entity_type' => 'tts', 'status_code' => 429, 'meta_json' => ['textLen' => mb_strlen($text)],
+    ]);
+    json_response(['error' => true, 'message' => 'เรียกใช้เสียงถี่เกินไป กรุณารอสักครู่แล้วลองใหม่'], 429);
+}
+// Count this attempt toward the window (the audio service tolerates a failed call)
+audit_log_event($pdo, [
+    'sc_id' => $actorSc, 'stuid' => $actorId, 'action' => 'tts_request',
+    'entity_type' => 'tts', 'meta_json' => ['speaker' => $speaker, 'textLen' => mb_strlen($text)],
+]);
 
 // ── Botnoi API call ───────────────────────────────────────────────────────────
 $payload  = json_encode(['text' => $text, 'speaker' => $speaker, 'volume' => $volume,

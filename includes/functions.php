@@ -89,12 +89,106 @@ function hit_cell(array $stu, int $hit, int $class_id): string
 }
 
 /** ส่ง JSON response แล้วจบการทำงาน */
-function json_response(array $data, int $code = 200): void
+if (!function_exists('json_response')) {
+    function json_response(array $data, int $code = 200): void
+    {
+        http_response_code($code);
+        header('Content-Type: application/json; charset=utf8');
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+}
+
+/**
+ * เขียน 1 แถวลง audit_logs — ใช้ทั้ง request middleware และ security event ในแต่ละ handler
+ * ห้าม throw: ถ้า audit ล้มเหลวต้องไม่ทำให้ request พัง (best-effort)
+ */
+function audit_log_event(PDO $pdo, array $fields): void
 {
-    http_response_code($code);
-    header('Content-Type: application/json; charset=utf8');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit;
+    static $cols = [
+        'sc_id', 'stuid', 'role', 'method', 'path', 'action',
+        'entity_type', 'entity_id', 'status_code', 'ip', 'user_agent',
+        'duration_ms', 'meta_json',
+    ];
+    try {
+        $row = [];
+        foreach ($cols as $c) {
+            $v = $fields[$c] ?? null;
+            if ($c === 'meta_json' && is_array($v)) {
+                $v = json_encode($v, JSON_UNESCAPED_UNICODE);
+            }
+            if ($c === 'user_agent' && is_string($v)) {
+                $v = mb_substr($v, 0, 255);
+            }
+            $row[] = $v;
+        }
+        $ph = implode(',', array_fill(0, count($cols), '?'));
+        $pdo->prepare('INSERT INTO audit_logs (' . implode(',', $cols) . ') VALUES (' . $ph . ')')
+            ->execute($row);
+    } catch (Throwable $e) {
+        // audit must never break the request
+    }
+}
+
+/**
+ * true ถ้า $stuid ยิงคำขอ TTS (action='tts_request') เกิน $max ครั้งใน $windowSec วินาทีล่าสุด
+ * นับจาก audit_logs. Fail-open: ถ้าตรวจไม่ได้ (เช่นตารางหาย) คืน false เพื่อไม่บล็อกผู้ใช้
+ */
+function tts_rate_exceeded(PDO $pdo, string $stuid, int $max, int $windowSec): bool
+{
+    $windowSec = max(1, $windowSec);
+    try {
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) FROM audit_logs
+             WHERE stuid = ? AND action = 'tts_request'
+               AND created_at > (NOW(3) - INTERVAL {$windowSec} SECOND)"
+        );
+        $stmt->execute([$stuid]);
+        return (int)$stmt->fetchColumn() >= $max;
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
+/**
+ * ลบ audit_logs ที่เก่ากว่า $days วัน แบบเป็น batch (กัน lock ตารางนานตอนตารางใหญ่)
+ * คืนจำนวนแถวที่ลบทั้งหมด — $days/$batch เป็น int ที่ระบบคุมเอง จึง interpolate ปลอดภัย
+ */
+function prune_audit_logs(PDO $pdo, int $days, int $batch = 5000): int
+{
+    $days  = max(1, $days);
+    $batch = max(1, min(50000, $batch));
+    $sql   = "DELETE FROM audit_logs WHERE created_at < (NOW() - INTERVAL {$days} DAY) LIMIT {$batch}";
+    $total = 0;
+    do {
+        $n = (int)$pdo->exec($sql);
+        $total += $n;
+    } while ($n === $batch);
+    return $total;
+}
+
+/**
+ * Request-level audit middleware. เรียกครั้งเดียวจาก api/index.php ก่อน dispatch.
+ * ลงทะเบียน shutdown function เพื่อบันทึก method/path/identity/status/duration
+ * หลัง handler ส่ง response (json_response() เรียก exit → shutdown ยังทำงาน).
+ */
+function audit_request_begin(array $ctx): void
+{
+    $start = microtime(true);
+    register_shutdown_function(function () use ($ctx, $start) {
+        audit_log_event(db(), [
+            'sc_id'       => $ctx['sc_id']  ?? null,
+            'stuid'       => $ctx['stuid']  ?? null,
+            'role'        => $ctx['role']   ?? null,
+            'method'      => $ctx['method'] ?? null,
+            'path'        => $ctx['path']   ?? null,
+            'action'      => 'request',
+            'status_code' => http_response_code() ?: null,
+            'ip'          => $_SERVER['REMOTE_ADDR']     ?? null,
+            'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? null,
+            'duration_ms' => (int)round((microtime(true) - $start) * 1000),
+        ]);
+    });
 }
 
 /**
