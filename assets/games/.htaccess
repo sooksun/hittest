@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # อย่า rewrite ถ้าเป็นไฟล์/โฟลเดอร์จริง
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # React Router (SPA): route อื่น ๆ ให้กลับไปที่ index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+

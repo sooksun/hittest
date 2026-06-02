@@ -1,0 +1,186 @@
+{
+  "_Button-Bk405x_A.js": {
+    "file": "assets/Button-Bk405x_A.js",
+    "name": "Button",
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_ui-DBWp2crK.js"
+    ]
+  },
+  "_api-CmQHVrCB.css": {
+    "file": "assets/api-CmQHVrCB.css",
+    "src": "_api-CmQHVrCB.css"
+  },
+  "_api-DJjx_-y2.js": {
+    "file": "assets/api-DJjx_-y2.js",
+    "name": "api",
+    "imports": [
+      "_react-vendor-BcInfMoi.js"
+    ],
+    "css": [
+      "assets/api-CmQHVrCB.css"
+    ]
+  },
+  "_confetti.module-B82hT1Tr.js": {
+    "file": "assets/confetti.module-B82hT1Tr.js",
+    "name": "confetti.module",
+    "imports": [
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_api-DJjx_-y2.js"
+    ]
+  },
+  "_preload-helper-CGXphQGh.js": {
+    "file": "assets/preload-helper-CGXphQGh.js",
+    "name": "preload-helper"
+  },
+  "_react-vendor-BcInfMoi.js": {
+    "file": "assets/react-vendor-BcInfMoi.js",
+    "name": "react-vendor"
+  },
+  "_state-B8RzpQkN.js": {
+    "file": "assets/state-B8RzpQkN.js",
+    "name": "state",
+    "imports": [
+      "_react-vendor-BcInfMoi.js"
+    ]
+  },
+  "_toast-XHnn45IO.js": {
+    "file": "assets/toast-XHnn45IO.js",
+    "name": "toast",
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_ui-DBWp2crK.js"
+    ]
+  },
+  "_ui-DBWp2crK.js": {
+    "file": "assets/ui-DBWp2crK.js",
+    "name": "ui",
+    "imports": [
+      "_react-vendor-BcInfMoi.js"
+    ]
+  },
+  "_wordAudio.service-CeHx5I5C.js": {
+    "file": "assets/wordAudio.service-CeHx5I5C.js",
+    "name": "wordAudio.service",
+    "isDynamicEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js"
+    ]
+  },
+  "src/entries/balloon.tsx": {
+    "file": "assets/balloon-hY9XmovJ.js",
+    "name": "balloon",
+    "src": "src/entries/balloon.tsx",
+    "isEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_confetti.module-B82hT1Tr.js",
+      "_wordAudio.service-CeHx5I5C.js"
+    ]
+  },
+  "src/entries/bubble.tsx": {
+    "file": "assets/bubble-DY-PL2-V.js",
+    "name": "bubble",
+    "src": "src/entries/bubble.tsx",
+    "isEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_preload-helper-CGXphQGh.js",
+      "src/services/api.ts",
+      "_state-B8RzpQkN.js",
+      "_toast-XHnn45IO.js"
+    ],
+    "dynamicImports": [
+      "_wordAudio.service-CeHx5I5C.js"
+    ]
+  },
+  "src/entries/hangman.tsx": {
+    "file": "assets/hangman-ByKTHmg4.js",
+    "name": "hangman",
+    "src": "src/entries/hangman.tsx",
+    "isEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_preload-helper-CGXphQGh.js",
+      "_state-B8RzpQkN.js",
+      "_wordAudio.service-CeHx5I5C.js",
+      "_toast-XHnn45IO.js"
+    ],
+    "dynamicImports": [
+      "src/services/hangman.service.ts",
+      "src/services/api.ts",
+      "src/services/hangman.service.ts",
+      "src/services/hangman.service.ts",
+      "src/services/api.ts",
+      "src/utils/soundEffects.ts"
+    ]
+  },
+  "src/entries/memory.tsx": {
+    "file": "assets/memory-DCFBmL3O.js",
+    "name": "memory",
+    "src": "src/entries/memory.tsx",
+    "isEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_confetti.module-B82hT1Tr.js",
+      "_Button-Bk405x_A.js",
+      "_toast-XHnn45IO.js"
+    ]
+  },
+  "src/entries/training.tsx": {
+    "file": "assets/training-Dz6Ynj6x.js",
+    "name": "training",
+    "src": "src/entries/training.tsx",
+    "isEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js",
+      "_ui-DBWp2crK.js",
+      "_toast-XHnn45IO.js",
+      "src/services/api.ts",
+      "_state-B8RzpQkN.js",
+      "_wordAudio.service-CeHx5I5C.js",
+      "_Button-Bk405x_A.js",
+      "_preload-helper-CGXphQGh.js",
+      "src/utils/soundEffects.ts"
+    ],
+    "dynamicImports": [
+      "_wordAudio.service-CeHx5I5C.js"
+    ]
+  },
+  "src/services/api.ts": {
+    "file": "assets/api-D0d0LiiF.js",
+    "name": "api",
+    "src": "src/services/api.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js"
+    ]
+  },
+  "src/services/hangman.service.ts": {
+    "file": "assets/hangman.service-Bi8uwFuZ.js",
+    "name": "hangman.service",
+    "src": "src/services/hangman.service.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_api-DJjx_-y2.js",
+      "_react-vendor-BcInfMoi.js"
+    ]
+  },
+  "src/utils/soundEffects.ts": {
+    "file": "assets/soundEffects-BOXeqeji.js",
+    "name": "soundEffects",
+    "src": "src/utils/soundEffects.ts",
+    "isDynamicEntry": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "อาณาจักรวาจาสิทธิ์",
+  "short_name": "Kingdom of Words",
+  "description": "เกมฝึกอ่านภาษาไทยสำหรับเด็กประถม",
+  "theme_color": "#1a1a2e",
+  "background_color": "#0f0f23",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": ".",
+  "start_url": ".",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games"],
+  "lang": "th",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}
+

@@ -52,6 +52,17 @@ $myScore = $hits[$hit]['tested'] ? $hits[$hit]['score'] : null;
 $trend = dash_student_trend($scid, $stuid);
 $trendLabels = array_map(fn($t) => 'Hit-' . $t['hittest'] . ' (' . $t['years'] . ')', $trend);
 $trendData   = array_map(fn($t) => (int)$t['score'], $trend);
+
+$recentGames = dash_game_history($stuid, 5);
+$gameSummary = dash_game_summary($stuid);
+$gameNames   = [
+    'memory'   => ['icon' => '🧠', 'name' => 'สลับคำ'],
+    'balloon'  => ['icon' => '🎈', 'name' => 'ลูกโป่ง'],
+    'bubble'   => ['icon' => '💎', 'name' => 'ยิงฟอง'],
+    'hangman'  => ['icon' => '📝', 'name' => 'เดาคำ'],
+    'training' => ['icon' => '⚡', 'name' => 'ฝึกอ่าน'],
+];
+$diffNames = [1 => 'ง่าย', 2 => 'กลาง', 3 => 'ยาก'];
 ?>
 <!doctype html>
 <html lang="th">
@@ -59,7 +70,7 @@ $trendData   = array_map(fn($t) => (int)$t['score'], $trend);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>แดชบอร์ดของฉัน — HIT-TEST</title>
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/theme.css?v=<?= @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1' ?>" rel="stylesheet">
@@ -73,7 +84,7 @@ $trendData   = array_map(fn($t) => (int)$t['score'], $trend);
 </head>
 <body>
 <div class="stu-top"><div class="stu-top__in">
-    <img src="images/logohittest.png" alt="HIT-TEST" style="height:40px;width:40px;object-fit:contain;display:block">
+    <img src="images/newlogo.png" alt="HIT-TEST" style="height:40px;width:40px;object-fit:contain;display:block">
     <strong style="font-size:1.05rem">🧒 <?= htmlspecialchars($stu['stuname']) ?></strong>
     <span class="ht-badge t-blue"><?= htmlspecialchars($className) ?></span>
     <div class="ht-row" style="gap:8px;margin-left:auto;flex-wrap:wrap;align-items:center">
@@ -129,6 +140,75 @@ $trendData   = array_map(fn($t) => (int)$t['score'], $trend);
         <h3 class="mb-2">อยากเก่งขึ้น? มาฝึกอ่านกัน 🗣️</h3>
         <p class="text-muted mb-3">ฝึกอ่านคำในชุดของ <?= htmlspecialchars($className) ?> แล้วกลับมาดูคะแนนใหม่ได้เลย</p>
         <a class="ht-btn ht-btn--lg" href="my_practice.php?class_id=<?= $classid ?>&hittest=<?= $hit ?>&sethit=1">▶️ ไปฝึกอ่าน</a>
+    </div>
+
+    <!-- ── เกมฝึกอ่านคำ ──────────────────────────────────────────────────── -->
+    <div class="dash-chartbox mt-4">
+        <h3 class="mb-2">🎮 เกมฝึกอ่านคำ</h3>
+        <p class="text-muted mb-3">เล่นเกมสนุกๆ เพื่อฝึกอ่านคำศัพท์ระดับชั้น <?= htmlspecialchars($className) ?></p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="ht-btn" href="game_memory.php?grade=<?= $classid ?>&difficulty=1">🧠 สลับคำ จำให้แม่น</a>
+            <a class="ht-btn" href="game_balloon.php?grade=<?= $classid ?>">🎈 ลูกโป่งหรรษา</a>
+            <a class="ht-btn" href="game_bubble.php?grade=<?= $classid ?>&difficulty=1">💎 ยิงแม่นแขวนคำ</a>
+            <a class="ht-btn" href="game_hangman.php?grade=<?= $classid ?>&difficulty=1">📝 ไทยคำ จำแม่น</a>
+            <a class="ht-btn" href="game_training.php?grade=<?= $classid ?>&difficulty=1">⚡ ฝึกอ่าน</a>
+        </div>
+    </div>
+
+    <!-- ── ประวัติการเล่นเกมล่าสุด ──────────────────────────────────────── -->
+    <div class="dash-chartbox mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="mb-0">📋 ประวัติการเล่นเกมล่าสุด</h3>
+            <a href="my_game_history.php" class="ht-btn ht-btn--ghost ht-btn--sm">ดูทั้งหมด →</a>
+        </div>
+
+        <?php if (!empty($gameSummary)): ?>
+        <!-- Mini stat chips -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <?php foreach ($gameNames as $key => $g):
+                $s = $gameSummary[$key] ?? null;
+                if (!$s) continue;
+            ?>
+            <span style="padding:4px 12px;background:#F0F4FF;border-radius:20px;font-size:.8rem;color:#555">
+                <?= $g['icon'] ?> <?= $g['name'] ?> · <strong><?= $s['plays'] ?></strong> ครั้ง · สูงสุด <strong><?= number_format((int)$s['best']) ?></strong>
+            </span>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if (empty($recentGames)): ?>
+            <p class="text-muted">ยังไม่มีประวัติการเล่น — ลองเล่นเกมข้างบนดู!</p>
+        <?php else: ?>
+        <div class="table-responsive">
+        <table class="table table-sm mb-0" style="font-size:.88rem">
+            <thead>
+                <tr style="color:#888">
+                    <th style="font-weight:600;border:none">เกม</th>
+                    <th style="font-weight:600;border:none">ระดับ</th>
+                    <th style="font-weight:600;border:none">ความยาก</th>
+                    <th style="font-weight:600;border:none">คะแนน</th>
+                    <th style="font-weight:600;border:none">วันที่</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($recentGames as $r):
+                $g = $gameNames[$r['game']] ?? ['icon' => '🎮', 'name' => $r['game']];
+                $dateObj = new DateTime($r['created_at']);
+                $thYear = (int)$dateObj->format('Y') + 543;
+                $dateDisp = $dateObj->format('d/m/') . $thYear . ' ' . $dateObj->format('H:i');
+            ?>
+            <tr>
+                <td><?= $g['icon'] ?> <?= $g['name'] ?></td>
+                <td>ป.<?= (int)$r['grade'] ?></td>
+                <td><?= $diffNames[(int)$r['difficulty']] ?? '-' ?></td>
+                <td style="font-weight:700;color:#4D96FF"><?= number_format((int)$r['score']) ?></td>
+                <td style="color:#aaa"><?= $dateDisp ?></td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
 

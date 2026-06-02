@@ -186,6 +186,47 @@ function dash_student_trend(string $scid, string $stuid): array
 }
 
 /**
+ * ประวัติการเล่นเกมล่าสุดของนักเรียน จาก game_results
+ * RBAC: ผูก stuid + sc_id ผ่าน join students — คืนเฉพาะข้อมูลตัวเอง
+ * คืน: [ {id, game, score, grade, difficulty, stats_json, created_at}, ... ]
+ */
+function dash_game_history(string $stuid, int $limit = 15): array
+{
+    $st = db()->prepare(
+        'SELECT id, game, score, grade, difficulty, stats_json, created_at
+         FROM game_results
+         WHERE stuid = ?
+         ORDER BY created_at DESC
+         LIMIT ?'
+    );
+    $st->execute([$stuid, $limit]);
+    return $st->fetchAll();
+}
+
+/**
+ * สรุปสถิติเกมรวม (เล่นทั้งหมดกี่ครั้ง, คะแนนสูงสุด/เฉลี่ยแต่ละเกม)
+ */
+function dash_game_summary(string $stuid): array
+{
+    $st = db()->prepare(
+        'SELECT game,
+                COUNT(*) AS plays,
+                MAX(score) AS best,
+                ROUND(AVG(score), 0) AS avg_score
+         FROM game_results
+         WHERE stuid = ?
+         GROUP BY game'
+    );
+    $st->execute([$stuid]);
+    $rows = $st->fetchAll();
+    $map  = [];
+    foreach ($rows as $r) {
+        $map[$r['game']] = $r;
+    }
+    return $map;
+}
+
+/**
  * หมวดคำที่นักเรียนอ่อน (จาก per-word evaluations) — รอบ/ปีที่เลือก
  * mapping: words.indicator = word_category.catid (ยืนยันแล้ว — design doc ข้อ 1.5)
  * หมายเหตุ: evaluations แทบว่างในระบบจริงตอนนี้ → มักคืน [] (หน้า UI จะแจ้งผู้ใช้)
