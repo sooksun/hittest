@@ -26,9 +26,8 @@ $actorSc = (string)($_SESSION['sc_id'] ?? ($_SESSION['stu']['sc_id'] ?? ''));
 session_write_close();
 
 // ── Config ────────────────────────────────────────────────────────────────────
-$secret = dirname(__DIR__) . '/config/botnoi.php';
-if (is_file($secret)) require_once $secret;
-if (!defined('BOTNOI_TOKEN') || BOTNOI_TOKEN === '') {
+require_once dirname(__DIR__) . '/includes/botnoi_tts.php';   // botnoi_norm_params(), botnoi_request_audio_url()
+if (!botnoi_ready()) {
     json_response(['error' => true, 'message' => 'ยังไม่ได้ตั้งค่า Botnoi token'], 500);
 }
 
@@ -38,12 +37,7 @@ $text    = trim((string)($body['text'] ?? ''));
 
 // Validate and normalise speaker, speed, volume before forwarding to Botnoi.
 // Normalisation also ensures cache-key stability (e.g. 1.0 === 1.00).
-$rawSpeaker = (string)($body['speaker'] ?? (defined('BOTNOI_SPEAKER') ? BOTNOI_SPEAKER : '1'));
-$speaker    = ctype_digit($rawSpeaker) && (int)$rawSpeaker >= 1 && (int)$rawSpeaker <= 99
-    ? $rawSpeaker
-    : '1';
-$speed  = round(max(0.5, min(2.0, (float)($body['speed']  ?? (defined('BOTNOI_SPEED') ? BOTNOI_SPEED : 1.0)))), 1);
-$volume = round(max(0.0, min(1.0, (float)($body['volume'] ?? 1.0))), 1);
+[$speaker, $speed, $volume] = botnoi_norm_params($body['speaker'] ?? null, $body['speed'] ?? null, $body['volume'] ?? null);
 
 if ($text === '') {
     json_response(['error' => true, 'message' => 'No text'], 400);
@@ -53,7 +47,8 @@ if (mb_strlen($text) > 255) {
 }
 
 // ── Cache lookup ──────────────────────────────────────────────────────────────
-$key = sha1($text . '|' . $speaker . '|' . $speed);
+// รวม volume ในคีย์ด้วย ไม่งั้นข้อความเดิมคนละ volume จะชนแคชเดิม (คืนไฟล์เสียงผิด volume)
+$key = sha1($text . '|' . $speaker . '|' . $speed . '|' . $volume);
 $pdo = db();
 try {
     $c = $pdo->prepare('SELECT audio_url FROM tts_cache WHERE cache_key = ?');
@@ -80,38 +75,15 @@ audit_log_event($pdo, [
     'entity_type' => 'tts', 'meta_json' => ['speaker' => $speaker, 'textLen' => mb_strlen($text)],
 ]);
 
-// ── Botnoi API call ───────────────────────────────────────────────────────────
-$payload  = json_encode(['text' => $text, 'speaker' => $speaker, 'volume' => $volume,
-    'speed' => $speed, 'type_media' => 'mp3', 'save_file' => 'true', 'language' => 'th', 'page' => 'user']);
-$endpoint = 'https://api-voice.botnoi.ai/openapi/v1/generate_audio';
-$res      = null;
-$httpCode = 0;
-
-if (function_exists('curl_init')) {
-    $ch = curl_init($endpoint);
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_HTTPHEADER     => ['Content-Type: application/json', 'Botnoi-Token: ' . BOTNOI_TOKEN],
-        CURLOPT_POSTFIELDS     => $payload,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 20,
-    ]);
-    $res      = curl_exec($ch);
-    $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-}
-
-$data     = json_decode($res ?: '{}', true);
-$audioUrl = is_array($data) ? ($data['audio_url'] ?? '') : '';
-
-if ($httpCode === 200 && $audioUrl !== '') {
+// ── Botnoi API call (ผ่าน helper ร่วม includes/botnoi_tts.php) ────────────────────
+$r = botnoi_request_audio_url($text, $speaker, $speed, $volume);
+if ($r['ok']) {
     try {
         $pdo->prepare('INSERT INTO tts_cache (cache_key, text, audio_url, created_at) VALUES (?,?,?,NOW())
                        ON DUPLICATE KEY UPDATE audio_url = VALUES(audio_url)')
-            ->execute([$key, mb_substr($text, 0, 255), $audioUrl]);
+            ->execute([$key, mb_substr($text, 0, 255), $r['audioUrl']]);
     } catch (Throwable $e) { /* ignore */ }
-    json_response(['audioUrl' => $audioUrl]);
+    json_response(['audioUrl' => $r['audioUrl']]);
 }
 
-$msg = is_array($data) && !empty($data['detail']) ? $data['detail'] : 'สร้างเสียงไม่สำเร็จ';
-json_response(['error' => true, 'message' => $msg], 502);
+json_response(['error' => true, 'message' => $r['error'] ?? 'สร้างเสียงไม่สำเร็จ'], 502);

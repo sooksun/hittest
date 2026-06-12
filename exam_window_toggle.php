@@ -5,6 +5,7 @@
  * scope ด้วย session sc_id เท่านั้น (ไม่รับ sc_id จาก client)
  */
 require __DIR__ . '/includes/auth.php';
+require_editor();   // บัญชีผู้ชม (viewer) เปิด/ปิดสอบไม่ได้
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['status' => 'error', 'message' => 'method not allowed'], 405);

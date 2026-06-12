@@ -51,7 +51,7 @@ $prefill = trim($_POST['stuid'] ?? $_GET['u'] ?? '');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>นักเรียนเข้าระบบ — HIT-TEST</title>
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/theme.css?v=<?= @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1' ?>" rel="stylesheet">
@@ -70,7 +70,7 @@ $prefill = trim($_POST['stuid'] ?? $_GET['u'] ?? '');
 <body>
     <div class="stu-shell">
         <div class="stu-brand" style="flex-direction:column;align-items:center;gap:6px">
-            <img src="images/logohittest.png" alt="HIT-TEST" style="width:124px;height:124px;object-fit:contain">
+            <img src="images/newlogo.png" alt="HIT-TEST" style="width:124px;height:124px;object-fit:contain">
             <span style="font-size:.95rem;color:var(--ink-soft);font-weight:700">🧒 สำหรับนักเรียน</span>
         </div>
         <h1 style="font-size:1.7rem;margin-bottom:4px">สวัสดี! 👋</h1>

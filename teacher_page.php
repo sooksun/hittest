@@ -43,7 +43,7 @@ $examConfig = [
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>แบบทดสอบอ่านไทย — HIT-TEST</title>
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/theme.css?v=<?= @filemtime(__DIR__ . '/assets/css/theme.css') ?>" rel="stylesheet">

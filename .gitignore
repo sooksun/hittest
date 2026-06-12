@@ -3,4 +3,26 @@
 !/uploads/.gitkeep
 /database/*.sql
 /config/botnoi.php
+/config/media_gen.php
 /docsref/students/
+# สื่อที่สร้าง/ย้ายเข้ามา (เสียง mp3 + ภาพ png) — ใหญ่+เป็นของแต่ละ environment ห้าม commit
+/media/
+/media_local/
+# DB backups (มีข้อมูลนักเรียน) — ห้าม commit
+/backups/
+# DB dumps/exports — rule *.sql ด้านบนไม่จับ .zip/.gz ที่บีบอัด (มี PII นักเรียน) ห้าม commit
+/database/*.zip
+/database/*.sql.gz
+/database/*.sql.zip
+# Dev scratch / generated artifacts — ห้ามขึ้น public repo
+/_capture.php
+/_screens/
+/pdf_files/
+# Worker/runtime logs — environment-local เปลี่ยนตลอด ไม่ต้อง track
+/storage/
+# Tester access gate (HTTP Basic Auth) — root only; api/ and assets/games/ .htaccess stay tracked
+/.htaccess
+/.htpasswd
+# pnpm side-effects ของ delegating package.json (ไม่มี dependency จริงใน repo นี้)
+/node_modules/
+/pnpm-lock.yaml

@@ -15,7 +15,7 @@ $loggedIn = !empty($_SESSION['sc_id']);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HIT-TEST — ยกระดับการอ่านภาษาไทย โรงเรียนพื้นที่ลักษณะพิเศษ</title>
     <meta name="description" content="ระบบประเมินความสามารถการอ่านภาษาไทย (HIT) สำหรับนักเรียน ป.1–ป.6 โรงเรียนพื้นที่สูงในถิ่นทุรกันดารและโรงเรียนพื้นที่เกาะ ตามแนวทาง สพฐ.">
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= $css ?>" rel="stylesheet">
@@ -103,7 +103,7 @@ $loggedIn = !empty($_SESSION['sc_id']);
     <!-- Navbar -->
     <nav class="lp-nav">
         <div class="lp-nav__inner">
-            <span class="lp-brand"><img src="images/logohittest.png" alt="HIT-TEST" style="height:46px;width:46px;object-fit:contain;display:block"> <span style="font-weight:800;color:var(--ink)">HIT-TEST</span></span>
+            <span class="lp-brand"><img src="images/newlogo.png" alt="HIT-TEST" style="height:46px;width:46px;object-fit:contain;display:block"> <span style="font-weight:800;color:var(--ink)">HIT-TEST</span></span>
             <div class="lp-nav__links">
                 <a class="ln d-none d-md-inline" href="#about">เกี่ยวกับ HIT</a>
                 <a class="ln d-none d-md-inline" href="#process">กระบวนการ</a>

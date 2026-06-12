@@ -15,8 +15,8 @@ foreach ($rows->fetchAll() as $r) {
 // จำนวนนักเรียน + สอบแล้วต่อรอบ (ของโรงเรียนนี้)
 $stat = db()->prepare('SELECT COUNT(*) total,
         COALESCE(SUM(hit1tested),0) h1, COALESCE(SUM(hit2tested),0) h2, COALESCE(SUM(hit3tested),0) h3
-    FROM students WHERE sc_id = ?');
-$stat->execute([$scid]);
+    FROM students WHERE sc_id = ? AND years = ?');
+$stat->execute([$scid, current_year()]);
 $stat = $stat->fetch();
 $total = (int)$stat['total'];
 $testedByHit = [1 => (int)$stat['h1'], 2 => (int)$stat['h2'], 3 => (int)$stat['h3']];

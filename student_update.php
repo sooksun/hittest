@@ -5,6 +5,7 @@
  * ไม่อนุญาตให้แก้ stuid / sc_id (PK + ขอบเขตโรงเรียน)
  */
 require __DIR__ . '/includes/auth.php';
+require_editor();   // บัญชีผู้ชม (viewer) แก้ข้อมูลนักเรียนไม่ได้
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['status' => 'error', 'message' => 'method not allowed'], 405);
@@ -49,8 +50,8 @@ try {
         'UPDATE students
             SET stuname = ?, class_id = ?, rooms = ?, stustatus = ?,
                 sethit1 = ?, sethit2 = ?, sethit3 = ?
-          WHERE stuid = ? AND sc_id = ?'
-    )->execute([$stuname, $class_id, $rooms, $status, $sets[1], $sets[2], $sets[3], $stuid, $scid]);
+          WHERE stuid = ? AND sc_id = ? AND years = ?'
+    )->execute([$stuname, $class_id, $rooms, $status, $sets[1], $sets[2], $sets[3], $stuid, $scid, current_year()]);
 } catch (Throwable $e) {
     json_response(['status' => 'error', 'message' => 'บันทึกไม่สำเร็จ'], 500);
 }

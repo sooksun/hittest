@@ -1,6 +1,7 @@
 <?php
 /** cancel_result.php — ยกเลิกการสอบ 1 รอบ (ลบผล + คืนสถานะยังไม่สอบ) */
 require __DIR__ . '/includes/auth.php';
+require_editor();   // บัญชีผู้ชม (viewer) ยกเลิกผลไม่ได้
 
 $stuid   = (string)($_REQUEST['stuid'] ?? '');
 $hittest = (int)($_REQUEST['hittest'] ?? 0);
@@ -13,13 +14,14 @@ if (!find_student($stuid)) {
     json_response(['status' => 'error', 'message' => 'ไม่พบนักเรียน หรือไม่มีสิทธิ์'], 403);
 }
 
-$pdo = db();
+$pdo  = db();
+$year = current_year();   // ยกเลิกเฉพาะผลของปีปัจจุบัน (ปีเก่าเป็นประวัติ ไม่แตะ)
 try {
     $pdo->beginTransaction();
-    $pdo->prepare('DELETE FROM evaluations WHERE stuid = ? AND hittest = ?')->execute([$stuid, $hittest]);
-    $pdo->prepare('DELETE FROM studenteval WHERE stuid = ? AND hittest = ?')->execute([$stuid, $hittest]);
-    $pdo->prepare('DELETE FROM studenthit  WHERE stuid = ? AND hit = ?')->execute([$stuid, $hittest]);
-    $pdo->prepare("UPDATE students SET `hit{$hittest}` = 0, `hit{$hittest}tested` = 0 WHERE stuid = ?")->execute([$stuid]);
+    $pdo->prepare('DELETE FROM evaluations WHERE stuid = ? AND hittest = ? AND years = ?')->execute([$stuid, $hittest, $year]);
+    $pdo->prepare('DELETE FROM studenteval WHERE stuid = ? AND hittest = ? AND years = ?')->execute([$stuid, $hittest, $year]);
+    $pdo->prepare('DELETE FROM studenthit  WHERE stuid = ? AND hit = ? AND years = ?')->execute([$stuid, $hittest, $year]);
+    $pdo->prepare("UPDATE students SET `hit{$hittest}` = 0, `hit{$hittest}tested` = 0 WHERE stuid = ? AND years = ?")->execute([$stuid, $year]);
     $pdo->commit();
 } catch (PDOException $e) {
     $pdo->rollBack();

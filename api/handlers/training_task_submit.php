@@ -55,14 +55,18 @@ if (!$task) {
     json_response(['error' => true, 'message' => 'Task not found'], 404);
 }
 
-// ── Server-side elapsed time (now − previous submission, else session start) ──
-$prev = $pdo->prepare('SELECT MAX(submitted_at) FROM game_task_submissions WHERE session_id = ?');
-$prev->execute([$sessionId]);
-$prevTs = $prev->fetchColumn() ?: $session['started_at'];
-
-$diff = $pdo->prepare('SELECT GREATEST(0, TIMESTAMPDIFF(MICROSECOND, ?, NOW(3)))');
-$diff->execute([$prevTs]);
-$elapsedMs = (int)floor(((int)$diff->fetchColumn()) / 1000);
+// ── Server-side elapsed time (anti-cheat) ────────────────────────────────────
+// วัดฝั่ง server เท่านั้น: ตั้งแต่ submit ของ task ก่อนหน้า (หรือ session start ถ้าเป็น task แรก)
+// จนถึงตอนนี้ — ไม่เชื่อ timeSpentMs จาก client (จะโกงให้เร็วเพื่อรีด speed bonus ได้).
+// ค่านี้เป็น "ขอบบน" ของเวลาคิดจริง (รวมเวลาดูผล task ก่อนหน้าเล็กน้อย) จึงให้โบนัสอย่าง
+// อนุรักษ์นิยม — โกงให้ได้โบนัสเกินจริงไม่ได้. รวมเป็น query เดียว (เดิมยิง 2 ครั้ง).
+$elapsedStmt = $pdo->prepare(
+    'SELECT GREATEST(0, TIMESTAMPDIFF(MICROSECOND,
+        COALESCE((SELECT MAX(submitted_at) FROM game_task_submissions WHERE session_id = ?), ?),
+        NOW(3)))'
+);
+$elapsedStmt->execute([$sessionId, $session['started_at']]);
+$elapsedMs = (int)floor(((int)$elapsedStmt->fetchColumn()) / 1000);
 
 // ── Evaluate correctness ──────────────────────────────────────────────────────
 $isCorrect = false;
@@ -72,9 +76,10 @@ if (in_array($tmpl, ['W001_FILL_MISSING_CHAR', 'W003_TYPE_WORD'])) {
     $expected  = $task['config']['expectedText'] ?? $task['config']['expectedWord'] ?? $task['wordText'];
     $isCorrect = mb_strtolower(trim($typed)) === mb_strtolower(trim($expected));
 } elseif ($tmpl === 'S001_RECORD_PRONUNCIATION') {
-    // client speechConfidence is NOT trusted — text transcript only
-    $expected  = mb_strtolower(trim($task['config']['expectedText'] ?? $task['wordText']));
-    $isCorrect = mb_strtolower($typed) === $expected;
+    // ไม่เชื่อ speechConfidence ของ client — ตรวจ "ข้อความ" ที่ STT ถอดได้ฝั่ง server แบบยืดหยุ่น
+    // (NFC + ไม่สนวรรณยุกต์ + รองรับคำพ่วง) เพื่อให้ออกเสียงถูกได้คะแนนจริง ไม่ใช่ต้องสะกดเป๊ะ
+    $expected  = (string)($task['config']['expectedText'] ?? $task['wordText'] ?? '');
+    $isCorrect = thai_speech_match($typed, $expected);
 } else {
     // Choice-based (L001, R001, ...)
     foreach ($task['choices'] as $ch) {

@@ -270,3 +270,106 @@ run_test('IT8 — Session row lock blocks a concurrent writer (FOR UPDATE)', fun
     ok($blocked === true,  'concurrent writer was blocked while the lock was held');
     ok($errno === 1205,    "blocked with lock-wait-timeout 1205 (got {$errno})");
 });
+
+// ═════════════════════════════════════════════════════════════════════════════
+// IT9 — S001 pronunciation is scored SERVER-SIDE on the transcript (not client
+//        speechConfidence): a correct read scores even when STT mangles the tone
+//        / appends a word, while a wrong word fails despite high client confidence.
+// ═════════════════════════════════════════════════════════════════════════════
+run_test('IT9 — S001 pronunciation: tone-variant transcript scores, wrong word fails', function () use ($H, $ME) {
+    $s001 = [
+        'taskId'      => 'task-s1',
+        'templateKey' => 'S001_RECORD_PRONUNCIATION',
+        'wordText'    => 'กบ',
+        'choices'     => [],
+        'timerMs'     => 15000,
+        'config'      => ['expectedText' => 'กบ'],
+    ];
+
+    // Correct read, but Chrome STT returned a stray tone mark + a polite word
+    $pdo = create_test_db();
+    $sid = seed_training($pdo, ['tasks' => [$s001]]);
+    $r = call_handler($H . 'training_task_submit.php',
+        ['pdo' => $pdo, 'me' => $ME, 'taskId' => 'task-s1'],
+        json_encode(['sessionId' => $sid, 'typedText' => 'ก่บ ค่ะ']));
+    ok($r->data['isCorrect'] === true, 'tone-variant + appended word is accepted server-side');
+    ok($r->data['score'] >= 100,       'a correct read earns the base score');
+
+    // Wrong word must fail even if the client claims near-perfect confidence
+    $pdo2 = create_test_db();
+    $sid2 = seed_training($pdo2, ['tasks' => [$s001]]);
+    $r2 = call_handler($H . 'training_task_submit.php',
+        ['pdo' => $pdo2, 'me' => $ME, 'taskId' => 'task-s1'],
+        json_encode(['sessionId' => $sid2, 'typedText' => 'หมา', 'speechConfidence' => 0.99]));
+    ok($r2->data['isCorrect'] === false, 'wrong word rejected despite high client speechConfidence');
+    ok($r2->data['score'] === 0,         'no score for a wrong read');
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+// IT10 — Replaying the guess that COMPLETED the round is idempotent (200 replay,
+//         not 400). The game client's API wrapper throws on any 4xx, so a retry /
+//         double-tap of the winning guess must return the original final result.
+// ═════════════════════════════════════════════════════════════════════════════
+run_test('IT10 — Hangman replay of the winning guess returns 200 (not 400), scored once', function () use ($H, $ME) {
+    $pdo = create_test_db();
+    $sid = seed_hangman($pdo, ['word' => 'กา', 'masked' => '["_","_"]', 'lives' => 5]);
+
+    // Reveal the first letter, then the winning letter (round completes)
+    call_handler($H . 'hangman_guess.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['sessionId' => $sid, 'guess' => 'ก', 'guessType' => 'consonant']));
+    $win = call_handler($H . 'hangman_guess.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['sessionId' => $sid, 'guess' => 'า', 'guessType' => 'vowel']));
+    ok($win->data['won'] === true,       'winning guess completes the word');
+    ok($win->data['completed'] === true, 'session marked completed');
+    $finalScore = (int)$win->data['score'];
+
+    // Network retry / double-tap of that SAME winning guess on the finished round
+    $replay = call_handler($H . 'hangman_guess.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['sessionId' => $sid, 'guess' => 'า', 'guessType' => 'vowel']));
+    ok($replay->httpCode === 200,                      'replay is HTTP 200, not a 4xx the client would throw');
+    ok(($replay->data['duplicate'] ?? false) === true, 'replay flagged duplicate');
+    ok($replay->data['won'] === true,                  'replay still reports won');
+    ok($replay->data['completed'] === true,            'replay still reports completed');
+    ok($replay->data['word'] === 'กา',                 'replay reveals the answer word');
+    ok($replay->data['score'] === $finalScore,         'replay returns the original score (no re-score)');
+
+    // No double insert / no double result row
+    $rows = count_rows($pdo, 'game_hangman_guesses', 'session_id = ? AND guess_char = ?', [$sid, 'า']);
+    ok($rows === 1, "exactly 1 guess row for the winning char (got {$rows})");
+    $results = count_rows($pdo, 'game_results', 'game = ? AND stuid = ?', ['hangman', 'studentA']);
+    ok($results === 1, "exactly 1 hangman result row (got {$results})");
+
+    // A genuinely NEW guess on the finished round still gets 400 (not a replay)
+    $newGuess = call_handler($H . 'hangman_guess.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['sessionId' => $sid, 'guess' => 'ม', 'guessType' => 'consonant']));
+    ok($newGuess->httpCode === 400, 'a never-made guess on a finished round still returns 400');
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+// IT11 — balloon_submit drives the shared game_clamp_score() + game_result_save()
+//         helpers: a legit score is stored as-is; a fabricated score is clamped
+//         to 9999 and the clamp is audited.
+// ═════════════════════════════════════════════════════════════════════════════
+run_test('IT11 — balloon_submit: shared clamp + result-save helpers', function () use ($H, $ME) {
+    $pdo = create_test_db();
+
+    // Legit score saves through game_result_save (class_id from $me, grade from body)
+    $r1 = call_handler($H . 'balloon_submit.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['score' => 1500, 'levelsCompleted' => 3, 'difficulty' => 2, 'hearts' => 4, 'gradeLevel' => 2]));
+    ok(($r1->data['ok'] ?? false) === true,    'ok=true');
+    ok(($r1->data['attemptId'] ?? 0) > 0,      'returns attemptId');
+    $row = $pdo->query("SELECT * FROM game_results WHERE game='balloon' ORDER BY id DESC LIMIT 1")->fetch();
+    ok((int)$row['score'] === 1500,            'legit score 1500 stored as-is');
+    ok((int)$row['grade'] === 2,               'grade from body');
+    ok((int)$row['class_id'] === 1,            'class_id from $me (studentA = class 1)');
+
+    // Fabricated huge score → clamped to 9999 + score_clamped audit
+    $r2 = call_handler($H . 'balloon_submit.php', ['pdo' => $pdo, 'me' => $ME],
+        json_encode(['score' => 999999, 'difficulty' => 1, 'gradeLevel' => 1]));
+    $clampedScore = (int)$pdo->query("SELECT score FROM game_results WHERE game='balloon' ORDER BY id DESC LIMIT 1")->fetchColumn();
+    ok($clampedScore === 9999, "fabricated 999999 clamped to 9999 (got {$clampedScore})");
+    $clamped = count_rows($pdo, 'audit_logs', 'action = ?', ['score_clamped']);
+    ok($clamped === 1, 'score_clamped audited exactly once');
+
+    ok(count_rows($pdo, 'game_results', 'game = ?', ['balloon']) === 2, 'two balloon rows total');
+});

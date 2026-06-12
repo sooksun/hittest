@@ -10,6 +10,12 @@ require_once __DIR__ . '/bootstrap.php';
 require_once __DIR__ . '/SecurityTest.php';
 require_once __DIR__ . '/IntegrationTest.php';
 require_once __DIR__ . '/RetentionTest.php';
+require_once __DIR__ . '/StoryTest.php';
+require_once __DIR__ . '/MediaJobTest.php';
+require_once __DIR__ . '/MediaPipelineTest.php';
+require_once __DIR__ . '/PromoteYearTest.php';
+require_once __DIR__ . '/AuthUserTest.php';
+require_once __DIR__ . '/StudentsImportTest.php';
 
 // ── Report ────────────────────────────────────────────────────────────────────
 $passed  = $GLOBALS['_test_passed'];

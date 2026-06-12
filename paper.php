@@ -6,11 +6,20 @@ $class_id = (int)($_GET['class_id'] ?? 1);
 if ($class_id < 1 || $class_id > 6) {
     $class_id = 1;
 }
-$cnt = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND class_id = ?');
-$cnt->execute([current_sc_id(), $class_id]);
+$cnt = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND class_id = ?');
+$cnt->execute([current_sc_id(), current_year(), $class_id]);
 $cnt = (int)$cnt->fetch()['c'];
 
 $win = exam_windows();   // สถานะเปิด/ปิดรายรอบของโรงเรียนนี้
+
+// ชุดแบบทดสอบ (PDF) ของชั้นที่เลือก — hittestSet เป็นชุดกลาง (ไม่ผูกโรงเรียน)
+// ชื่อตารางตาม schema คือ hittestSet (S ตัวใหญ่) — MySQL บน Linux case-sensitive จึงต้องตรงเป๊ะ ห้ามเปลี่ยนเป็นพิมพ์เล็ก
+$setStmt = db()->prepare('SELECT hit, hitset, hittestdoc FROM hittestSet WHERE class_id = ? ORDER BY hit, hitset');
+$setStmt->execute([$class_id]);
+$setsByHit = [];
+foreach ($setStmt->fetchAll() as $row) {
+    $setsByHit[(int)$row['hit']][] = $row;
+}
 
 $page_title = 'สอบด้วยกระดาษ';
 $active = 'paper';
@@ -78,6 +87,52 @@ require __DIR__ . '/includes/header.php';
                 <button class="ht-btn ht-btn--lg ht-btn--green mt-4" type="submit">⬆️ อัปโหลดคะแนนเข้าระบบ</button>
             </form>
             <p class="text-muted mt-3 mb-0" style="font-size:.92rem">ระบบจะบันทึกลงผลรายข้อ (evaluations) และสรุปคะแนน (studenthit) ให้อัตโนมัติ</p>
+        </div>
+    </div>
+</div>
+
+<!-- ดาวน์โหลดชุดแบบทดสอบ (PDF) รายชั้น · ราย Hit · รายชุด -->
+<div class="row g-4 mt-1">
+    <div class="col-12">
+        <div class="ht-card">
+            <span class="ht-badge t-yellow mb-3">ชุดข้อสอบ</span>
+            <h3 class="mt-2">📄 ดาวน์โหลดชุดแบบทดสอบ (PDF) — ป.<?= $class_id ?></h3>
+            <p class="text-muted mt-1 mb-3" style="font-size:.92rem">
+                เลือกดาวน์โหลดเป็นรายรอบ (Hit) และรายชุด — ไฟล์ข้อสอบสำหรับพิมพ์สอบด้วยกระดาษ
+                (เปลี่ยนชั้นได้ที่ตัวเลือก "เลือกชั้น" ด้านบน)
+            </p>
+
+            <?php if (empty($setsByHit)): ?>
+                <p class="mb-0" style="color:var(--c-coral-ink)">— ยังไม่มีชุดแบบทดสอบสำหรับ ป.<?= $class_id ?> —</p>
+            <?php else: foreach ($setsByHit as $hit => $rows): $hitOpen = $win[$hit] ?? true; ?>
+                <div class="mb-3">
+                    <div class="ht-label mb-2">
+                        รอบ Hit-<?= $hit ?>
+                        <?php if (!$hitOpen): ?>
+                            <span class="ht-badge ht-badge--missing" title="รอบนี้ปิดการสอบอยู่">🔒 ปิดสอบ</span>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (!$hitOpen): ?>
+                        <p class="mb-0 text-muted" style="font-size:.88rem">— รอบนี้ปิดสอบอยู่ ดาวน์โหลดข้อสอบไม่ได้ —</p>
+                    <?php else: ?>
+                        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+                            <?php foreach ($rows as $row):
+                                $hitset = (int)$row['hitset'];
+                                $exists = is_file(__DIR__ . '/pdf_files/' . basename((string)$row['hittestdoc']));
+                            ?>
+                                <?php if ($exists): ?>
+                                    <a class="ht-btn ht-btn--sm ht-btn--ghost"
+                                       href="paper_pdf.php?class_id=<?= $class_id ?>&amp;hit=<?= $hit ?>&amp;hitset=<?= $hitset ?>">
+                                        📄 ชุด <?= $hitset ?> <span class="text-muted">⬇️</span>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="ht-badge ht-badge--missing" title="ไม่พบไฟล์ในระบบ">ชุด <?= $hitset ?> — ไม่มีไฟล์</span>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; endif; ?>
         </div>
     </div>
 </div>

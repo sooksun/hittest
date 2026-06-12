@@ -4,9 +4,9 @@
  * ของเดิม: username = password = รหัสโรงเรียน (เช่น 57030129)
  */
 session_start();
-require __DIR__ . '/includes/db.php';
+require __DIR__ . '/includes/functions.php';
 
-if (!empty($_SESSION['sc_id'])) {
+if (!empty($_SESSION['sc_id']) || !empty($_SESSION['user_id'])) {
     header('Location: menu.php');
     exit;
 }
@@ -16,6 +16,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $smis = trim($_POST['username'] ?? '');
     $pass = trim($_POST['password'] ?? '');
 
+    // 1) บัญชีผู้ใช้ (ตาราง users) — username/password (hash) + role
+    $user = user_authenticate($smis, $pass);
+    if ($user) {
+        session_regenerate_id(true);
+        $area = (string)($user['area_code'] ?? '');
+        $scid = (string)($user['sc_id'] ?? '');
+        // saoadmin (ผูกเขต ไม่ผูกโรงเรียน) → เลือกโรงเรียนแรกในเขตเป็นบริบทเริ่มต้น (สลับได้ภายหลัง)
+        if ($scid === '' && $area !== '') {
+            $f = db()->prepare('SELECT sc_id FROM schools WHERE sc_smis LIKE ? ORDER BY sc_smis LIMIT 1');
+            $f->execute([$area . '%']);
+            $scid = (string)($f->fetchColumn() ?: '');
+        }
+        // resolve บริบทโรงเรียน (ชื่อ/SMIS) จาก sc_id ถ้ามี
+        $scSmis = (string)$user['username'];
+        $scName = USER_ROLES[$user['role']] ?? 'ผู้ใช้';
+        if ($scid !== '') {
+            $s = db()->prepare('SELECT sc_id, sc_smis, sc_name FROM schools WHERE sc_id = ? LIMIT 1');
+            $s->execute([$scid]);
+            if ($sc = $s->fetch()) {
+                $scid   = (string)$sc['sc_id'];
+                $scSmis = (string)$sc['sc_smis'];
+                $scName = (string)$sc['sc_name'];
+            }
+        }
+        $_SESSION['sc_id']     = $scid;
+        $_SESSION['sc_smis']   = $scSmis;
+        $_SESSION['sc_name']   = $scName;
+        $_SESSION['user_id']   = (int)$user['id'];
+        $_SESSION['user_role'] = (string)$user['role'];
+        $_SESSION['user_name'] = (string)$user['name'];
+        $_SESSION['area_code'] = $area;
+        header('Location: menu.php');
+        exit;
+    }
+
+    // 2) เดิม: โรงเรียน login ด้วย SMIS (user = pass = SMIS)
     $stmt = db()->prepare('SELECT sc_id, sc_smis, sc_name FROM schools WHERE sc_smis = ?');
     $stmt->execute([$smis]);
     $school = $stmt->fetch();
@@ -37,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เข้าระบบ — HIT-TEST</title>
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/theme.css?v=<?= @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1' ?>" rel="stylesheet">
@@ -81,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-shell">
         <section class="login-form">
             <div class="login-brand" style="justify-content:center">
-                <img src="images/logohittest.png" alt="HIT-TEST" style="width:130px;height:130px;object-fit:contain">
+                <img src="images/newlogo.png" alt="HIT-TEST" style="width:130px;height:130px;object-fit:contain">
             </div>
             <h1>เข้าสู่ระบบ</h1>
             <p class="sub">เข้าสู่ระบบบัญชีของคุณเพื่อเริ่มการประเมิน</p>

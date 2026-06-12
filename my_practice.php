@@ -33,7 +33,7 @@ $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>ฝึกอ่าน — HIT-TEST</title>
-    <link rel="icon" href="images/logohittest.png" type="image/png">
+    <link rel="icon" href="images/newlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/theme.css?v=<?= $cssver ?>" rel="stylesheet">
@@ -73,7 +73,7 @@ $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
 </head>
 <body>
 <div class="mp-top"><div class="mp-top__in">
-    <a href="my_dashboard.php"><img src="images/logohittest.png" alt="HIT-TEST" style="height:38px;width:38px;object-fit:contain;display:block"></a>
+    <a href="my_dashboard.php"><img src="images/newlogo.png" alt="HIT-TEST" style="height:38px;width:38px;object-fit:contain;display:block"></a>
     <strong>🧒 <?= htmlspecialchars($me['stuname']) ?></strong>
     <a href="my_dashboard.php" class="ht-btn ht-btn--ghost ht-btn--sm" style="margin-left:auto">← แดชบอร์ด</a>
 </div></div>
@@ -151,21 +151,12 @@ $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
         'words' => $words,
         'set'   => ['class_id' => $class_id, 'hittest' => $hittest, 'sethit' => $sethit],
     ], JSON_UNESCAPED_UNICODE) ?>;</script>
+    <script src="assets/js/practice-reader.js?v=<?= @filemtime(__DIR__ . '/assets/js/practice-reader.js') ?: '1' ?>"></script>
     <script>
     (function () {
         'use strict';
-        var WORDS = (window.PRACTICE && window.PRACTICE.words) || [];
-        var SET   = (window.PRACTICE && window.PRACTICE.set) || {};
-        for (var i = WORDS.length - 1; i > 0; i--) {     // สลับลำดับ (Fisher–Yates)
-            var j = Math.floor(Math.random() * (i + 1));
-            var t = WORDS[i]; WORDS[i] = WORDS[j]; WORDS[j] = t;
-        }
-        var idx = 0, score = 0, total = WORDS.length, attempts = 0, solved = false;
-
-        var el = function (id) { return document.getElementById(id); };
-        var norm = function (s) { return String(s == null ? '' : s).replace(/\s+/g, '').trim(); };
-
-        // ---- บันทึกผลรายคำลงเซิร์ฟเวอร์ (ตัวตนมาจาก session ฝั่ง server) ----
+        var P = window.PRACTICE || {}, SET = P.set || {};
+        // บันทึกผลรายคำลงเซิร์ฟเวอร์ (ตัวตนมาจาก session ฝั่ง server) — เรียกตอนอ่านถูก (1) และตอนข้ามทั้งที่ยังไม่ถูก (0)
         function savePractice(w, tries, correct) {
             if (!w) { return; }
             fetch('practice_save.php', {
@@ -176,215 +167,12 @@ $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
                       '&attempts=' + tries + '&correct=' + (correct ? 1 : 0)
             }).catch(function () {});
         }
-
-        // ---- เสียงดริ๊ง ----
-        var chime = new Audio('sounds/correct.mp3'); chime.preload = 'auto';
-        var audioUnlocked = false;
-        // ปลดล็อกเสียงด้วย user-gesture แรก (มือถือบล็อก autoplay เสียงที่ไม่ได้เกิดจากการแตะ)
-        function unlockAudio() {
-            if (audioUnlocked) { return; }
-            audioUnlocked = true;
-            try {
-                chime.muted = true;
-                var p = chime.play();
-                if (p && p.then) { p.then(function () { chime.pause(); chime.currentTime = 0; chime.muted = false; })
-                                    .catch(function () { chime.muted = false; }); }
-                else { chime.pause(); chime.currentTime = 0; chime.muted = false; }
-            } catch (e) { chime.muted = false; }
-        }
-        function playChime() { try { chime.currentTime = 0; chime.play(); } catch (e) {} }
-
-        // ---- ฟังคำ (Botnoi ผ่าน tts.php, สำรองด้วย TTS เบราว์เซอร์) ----
-        var ttsAudio = null, lastSpeakText = '', lastSpeakAt = 0;
-        function speakFallback(text) {
-            if (wantListen || !('speechSynthesis' in window)) { return; }
-            window.speechSynthesis.cancel();
-            var u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 0.9;
-            window.speechSynthesis.speak(u);
-        }
-        function speak(text) {
-            var t = Date.now();
-            if (text === lastSpeakText && (t - lastSpeakAt) < 800) { return; }
-            lastSpeakText = text; lastSpeakAt = t;
-            stopListen(); stopAudio();
-            fetch('tts.php', { method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
-                body: 'text=' + encodeURIComponent(text) })
-                .then(function (r) { return r.json(); })
-                .then(function (d) {
-                    if (wantListen) { return; }
-                    if (d.status === 'ok' && d.audio_url) {
-                        ttsAudio = new Audio(d.audio_url);
-                        var pr = ttsAudio.play();
-                        if (pr && pr.then) { pr.catch(function () { lastSpeakText = ''; speakFallback(text); }); }
-                    } else { speakFallback(text); }
-                })
-                .catch(function () { speakFallback(text); });
-        }
-
-        // ---- Speech Recognition ----
-        var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        var recog = null, listening = false;
-        var wantListen = false, gotResult = false, retried = false, lastErr = '', micWarmed = false;
-        if (SR) {
-            recog = new SR();
-            recog.lang = 'th-TH'; recog.interimResults = true; recog.continuous = true; recog.maxAlternatives = 5;
-            recog.onstart = function () {
-                listening = true;
-                el('pMic').innerHTML = '🛑 หยุด (กำลังฟัง…)';
-                el('pMic').classList.replace('ht-btn--green', 'ht-btn--coral');
-            };
-            recog.onerror = function (e) { lastErr = (e && e.error) || ''; };
-            recog.onend = function () {
-                listening = false;
-                el('pMic').innerHTML = '🎤 อ่าน';
-                el('pMic').classList.replace('ht-btn--coral', 'ht-btn--green');
-                if (wantListen && !gotResult && !retried && (lastErr === '' || lastErr === 'no-speech' || lastErr === 'aborted')) {
-                    retried = true;
-                    setTimeout(function () { if (wantListen && !listening) { try { recog.start(); } catch (e) {} } }, 220);
-                    return;
-                }
-                if (wantListen && !gotResult) {
-                    el('pHeard').textContent =
-                        lastErr === 'not-allowed' ? '⚠️ กรุณาอนุญาตไมโครโฟน'
-                        : lastErr === 'audio-capture' ? '⚠️ ไม่พบไมโครโฟน'
-                        : lastErr === 'network' ? '⚠️ เชื่อมต่ออินเทอร์เน็ตไม่ได้'
-                        : 'ไม่ได้ยินเสียง — กด 🎤 อ่าน อีกครั้ง';
-                }
-                wantListen = false;
-            };
-            recog.onresult = function (e) {
-                var interim = '', finals = [], top = '';
-                for (var k = e.resultIndex; k < e.results.length; k++) {
-                    var r = e.results[k];
-                    if (r.isFinal) { gotResult = true; if (!top) { top = r[0].transcript; }
-                        for (var a = 0; a < r.length; a++) { finals.push(r[a].transcript); } }
-                    else { interim += r[0].transcript; }
-                }
-                el('pHeard').textContent = (top || interim) ? ('ได้ยิน: ' + (top || interim)) : '';
-                if (finals.length) { check(finals); }
-            };
-        } else {
-            el('pUnsupported').classList.remove('d-none');
-            el('pMic').disabled = true;
-        }
-
-        // ---- เทียบเสียง (รองรับคำพ้องเสียง) ----
-        var FINAL_SND = {
-            'ก':'ก','ข':'ก','ค':'ก','ฆ':'ก','ง':'ง',
-            'จ':'ด','ช':'ด','ซ':'ด','ฌ':'ด','ฎ':'ด','ฏ':'ด','ฐ':'ด','ฑ':'ด','ฒ':'ด','ด':'ด','ต':'ด','ถ':'ด','ท':'ด','ธ':'ด','ศ':'ด','ษ':'ด','ส':'ด',
-            'ญ':'น','ณ':'น','น':'น','ร':'น','ล':'น','ฬ':'น','ม':'ม','ย':'ย','ว':'ว',
-            'บ':'บ','ป':'บ','ผ':'บ','ฝ':'บ','พ':'บ','ฟ':'บ','ภ':'บ'
-        };
-        function isCons(c) { return c >= 'ก' && c <= 'ฮ'; }
-        function isVowel(c) { return (c >= 'ะ' && c <= 'ฺ') || (c >= 'เ' && c <= 'ๅ'); }
-        function soundKey(s) {
-            s = norm(s).replace(/[ก-ฮ]์/g, '').replace(/์/g, '');
-            var ch = s.split(''), first = -1, last = -1;
-            for (var i = 0; i < ch.length; i++) { if (isCons(ch[i])) { if (first < 0) { first = i; } last = i; } }
-            if (last > first) {
-                var vowelAfter = false;
-                for (var j = last + 1; j < ch.length; j++) { if (isVowel(ch[j])) { vowelAfter = true; break; } }
-                if (!vowelAfter) {
-                    var fin = last;
-                    if (ch[last] === 'ร' && last - 1 > first && isCons(ch[last - 1])) {
-                        var vBefore = false;
-                        for (var k = 0; k < last - 1; k++) { if (isVowel(ch[k])) { vBefore = true; break; } }
-                        if (vBefore) { ch.splice(last, 1); fin = last - 1; }
-                    }
-                    if (FINAL_SND[ch[fin]]) { ch[fin] = FINAL_SND[ch[fin]]; }
-                }
-            }
-            return ch.join('');
-        }
-        function isCorrect(said, cur) {
-            var targets = [cur.word];
-            String(cur.spoken || '').split(',').forEach(function (x) { x = x.trim(); if (x) { targets.push(x); } });
-            for (var t = 0; t < targets.length; t++) {
-                if (norm(said) === norm(targets[t])) { return true; }
-                if (soundKey(said) === soundKey(targets[t])) { return true; }
-            }
-            return false;
-        }
-        function check(saidList) {
-            var cur = WORDS[idx]; if (!cur) { return; }
-            if (typeof saidList === 'string') { saidList = [saidList]; }
-            attempts++;
-            var matched = false;
-            for (var i = 0; i < saidList.length; i++) { if (isCorrect(saidList[i], cur)) { matched = true; break; } }
-            if (matched) {
-                score++; el('pScore').textContent = score;
-                solved = true;
-                addResult(cur.word, attempts);
-                savePractice(cur, attempts, 1);      // บันทึก: อ่านถูก
-                stopListen(); playChime();
-                Swal.fire({ icon: 'success', title: 'อ่านถูกต้อง! 🎉',
-                    html: 'คำว่า <b>"' + cur.word + '"</b>', timer: 1500, showConfirmButton: false })
-                    .then(function () { next(); });
-            } else {
-                stopListen();
-                el('pHeard').textContent = 'ได้ยิน: ' + (saidList[0] || '');
-                Swal.fire({ icon: 'error', title: 'ยังไม่ถูก ลองอีกครั้ง',
-                    html: 'คำว่า <b>"' + cur.word + '"</b>', confirmButtonText: 'ลองอีกครั้ง', confirmButtonColor: '#FF6B6B' });
-            }
-        }
-
-        function render() {
-            var cur = WORDS[idx];
-            el('pWord').textContent = cur ? cur.word : '—';
-            el('pHeard').textContent = '';
-            attempts = 0; solved = false;
-            el('pBar').style.width = (total ? Math.round(idx / total * 100) : 0) + '%';
-        }
-        function addResult(word, tries) {
-            el('pResultsWrap').style.display = '';
-            var color = tries === 1 ? '#1E7B45' : (tries <= 3 ? '#9A6B00' : '#B4232B');
-            var th = document.createElement('th'); th.textContent = word; th.style.textAlign = 'center'; th.style.whiteSpace = 'nowrap';
-            el('pResHead').appendChild(th);
-            var td = document.createElement('td'); td.textContent = tries; td.style.textAlign = 'center'; td.style.fontWeight = '800'; td.style.color = color;
-            el('pResRow').appendChild(td);
-        }
-        function next() {
-            // ถ้าข้ามคำโดยยังไม่ถูก → บันทึกเป็น "ข้าม" (correct=0)
-            var cur = WORDS[idx];
-            if (cur && !solved) { savePractice(cur, attempts, 0); }
-            stopListen();
-            idx++;
-            if (idx >= total) { finish(); return; }
-            render();
-        }
-        function finish() {
-            el('pBar').style.width = '100%';
-            Swal.fire({ icon: 'success', title: 'ฝึกครบ ' + total + ' คำแล้ว! 🎉',
-                html: 'อ่านถูก <b>' + score + '</b> / ' + total + ' คำ<br><span style="color:var(--ink-soft)">บันทึกผลให้คุณครูแล้ว</span>',
-                showCancelButton: true, confirmButtonText: 'ฝึกชุดนี้อีกครั้ง', cancelButtonText: 'เลือกชุดใหม่', confirmButtonColor: '#4D96FF'
-            }).then(function (r) { if (r.isConfirmed) { location.reload(); } else { location.href = 'my_practice.php'; } });
-        }
-
-        el('pSpeak').addEventListener('click', function () { unlockAudio(); var c = WORDS[idx]; if (c) { speak(c.word); } });
-        function stopAudio() {
-            if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} ttsAudio = null; }
-            if ('speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch (e) {} }
-        }
-        function stopListen() { wantListen = false; if (recog && listening) { try { recog.stop(); } catch (e) {} } }
-        function startListen() {
-            if (!recog || listening) { return; }
-            stopAudio(); el('pHeard').textContent = '';
-            wantListen = true; gotResult = false; retried = false; lastErr = '';
-            var go = function () {
-                try { recog.start(); }
-                catch (e) { try { recog.stop(); } catch (_) {} setTimeout(function () { try { recog.start(); } catch (__) {} }, 300); }
-            };
-            if (!micWarmed && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then(function (st) { micWarmed = true; st.getTracks().forEach(function (t) { t.stop(); }); go(); })
-                    .catch(function () { go(); });
-            } else { go(); }
-        }
-        el('pMic').addEventListener('click', function () { unlockAudio(); if (!recog) { return; } if (listening) { stopListen(); } else { startListen(); } });
-        el('pNext').addEventListener('click', next);
-
-        if (total === 0) { el('pWord').textContent = 'ไม่มีคำในชุดนี้'; } else { render(); }
+        PracticeReader.init({
+            words:    P.words || [],
+            ttsUrl:   'tts.php',
+            exitUrl:  'my_practice.php',
+            onResult: savePractice
+        });
     })();
     </script>
 <?php endif; ?>

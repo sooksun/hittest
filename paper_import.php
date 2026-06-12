@@ -5,6 +5,7 @@
  * เขียนผลลง evaluations + studenthit + students + studenteval ผ่าน save_hit_result()
  */
 require __DIR__ . '/includes/auth.php';
+require_editor();   // บัญชีผู้ชม (viewer) นำเข้าผลไม่ได้
 require __DIR__ . '/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['file']['tmp_name'])
         $rows = $sheet->rangeToArray("A4:AB{$highestRow}", null, true, false, false);
 
         $pdo = db();
-        $year = ACADEMIC_YEAR;
+        $year = current_year();   // ผูกผลนำเข้ากับปีการศึกษาปัจจุบัน (จุดเดียวกับทั้งระบบ)
 
         foreach ($rows as $row) {
             $stuid = trim((string)($row[1] ?? ''));   // คอลัมน์ B

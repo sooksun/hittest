@@ -135,10 +135,10 @@ function student_pin_verify(string $scId, string $pin): ?array
     $st = db()->prepare(
         'SELECT sp.stuid, sp.pin_hash, s.stuname, s.class_id, s.rooms
          FROM student_pin sp
-         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id
+         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ?
          WHERE sp.sc_id = ? AND sp.pin_plain = ? AND sp.is_active = 1'
     );
-    $st->execute([$scId, $pin]);
+    $st->execute([current_year(), $scId, $pin]);
     $r = $st->fetch();
     if (!$r || !password_verify($pin, $r['pin_hash'])) {
         return null;
@@ -149,13 +149,13 @@ function student_pin_verify(string $scId, string $pin): ?array
 
 /**
  * เข้าระบบด้วย "รหัสนักเรียน (stuid)" — ใช้ stuid เป็นทั้ง username/password
- * stuid เป็น PK ของ students (unique ทั้งระบบ) → ระบุตัว + โรงเรียนได้ในตัว ไม่ต้องเลือกโรงเรียน
- * คืนข้อมูลนักเรียนถ้าพบ, null ถ้าไม่พบ
+ * stuid ไม่ซ้ำข้ามโรงเรียน → ระบุตัว + โรงเรียนได้ในตัว ไม่ต้องเลือกโรงเรียน
+ * เลือกแถว "ปีปัจจุบัน" (students ผูกปีแล้ว = 1 แถว/คน/ปี) · คืน null ถ้าไม่พบ
  */
 function student_login_by_id(string $stuid): ?array
 {
-    $st = db()->prepare('SELECT stuid, stuname, sc_id, class_id, rooms FROM students WHERE stuid = ?');
-    $st->execute([$stuid]);
+    $st = db()->prepare('SELECT stuid, stuname, sc_id, class_id, rooms FROM students WHERE stuid = ? AND years = ?');
+    $st->execute([$stuid, current_year()]);
     $r = $st->fetch();
     if (!$r) {
         return null;
@@ -208,10 +208,10 @@ function class_pins(string $scId, int $classId): array
     $st = db()->prepare(
         'SELECT sp.stuid, sp.pin_plain
          FROM student_pin sp
-         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id
+         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ?
          WHERE sp.sc_id = ? AND s.class_id = ? AND sp.is_active = 1'
     );
-    $st->execute([$scId, $classId]);
+    $st->execute([current_year(), $scId, $classId]);
     $map = [];
     foreach ($st->fetchAll() as $r) {
         $map[(string)$r['stuid']] = $r['pin_plain'];

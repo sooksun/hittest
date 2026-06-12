@@ -1,0 +1,8 @@
+{
+  "name": "newhittest",
+  "private": true,
+  "description": "ไม่มี JS build ใน repo นี้ — script ข้างล่างแค่ส่งต่อไปยัง repo เกมต้นทาง (kingdom-of-words)",
+  "scripts": {
+    "build:games": "pnpm --dir ../readthai/kingdom-of-words/apps/web run build:games"
+  }
+}

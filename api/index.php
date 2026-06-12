@@ -11,9 +11,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 // ── Path parsing ─────────────────────────────────────────────────────────────
 // REQUEST_URI example: /newhittest/api/balloon/all-words?gradeLevel=1
-$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base    = '/newhittest/api/';
-$path    = ltrim(substr($uriPath, strlen($base)), '/');
+// ตัดทุกอย่างจนถึงเซกเมนต์ '/api/' ออก → routing ทำงานได้ทุก mount path
+// (/newhittest/api/…, /api/… ที่ root, Cloudflare tunnel ฯลฯ) ไม่ผูกกับ '/newhittest/' ตายตัว
+$uriPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '';
+$apiPos  = strpos($uriPath, '/api/');
+$path    = $apiPos !== false ? ltrim(substr($uriPath, $apiPos + 5), '/') : ltrim($uriPath, '/');
 $parts   = explode('/', $path);
 
 // ── Identity ─────────────────────────────────────────────────────────────────
@@ -43,8 +45,11 @@ $me = $isStudent
 $pdo = db();
 
 // ── Dispatch ─────────────────────────────────────────────────────────────────
+// ครอบด้วย try/catch: handler ที่โยน exception ก่อนตอบ (เช่น DB error กลางคัน) จะถูก
+// rollback ทรานแซกชันที่ค้าง + audit + คืน JSON 500 (กัน 500 ตัวเปล่าที่ client parse ไม่ได้)
 $h = __DIR__ . '/handlers/';
 
+try {
 if ($path === 'words' && $method === 'GET') {
     require $h . 'words.php';
 
@@ -59,6 +64,9 @@ if ($path === 'words' && $method === 'GET') {
 
 } elseif ($path === 'memory/submit' && $method === 'POST') {
     require $h . 'memory_submit.php';
+
+} elseif ($path === 'story/submit' && $method === 'POST') {
+    require $h . 'story_submit.php';
 
 } elseif ($path === 'bubble/submit' && $method === 'POST') {
     require $h . 'bubble_submit.php';
@@ -86,4 +94,18 @@ if ($path === 'words' && $method === 'GET') {
 
 } else {
     json_response(['error' => true, 'message' => "Unknown route: {$method} {$path}"], 404);
+}
+} catch (Throwable $e) {
+    try { if ($pdo->inTransaction()) { $pdo->rollBack(); } } catch (Throwable $e2) { /* ต้องคืน JSON 500 ให้ได้ */ }
+    audit_log_event($pdo, [
+        'sc_id'       => (string)($me['sc_id'] ?? '') ?: null,
+        'stuid'       => $me['stuid'] ?? null,
+        'role'        => $role,
+        'method'      => $method,
+        'path'        => $path,
+        'action'      => 'handler_error',
+        'status_code' => 500,
+        'meta_json'   => ['error' => $e->getMessage()],
+    ]);
+    json_response(['error' => true, 'message' => 'เกิดข้อผิดพลาดภายในระบบ กรุณาลองใหม่'], 500);
 }

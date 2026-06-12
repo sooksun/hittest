@@ -36,8 +36,39 @@ if (!$session) {
     json_response(['error' => true, 'message' => 'Session not found'], 404);
 }
 if ($session['completed']) {
+    // รอบนี้จบแล้ว — ถ้าตัวอักษรนี้เคยทายไปแล้ว ถือเป็น replay (เน็ตหลุด/กดซ้ำของตาที่จบเกม)
+    // → คืนผลสุดท้ายเดิมด้วย HTTP 200 ไม่ใช่ 4xx (API wrapper ของเกมโยน error ทุก 4xx)
+    // ส่วนการทายตัวใหม่บนเกมที่จบแล้ว (ไม่ควรเกิดในการเล่นปกติ) ยังคืน 400 เหมือนเดิม
+    $dupStmt = $pdo->prepare(
+        'SELECT is_correct FROM game_hangman_guesses WHERE session_id = ? AND guess_char = ? LIMIT 1'
+    );
+    $dupStmt->execute([$sessionId, $normalGuess]);
+    $dupRow = $dupStmt->fetch();
     $pdo->rollBack();
-    json_response(['error' => true, 'message' => 'Session already completed'], 400);
+
+    if ($dupRow === false) {
+        json_response(['error' => true, 'message' => 'Session already completed'], 400);
+    }
+
+    $finalMasked = json_decode($session['masked_word'], true) ?: [];
+    $finalWon    = !in_array('_', $finalMasked, true);
+    audit_log_event($pdo, [
+        'sc_id' => $me['sc_id'], 'stuid' => $me['stuid'], 'action' => 'duplicate_guess',
+        'entity_type' => 'hangman_session', 'entity_id' => (string)$sessionId,
+        'meta_json' => ['guess' => $normalGuess, 'afterCompletion' => true],
+    ]);
+    json_response([
+        'error'          => false,
+        'correct'        => (bool)$dupRow['is_correct'],
+        'duplicate'      => true,
+        'maskedWord'     => $finalMasked,
+        'remainingLives' => (int)$session['remaining_lives'],
+        'completed'      => true,
+        'won'            => $finalWon,
+        'lost'           => !$finalWon,
+        'score'          => (int)$session['score'],
+        'word'           => $session['word'],
+    ]);
 }
 
 // ── Evaluate correctness (pure in-memory) ─────────────────────────────────────
@@ -141,19 +172,9 @@ $pdo->prepare(
 
 // ── Save to game_results on completion (same transaction = atomic) ───────────
 if ($completed) {
-    $pdo->prepare(
-        'INSERT INTO game_results
-            (sc_id, stuid, stuname, class_id, game, grade, difficulty, score, stats_json, created_at)
-         VALUES (?,?,?,?,?,?,?,?,?,NOW())'
-    )->execute([
-        $me['sc_id'], $me['stuid'], $me['stuname'] ?? '',
-        (int)($me['class_id'] ?? $session['grade_level']),
-        'hangman',
-        $session['grade_level'],
-        $session['difficulty'],
-        $newScore,
-        json_encode(['won' => $isWon, 'word' => $wordText], JSON_UNESCAPED_UNICODE),
-    ]);
+    game_result_save($pdo, $me, 'hangman',
+        (int)$session['grade_level'], (int)$session['difficulty'], $newScore,
+        ['won' => $isWon, 'word' => $wordText]);
 }
 
 $pdo->commit();

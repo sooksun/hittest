@@ -15,11 +15,11 @@ $rows = db()->prepare(
      FROM evaluations e
      JOIN words w          ON w.id = e.word_id
      JOIN word_category wc ON wc.catid = w.indicator
-     WHERE e.stuid = ? AND e.hittest = ?
+     WHERE e.stuid = ? AND e.years = ? AND e.hittest = ?
      GROUP BY wc.catid, wc.category
      ORDER BY wc.catid'
 );
-$rows->execute([$stuid, $hittest]);
+$rows->execute([$stuid, current_year(), $hittest]);
 $data = $rows->fetchAll();
 
 $totalWords   = array_sum(array_column($data, 'total'));

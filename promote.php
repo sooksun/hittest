@@ -2,12 +2,13 @@
 /** promote.php — เลื่อนชั้นทั้งโรงเรียน (ป.1-5 → +1, ป.6 → ย้ายออก, เก็บผลสอบเดิม) */
 require __DIR__ . '/includes/auth.php';
 
-$scid = current_sc_id();
+$scid     = current_sc_id();
+$fromYear = current_year() - 1;     // เลื่อนจากแถวปีก่อนหน้า (2568) → ปีปัจจุบัน (2569)
 
-// การกระจายชั้นปัจจุบัน (นับเฉพาะที่ยังไม่ย้ายออก)
+// การกระจายชั้นของปีที่จะถูกเลื่อน (นับเฉพาะที่ยังไม่ย้ายออก)
 $byClass = db()->prepare('SELECT class_id, COUNT(*) total, SUM(stustatus = 4) movedout
-    FROM students WHERE sc_id = ? GROUP BY class_id');
-$byClass->execute([$scid]);
+    FROM students WHERE sc_id = ? AND years = ? GROUP BY class_id');
+$byClass->execute([$scid, $fromYear]);
 $active2 = [];
 foreach ($byClass->fetchAll() as $r) {
     $active2[(int)$r['class_id']] = (int)$r['total'] - (int)$r['movedout'];

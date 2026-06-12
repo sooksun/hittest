@@ -7,8 +7,8 @@ if ($class_id < 1 || $class_id > 6) {
     $class_id = 1;
 }
 
-$stmt = db()->prepare('SELECT * FROM students WHERE sc_id = ? AND class_id = ? ORDER BY rooms, stuname');
-$stmt->execute([current_sc_id(), $class_id]);
+$stmt = db()->prepare('SELECT * FROM students WHERE sc_id = ? AND years = ? AND class_id = ? ORDER BY rooms, stuname');
+$stmt->execute([current_sc_id(), current_year(), $class_id]);
 $students = $stmt->fetchAll();
 
 $page_title = 'สอบอ่านไทย';

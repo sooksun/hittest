@@ -1,7 +1,7 @@
 <?php
 // GET /api/balloon/all-words?gradeLevel=1&limitPerLevel=10
 // Returns {ok:true, words:{1:[],2:[],3:[]}, totalWords}
-// LEFT JOINs readthai.wordstest for real sound/image paths.
+// Reads sound/image paths straight from the local wordstest (owned in-app; no readthai join).
 $gradeLevel = max(1, min(6, (int)($_GET['gradeLevel'] ?? 1)));
 $limit      = max(1, min(50, (int)($_GET['limitPerLevel'] ?? 10)));
 
@@ -10,9 +10,8 @@ $total = 0;
 
 for ($lvl = 1; $lvl <= 3; $lvl++) {
     $stmt = $pdo->prepare(
-        'SELECT h.id, h.word, h.level, r.image_path, r.sound_path
+        'SELECT h.id, h.word, h.level, h.image_path, h.sound_path
          FROM wordstest h
-         LEFT JOIN readthai.wordstest r ON r.id = h.id
          WHERE h.class_id = ? AND h.level = ? AND h.word IS NOT NULL
            AND CHAR_LENGTH(h.word) >= 2 AND CHAR_LENGTH(h.word) <= 5
          ORDER BY RAND() LIMIT ?'

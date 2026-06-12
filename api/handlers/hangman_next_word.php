@@ -1,7 +1,7 @@
 <?php
 // GET /api/hangman/next-word?grade=1&difficulty=1&excludeWordIds=[1,2,3]
 // Returns {error:false,sessionId,wordId,maskedWord[],hints[],remainingLives,imagePath,soundPath}
-// LEFT JOINs readthai.wordstest for real sound/image paths.
+// Reads sound/image paths straight from the local wordstest (owned in-app; no readthai join).
 
 $grade      = max(1, min(6, (int)($_GET['grade']      ?? 1)));
 $difficulty = max(1, min(3, (int)($_GET['difficulty'] ?? 1)));
@@ -15,9 +15,8 @@ if (!empty($_GET['excludeWordIds'])) {
 
 // ── Select a word with real media paths ──────────────────────────────────────
 $base = 'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form,
-                r.sound_path, r.image_path
+                h.sound_path, h.image_path
          FROM wordstest h
-         LEFT JOIN readthai.wordstest r ON r.id = h.id
          WHERE h.class_id = ? AND h.level = ? AND h.word IS NOT NULL';
 
 if (count($excludeIds) > 0) {
@@ -33,8 +32,8 @@ $word = $stmt->fetch();
 if (!$word) {
     // Fallback: any word for grade
     $stmt = $pdo->prepare(
-        'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, r.sound_path, r.image_path
-         FROM wordstest h LEFT JOIN readthai.wordstest r ON r.id = h.id
+        'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, h.sound_path, h.image_path
+         FROM wordstest h
          WHERE h.class_id = ? AND h.word IS NOT NULL ORDER BY RAND() LIMIT 1'
     );
     $stmt->execute([$grade]);

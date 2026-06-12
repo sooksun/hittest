@@ -58,7 +58,7 @@ $myScore = $hits[$hit]['tested'] ? $hits[$hit]['score'] : null;
 
 // เทรนด์ + หมวดอ่อน
 $trend = dash_student_trend($scid, $stuid);
-$weak  = dash_student_weak_categories($stuid, ACADEMIC_YEAR, $hit);
+$weak  = dash_student_weak_categories($stuid, current_year(), $hit);
 
 $trendLabels = array_map(fn($t) => 'Hit-' . $t['hittest'] . ' (' . $t['years'] . ')', $trend);
 $trendData   = array_map(fn($t) => (int)$t['score'], $trend);

@@ -1,15 +1,14 @@
 <?php
 // GET /api/skills/words?level=1&limit=8
 // Returns {success:true, words:[{id,word,imagePaths,soundPath,spokenForm,level,classId}], count}
-// LEFT JOINs readthai.wordstest for real sound/image paths.
+// Reads sound/image paths straight from the local wordstest (owned in-app; no readthai join).
 $level = max(1, min(3, (int)($_GET['level'] ?? 1)));
 $limit = max(1, min(100, (int)($_GET['limit'] ?? 50)));
 
 $stmt = $pdo->prepare(
     'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form,
-            r.sound_path, r.image_path
+            h.sound_path, h.image_path
      FROM wordstest h
-     LEFT JOIN readthai.wordstest r ON r.id = h.id
      WHERE h.level = ? AND h.word IS NOT NULL
      ORDER BY RAND() LIMIT ?'
 );

@@ -1,7 +1,7 @@
 <?php
 // POST /api/sessions/training/start  {gradeLevel, difficulty, limit}
 // Returns {sessionId, tasks:[Task], totalTasks}
-// LEFT JOINs readthai.wordstest for real sound/image paths.
+// Reads sound/image paths straight from the local wordstest (owned in-app; no readthai join).
 
 $body       = json_decode(file_get_contents('php://input'), true) ?: [];
 $gradeLevel = max(1, min(6, (int)($body['gradeLevel'] ?? $body['grade'] ?? 1)));
@@ -18,7 +18,7 @@ function ts_uuid(): string {
 function ts_shuffle(array $a): array { shuffle($a); return $a; }
 
 /**
- * Parse readthai image_path JSON → extract 'image_original' path → prepend /newhittest.
+ * Parse image_path JSON → extract 'image_original' path → prepend /newhittest.
  * Task components use <img src={task.imagePath}> directly, so full path is required.
  */
 function ts_img(?string $raw): ?string {
@@ -28,7 +28,7 @@ function ts_img(?string $raw): ?string {
         ? ($dec['image_original'] ?? $dec['original'] ?? $dec['img_full'] ?? null)
         : $raw;
     if (!$path) return null;
-    // Prepend /newhittest so the direct <img src> resolves correctly via the media junction.
+    // Prepend /newhittest so the direct <img src> resolves under the app's /media/ path.
     return '/newhittest' . (str_starts_with($path, '/') ? '' : '/') . $path;
 }
 
@@ -46,9 +46,8 @@ function ts_distractors(PDO $pdo, int $wordId, int $classId): array {
 // ── Select words ──────────────────────────────────────────────────────────────
 $stmt = $pdo->prepare(
     'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form,
-            r.sound_path, r.image_path
+            h.sound_path, h.image_path
      FROM wordstest h
-     LEFT JOIN readthai.wordstest r ON r.id = h.id
      WHERE h.class_id = ? AND h.level = ? AND h.word IS NOT NULL
      ORDER BY RAND() LIMIT ?'
 );
@@ -57,8 +56,8 @@ $words = $stmt->fetchAll();
 
 if (empty($words)) {
     $stmt = $pdo->prepare(
-        'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, r.sound_path, r.image_path
-         FROM wordstest h LEFT JOIN readthai.wordstest r ON r.id = h.id
+        'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, h.sound_path, h.image_path
+         FROM wordstest h
          WHERE h.class_id = ? AND h.word IS NOT NULL ORDER BY RAND() LIMIT ?'
     );
     $stmt->execute([$gradeLevel, $limit]);

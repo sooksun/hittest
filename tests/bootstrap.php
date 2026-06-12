@@ -22,6 +22,12 @@ const TEST_DSN  = 'mysql:host=127.0.0.1;dbname=newhittest_test;charset=utf8mb4';
 const TEST_USER = 'root';
 const TEST_PASS = '';
 
+// Media file ops in tests target a throwaway temp dir (never the real /media/).
+// Defined before includes/media_storage.php loads so it wins the define() guard.
+if (!defined('MEDIA_ROOT')) {
+    define('MEDIA_ROOT', sys_get_temp_dir() . '/newhittest_test_media');
+}
+
 // ── json_response override ──────────────────────────────────────────────────
 // Defined BEFORE functions.php (whose definition is wrapped in function_exists)
 // so handlers can be included without calling exit().
@@ -67,6 +73,8 @@ function create_test_db(): PDO
     foreach ([
         'game_hangman_guesses', 'game_task_submissions', 'audit_logs',
         'game_results', 'game_hangman_sessions', 'game_training_sessions',
+        'game_stories', 'game_media_jobs', 'game_prompt_history', 'wordstest',
+        'students', 'studenthit', 'promote_log', 'promote_log_item', 'users',
     ] as $t) {
         $pdo->exec("DROP TABLE IF EXISTS {$t}");
     }
@@ -176,6 +184,146 @@ function create_test_db(): PDO
             duration_ms INT,
             meta_json   JSON,
             KEY idx_action (action, created_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+
+    $pdo->exec("
+        CREATE TABLE game_stories (
+            id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+            sc_id       VARCHAR(15) NOT NULL,
+            stuid       VARCHAR(50) NOT NULL,
+            stuname     VARCHAR(255),
+            class_id    INT NOT NULL DEFAULT 1,
+            game        VARCHAR(30) NOT NULL,
+            grade       INT NOT NULL DEFAULT 1,
+            difficulty  INT NOT NULL DEFAULT 1,
+            words_json  JSON,
+            story_text  TEXT NOT NULL,
+            char_count  INT NOT NULL DEFAULT 0,
+            used_all    TINYINT(1) NOT NULL DEFAULT 0,
+            stats_json  JSON,
+            created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            KEY idx_stu (stuid, created_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+
+    // ── media generation (migration 009) ──────────────────────────────────────
+    $pdo->exec("
+        CREATE TABLE wordstest (
+            id                 INT AUTO_INCREMENT PRIMARY KEY,
+            word               VARCHAR(255),
+            spoken_form        VARCHAR(255),
+            class_id           INT,
+            level              INT,
+            sound_path         VARCHAR(255),
+            sound_generated_at DATETIME NULL,
+            what_to_draw       TEXT NULL,
+            image_status       ENUM('EMPTY','QUEUED','GENERATING','DONE','FAILED','AMBIGUOUS') NOT NULL DEFAULT 'EMPTY',
+            image_reason       VARCHAR(255) NULL,
+            image_generated_at DATETIME NULL,
+            image_path         TEXT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    $pdo->exec("
+        CREATE TABLE game_media_jobs (
+            id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+            type         ENUM('audio','image') NOT NULL,
+            word_id      INT NOT NULL,
+            status       ENUM('queued','processing','done','failed') NOT NULL DEFAULT 'queued',
+            attempts     INT NOT NULL DEFAULT 0,
+            forced       TINYINT(1) NOT NULL DEFAULT 0,
+            last_error   TEXT NULL,
+            meta_json    JSON NULL,
+            requested_by VARCHAR(64) NULL,
+            created_at   DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+            updated_at   DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+            KEY idx_status_type (status, type)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    $pdo->exec("
+        CREATE TABLE game_prompt_history (
+            id              INT AUTO_INCREMENT PRIMARY KEY,
+            word_id         INT NOT NULL,
+            word            VARCHAR(255) NOT NULL,
+            positive_prompt TEXT NOT NULL,
+            negative_prompt TEXT NOT NULL,
+            what_to_draw_th TEXT NULL,
+            what_to_draw_en TEXT NULL,
+            checkpoint_name VARCHAR(255) NULL,
+            seed            BIGINT NULL,
+            preview_image   TEXT NULL,
+            status          VARCHAR(50) NOT NULL DEFAULT 'generated',
+            is_active       TINYINT(1) NOT NULL DEFAULT 1,
+            notes           TEXT NULL,
+            created_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+            updated_at      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+            KEY idx_word_active (word_id, is_active)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+
+    // ── students roster ผูกปี (migration 010) — PK (stuid, years) ──────────────
+    $pdo->exec("
+        CREATE TABLE students (
+            stuid       VARCHAR(50)  NOT NULL,
+            stuname     VARCHAR(255),
+            sc_id       VARCHAR(15),
+            studentId   VARCHAR(255),
+            genderName  VARCHAR(255),
+            class_id    INT,
+            years       INT          NOT NULL DEFAULT 2569,
+            rooms       INT,
+            stustatus   INT          NOT NULL DEFAULT 1,
+            hit1 INT NOT NULL DEFAULT 0, hit1tested INT NOT NULL DEFAULT 0,
+            hit2 INT NOT NULL DEFAULT 0, hit2tested INT NOT NULL DEFAULT 0,
+            hit3 INT NOT NULL DEFAULT 0, hit3tested INT NOT NULL DEFAULT 0,
+            sethit1 INT DEFAULT 1, sethit2 INT DEFAULT 1, sethit3 INT DEFAULT 1,
+            updatedDate TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (stuid, years)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    $pdo->exec("
+        CREATE TABLE studenthit (
+            stuid     VARCHAR(50) NOT NULL,
+            hit       INT NOT NULL DEFAULT 1,
+            years     INT NOT NULL DEFAULT 2569,
+            stuname   VARCHAR(255), sc_id VARCHAR(15), class_id INT, rooms INT,
+            stustatus INT NOT NULL DEFAULT 1, hitscore INT NOT NULL DEFAULT 0, sethit INT,
+            item1 INT,item2 INT,item3 INT,item4 INT,item5 INT,item6 INT,item7 INT,item8 INT,item9 INT,item10 INT,
+            item11 INT,item12 INT,item13 INT,item14 INT,item15 INT,item16 INT,item17 INT,item18 INT,item19 INT,item20 INT,
+            updatedDate DATETIME,
+            PRIMARY KEY (stuid, years, hit)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    $pdo->exec("
+        CREATE TABLE promote_log (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            sc_id VARCHAR(15) NOT NULL, sc_smis VARCHAR(8), sc_name VARCHAR(255),
+            promoted INT DEFAULT 0, graduated INT DEFAULT 0,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, rolled_back_at DATETIME NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    $pdo->exec("
+        CREATE TABLE promote_log_item (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            log_id INT NOT NULL, stuid VARCHAR(50) NOT NULL, years INT NULL,
+            prev_class_id INT, prev_stustatus INT, action VARCHAR(10) NOT NULL,
+            KEY idx_log (log_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
+    // ── users (migration 011) — บัญชีผู้ใช้จริง + role ─────────────────────────
+    $pdo->exec("
+        CREATE TABLE users (
+            id            INT AUTO_INCREMENT PRIMARY KEY,
+            username      VARCHAR(50)  NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            name          VARCHAR(150) NOT NULL DEFAULT '',
+            role          ENUM('superadmin','saoadmin','school') NOT NULL DEFAULT 'school',
+            area_code     VARCHAR(10)  NULL,
+            sc_id         VARCHAR(15)  NULL,
+            is_active     TINYINT(1)   NOT NULL DEFAULT 1,
+            created_at    DATETIME     NOT NULL,
+            updated_at    DATETIME     NOT NULL,
+            UNIQUE KEY uq_username (username)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");
 
