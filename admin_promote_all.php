@@ -19,35 +19,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'promo
     if (($_POST['confirm'] ?? '') !== DB_NAME) {
         json_response(['status' => 'error', 'message' => 'พิมพ์ชื่อฐานข้อมูลยืนยันไม่ถูกต้อง'], 400);
     }
-    try {
-        @set_time_limit(0);
-        $pdo->beginTransaction();
+    // ── fail-protection สำหรับสเกลใหญ่ (หลายแสนคน) ──────────────────────────────
+    //   • commit "ทีละโรงเรียน" (ไม่ใช่ transaction เดียวทั้งระบบ) → ล้มกลางคันไม่เสียทั้งยวง
+    //   • ทำเป็น batch ตาม time budget แล้วคืนค่าให้ client เรียกต่อ → กัน proxy/LSAPI timeout
+    //   • idempotent: ข้ามโรงเรียนที่มี roster ปีใหม่แล้ว (NOT EXISTS) → กดซ้ำ/resume ได้
+    //   • โรงเรียนที่ error ถูกส่งกลับใน failed[] → client ส่งเป็น skip รอบถัดไป (ไม่ retry วนไม่จบ)
+    @set_time_limit(0);
+    @ignore_user_abort(true);
 
-        $schools = $pdo->prepare(
-            'SELECT DISTINCT sc_id FROM students WHERE years = ? AND class_id BETWEEN 1 AND 6 AND stustatus <> 4'
-        );
-        $schools->execute([$fromYear]);
-        $schoolIds = $schools->fetchAll(PDO::FETCH_COLUMN);
+    $budget = 20;            // วินาที/คำขอ — เผื่อให้จบก่อน proxy ตัด (เริ่มนับหลังทำอย่างน้อย 1 โรงเรียน)
+    $start  = time();
 
-        $info = $pdo->prepare('SELECT sc_smis, sc_name FROM schools WHERE sc_id = ? LIMIT 1');
-        $totP = 0;
-        $totG = 0;
-        foreach ($schoolIds as $sc) {
+    // โรงเรียนที่ล้มเหลวสะสมจากรอบก่อน (client ส่งกลับมา) — ข้ามไม่หยิบมาทำซ้ำ
+    $skip = array_values(array_filter(
+        array_map('strval', explode(',', (string)($_POST['skip'] ?? ''))),
+        static fn ($s) => $s !== '' && ctype_digit($s)
+    ));
+    $skipSql = $skip ? (' AND s.sc_id NOT IN (' . implode(',', array_fill(0, count($skip), '?')) . ')') : '';
+
+    // เลือกเฉพาะโรงเรียนที่ "มี roster ปีเก่า แต่ยังไม่มี roster ปีใหม่" (resumable) และไม่อยู่ใน skip
+    $sel = $pdo->prepare(
+        'SELECT DISTINCT s.sc_id FROM students s
+         WHERE s.years = ? AND s.class_id BETWEEN 1 AND 6 AND s.stustatus <> 4
+           AND NOT EXISTS (SELECT 1 FROM students d WHERE d.sc_id = s.sc_id AND d.years = ?)'
+        . $skipSql . ' ORDER BY s.sc_id'
+    );
+    $sel->execute(array_merge([$fromYear, $toYear], $skip));
+    $schoolIds = $sel->fetchAll(PDO::FETCH_COLUMN);
+
+    $info = $pdo->prepare('SELECT sc_smis, sc_name FROM schools WHERE sc_id = ? LIMIT 1');
+    $processed = 0;
+    $totP = 0;
+    $totG = 0;
+    $failed = [];
+    foreach ($schoolIds as $sc) {
+        try {
             $info->execute([$sc]);
             $sch = $info->fetch() ?: ['sc_smis' => null, 'sc_name' => null];
+            $pdo->beginTransaction();
             $r = promote_school_year($pdo, (string)$sc, $fromYear, $toYear, $sch['sc_smis'], $sch['sc_name']);
+            $pdo->commit();                          // จบเป็นรายโรงเรียน → ผลที่สำเร็จคงอยู่แม้รอบถัดไปล้ม
             $totP += $r['promoted'];
             $totG += $r['graduated'];
+            $processed++;
+        } catch (Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();                    // โรงเรียนนี้กลับสภาพเดิม ไม่กระทบโรงเรียนอื่น
+            }
+            $failed[] = (string)$sc;                 // client จะส่งกลับมาใน skip รอบถัดไป
         }
-
-        $pdo->commit();
-        json_response(['status' => 'ok', 'schools' => count($schoolIds), 'promoted' => $totP, 'graduated' => $totG]);
-    } catch (Throwable $e) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
+        if (time() - $start >= $budget) {
+            break;                                   // คืนค่าให้ client เรียกต่อ (resume แบบไม่เริ่มใหม่)
         }
-        json_response(['status' => 'error', 'message' => 'เลื่อนชั้นทั้งระบบไม่สำเร็จ'], 500);
     }
+
+    $remaining = max(0, count($schoolIds) - $processed - count($failed));
+    json_response([
+        'status'    => 'ok',
+        'processed' => $processed,
+        'promoted'  => $totP,
+        'graduated' => $totG,
+        'failed'    => $failed,
+        'remaining' => $remaining,
+        'done'      => ($remaining === 0),
+    ]);
 }
 
 /* ---------- พรีวิว (อิงแถวปีก่อนหน้า = ปีที่จะถูกเลื่อน) ---------- */
@@ -117,18 +152,58 @@ document.getElementById('btnPromoteAll').addEventListener('click', function () {
         preConfirm: function (v) { if (String(v).trim() !== DBNAME) { Swal.showValidationMessage('ชื่อไม่ถูกต้อง'); return false; } return true; }
     }).then(function (r) {
         if (!r.isConfirmed) return;
-        Swal.fire({ title: 'กำลังเลื่อนชั้น…', allowOutsideClick: false, didOpen: function () { Swal.showLoading(); } });
-        var fd = new FormData(); fd.append('action', 'promote_all'); fd.append('confirm', String(r.value).trim());
-        fetch('admin_promote_all.php', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: fd })
-            .then(function (x) { return x.json(); })
-            .then(function (d) {
-                if (d.status === 'ok') {
-                    Swal.fire({ icon: 'success', title: 'เลื่อนชั้นทั้งระบบสำเร็จ', confirmButtonColor: '#4D96FF',
-                        html: '<b>' + d.schools + '</b> โรงเรียน · เลื่อนขึ้น <b>' + d.promoted + '</b> คน · จบการศึกษา <b>' + d.graduated + '</b> คน'
-                    }).then(function () { location.reload(); });
-                } else { Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: d.message || '', confirmButtonColor: '#4D96FF' }); }
-            })
-            .catch(function () { Swal.fire({ icon: 'error', title: 'ผิดพลาด', confirmButtonColor: '#4D96FF' }); });
+        var confirmVal = String(r.value).trim();
+        var totals = { schools: 0, promoted: 0, graduated: 0 };
+        var skip = [];          // โรงเรียนที่ล้มเหลวสะสม → ส่งให้ server ข้ามรอบถัดไป (กัน retry ไม่จบ)
+
+        Swal.fire({
+            title: 'กำลังเลื่อนชั้น…',
+            html: '<div id="promoProg" style="font-size:.95rem">เริ่ม…</div>',
+            allowOutsideClick: false, allowEscapeKey: false,
+            didOpen: function () { Swal.showLoading(); }
+        });
+
+        // เรียกทีละ batch จนกว่าจะ done — ผลแต่ละโรงเรียนถูก commit แล้ว จึง resume ได้แม้หลุดกลางคัน
+        function step() {
+            var fd = new FormData();
+            fd.append('action', 'promote_all');
+            fd.append('confirm', confirmVal);
+            fd.append('skip', skip.join(','));
+            return fetch('admin_promote_all.php', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: fd })
+                .then(function (x) { return x.json(); })
+                .then(function (d) {
+                    if (d.status !== 'ok') { throw new Error(d.message || 'ผิดพลาด'); }
+                    totals.schools   += d.processed;
+                    totals.promoted  += d.promoted;
+                    totals.graduated += d.graduated;
+                    if (d.failed && d.failed.length) { skip = skip.concat(d.failed); }
+                    var pe = document.getElementById('promoProg');
+                    if (pe) {
+                        pe.innerHTML =
+                            'เลื่อนแล้ว <b>' + totals.schools + '</b> โรงเรียน · ขึ้น <b>' + totals.promoted + '</b> คน · จบ <b>' + totals.graduated + '</b> คน'
+                            + (skip.length ? '<br><span style="color:#c0392b">ล้มเหลว ' + skip.length + ' โรงเรียน (ข้ามไว้)</span>' : '')
+                            + (d.remaining ? '<br>เหลืออีก ~' + d.remaining + ' โรงเรียน…' : '');
+                    }
+                    if (!d.done) { return step(); }   // ยังไม่ครบ → เรียก batch ถัดไป
+                });
+        }
+
+        step().then(function () {
+            Swal.fire({
+                icon: skip.length ? 'warning' : 'success',
+                title: skip.length ? 'เลื่อนชั้นเสร็จ (บางโรงเรียนล้มเหลว)' : 'เลื่อนชั้นทั้งระบบสำเร็จ',
+                confirmButtonColor: '#4D96FF',
+                html: '<b>' + totals.schools + '</b> โรงเรียน · เลื่อนขึ้น <b>' + totals.promoted + '</b> คน · จบการศึกษา <b>' + totals.graduated + '</b> คน'
+                    + (skip.length ? '<br><br><span style="color:#c0392b">ล้มเหลว ' + skip.length + ' โรงเรียน: ' + skip.join(', ')
+                        + '<br>กด “เลื่อนชั้นทั้งระบบ” ซ้ำเพื่อลองใหม่ หรือเลื่อนทีละโรงเรียนที่เมนูเลื่อนชั้น</span>' : '')
+            }).then(function () { location.reload(); });
+        }).catch(function (e) {
+            Swal.fire({
+                icon: 'error', title: 'หยุดกลางคัน', confirmButtonColor: '#4D96FF',
+                html: ((e && e.message) ? e.message + '<br><br>' : '')
+                    + 'ผลที่เลื่อนสำเร็จก่อนหน้านี้ถูกบันทึกแล้ว (' + totals.schools + ' โรงเรียน)<br>กด “เลื่อนชั้นทั้งระบบ” ซ้ำเพื่อทำต่อจากเดิมได้'
+            });
+        });
     });
 });
 </script>
