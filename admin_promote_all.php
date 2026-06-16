@@ -149,10 +149,11 @@ document.getElementById('btnPromoteAll').addEventListener('click', function () {
         html: 'กระทบ <b>ทุกโรงเรียน</b><br>ป.1–ป.5 เลื่อนขึ้น 1 ชั้น · <b>ป.6 จบ → ย้ายออก</b><br>ผลสอบเดิมจะถูกเก็บไว้ (ไม่ลบ)<br><br>พิมพ์ชื่อฐานข้อมูล <b>' + DBNAME + '</b> เพื่อยืนยัน',
         input: 'text', inputPlaceholder: 'ชื่อฐานข้อมูล',
         showCancelButton: true, confirmButtonText: 'เลื่อนชั้นทั้งระบบ', confirmButtonColor: '#FF6B6B', cancelButtonText: 'ยกเลิก',
-        preConfirm: function (v) { if (String(v).trim() !== DBNAME) { Swal.showValidationMessage('ชื่อไม่ถูกต้อง'); return false; } return true; }
+        // ยอมรับเว้นวรรคแทน "_" (บางแป้นพิมพ์กด _ ไม่ได้) — แปลงช่องว่างเป็น _ ก่อนเทียบ
+        preConfirm: function (v) { if (String(v).trim().replace(/\s+/g, '_') !== DBNAME) { Swal.showValidationMessage('ชื่อไม่ถูกต้อง'); return false; } return true; }
     }).then(function (r) {
         if (!r.isConfirmed) return;
-        var confirmVal = String(r.value).trim();
+        var confirmVal = String(r.value).trim().replace(/\s+/g, '_');
         var totals = { schools: 0, promoted: 0, graduated: 0 };
         var skip = [];          // โรงเรียนที่ล้มเหลวสะสม → ส่งให้ server ข้ามรอบถัดไป (กัน retry ไม่จบ)
 
