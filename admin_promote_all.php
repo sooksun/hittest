@@ -16,7 +16,9 @@ $toYear   = current_year();          // ปีปัจจุบัน (2569)
 $fromYear = $toYear - 1;             // เลื่อนจากปีก่อนหน้า (2568)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'promote_all') {
-    if (($_POST['confirm'] ?? '') !== DB_NAME) {
+    // ยอมรับเว้นวรรคแทน "_" (บางแป้นพิมพ์กด _ ไม่ได้) — ปรับทั้งฝั่ง server เองด้วย
+    $confirmIn = preg_replace('/\s+/', '_', trim((string)($_POST['confirm'] ?? '')));
+    if ($confirmIn !== DB_NAME) {
         json_response(['status' => 'error', 'message' => 'พิมพ์ชื่อฐานข้อมูลยืนยันไม่ถูกต้อง'], 400);
     }
     // ── fail-protection สำหรับสเกลใหญ่ (หลายแสนคน) ──────────────────────────────
