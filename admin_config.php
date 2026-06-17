@@ -10,6 +10,13 @@
 require __DIR__ . '/includes/admin_auth.php';
 require __DIR__ . '/includes/db_backup.php';   // ใช้ dbk_* สำหรับสถานะระบบสำรองข้อมูล
 
+// POST: เปิด/ปิดเมนู "เลื่อนชั้นทั้งโรงเรียน" สำหรับโรงเรียน (ผู้ดูแลระบบเท่านั้น — admin_auth กันให้แล้ว)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_promote') {
+    $enabled = ($_POST['enabled'] ?? '') === '1';   // ค่าที่เพิ่งบันทึก (cache app_settings อาจ stale หลัง set จึงคืนค่านี้ตรง ๆ)
+    app_setting_set('promote_enabled', $enabled ? '1' : '0');
+    json_response(['status' => 'ok', 'enabled' => $enabled]);
+}
+
 $pdo = db();
 
 /* ---------- รวบรวมข้อมูลแสดงผล ---------- */
@@ -94,6 +101,45 @@ require __DIR__ . '/includes/header.php';
     </div>
     <a class="ht-btn ht-btn--coral ht-btn--sm" href="admin_users.php">👤 จัดการบัญชีผู้ใช้ (role) →</a>
 </div>
+
+<!-- ===== เปิด/ปิดเมนูเลื่อนชั้นทั้งโรงเรียน ===== -->
+<?php $promoteOn = promote_menu_enabled(); ?>
+<div class="ht-card mb-4" style="max-width:820px; border-left:6px solid var(--c-purple)">
+    <h3 class="mb-2">⬆️ เมนู "เลื่อนชั้นทั้งโรงเรียน" ของโรงเรียน</h3>
+    <p class="text-muted mb-3" style="font-size:.9rem">ควบคุมว่าโรงเรียน (role โรงเรียน) เห็นและใช้เมนูเลื่อนชั้นได้หรือไม่ — แนะนำให้เปิดเฉพาะช่วงต้นปีการศึกษา แล้วปิดเมื่อเลื่อนชั้นเสร็จ · ผู้ดูแลระบบใช้ได้เสมอ</p>
+    <div class="ht-row" style="gap:14px; align-items:center">
+        <span>สถานะปัจจุบัน:</span>
+        <span id="promoteState" class="ht-badge <?= $promoteOn ? 'ht-badge--done' : 'ht-badge--missing' ?>"><?= $promoteOn ? '🔓 เปิดให้โรงเรียนใช้' : '🔒 ปิด (เฉพาะผู้ดูแลระบบ)' ?></span>
+        <button type="button" id="btnTogglePromote" class="ht-btn ht-btn--sm <?= $promoteOn ? 'ht-btn--ghost' : '' ?>" data-on="<?= $promoteOn ? '1' : '0' ?>" style="margin-left:auto">
+            <?= $promoteOn ? '🔒 ปิดเมนูนี้' : '🔓 เปิดเมนูนี้' ?>
+        </button>
+    </div>
+</div>
+<script>
+(function () {
+    var btn = document.getElementById('btnTogglePromote');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        var next = btn.dataset.on === '1' ? '0' : '1';
+        btn.disabled = true;
+        fetch('admin_config.php', {
+            method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new URLSearchParams({ action: 'save_promote', enabled: next })
+        })
+            .then(function (x) { return x.json(); })
+            .then(function (d) {
+                if (d.status === 'ok') {
+                    Swal.fire({ icon: 'success', title: d.enabled ? 'เปิดเมนูแล้ว' : 'ปิดเมนูแล้ว', timer: 1100, showConfirmButton: false })
+                        .then(function () { location.reload(); });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: d.message || '' });
+                }
+            })
+            .catch(function () { Swal.fire({ icon: 'error', title: 'ผิดพลาด' }); })
+            .finally(function () { btn.disabled = false; });
+    });
+})();
+</script>
 
 <!-- ===== อ่านอย่างเดียว: ค่าระบบ ===== -->
 <div class="ht-card mb-4" style="max-width:820px; border-left:6px solid var(--c-blue)">

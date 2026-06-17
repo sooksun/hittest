@@ -6,7 +6,7 @@ $class_id = (int)($_GET['class_id'] ?? 1);
 if ($class_id < 1 || $class_id > 6) {
     $class_id = 1;
 }
-$cnt = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND class_id = ?');
+$cnt = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND deleted_at IS NULL AND stustatus <> 4');
 $cnt->execute([current_sc_id(), current_year(), $class_id]);
 $cnt = (int)$cnt->fetch()['c'];
 

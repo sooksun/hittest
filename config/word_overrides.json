@@ -1,0 +1,2103 @@
+{
+    "_comment": "WORD OVERRIDES - ล็อกความหมายสำหรับคำเสี่ยง (bypass LLM/translate)",
+    "_version": "1.1.0",
+    "_updated": "2026-06-14",
+    "_note_ambiguous": "กลุ่ม นามธรรม_/วัฒนธรรม_/รูปธรรม_ เพิ่มจากการกู้คำ AMBIGUOUS 424 คำ (workflow ออกแบบฉาก SDXL ปลอดข้อความ)",
+    "สัตว์ไทย": {
+        "กระทิง": {
+            "whatToDrawEn": "a single gaur (wild bull, large wild cattle), full body, standing, clear curved horns, four legs visible, centered composition, simple clean background",
+            "category": "animal",
+            "extraNegative": "boar, pig, tusks, domestic cow, buffalo"
+        },
+        "กระบือ": {
+            "whatToDrawEn": "a single water buffalo, full body, standing, large curved horns, dark gray skin, four legs visible, centered composition, rice field background",
+            "category": "animal",
+            "extraNegative": "cow, bull, gaur, ox, bison"
+        },
+        "ควายหงาน": {
+            "whatToDrawEn": "a single aggressive water buffalo in heat, full body, standing alert, large curved horns, muscular body, four legs visible, centered composition",
+            "category": "animal",
+            "extraNegative": "cow, bull, gaur, calm"
+        },
+        "จระเข้": {
+            "whatToDrawEn": "a single crocodile, full body, lying on riverbank, open mouth showing teeth, scaly green skin, four short legs visible, centered composition",
+            "category": "animal",
+            "extraNegative": "alligator, lizard, dinosaur"
+        },
+        "ช้าง": {
+            "whatToDrawEn": "a single cute elephant, full body, standing, large ears, long trunk, four legs visible, gray skin, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "mammoth, multiple elephants, baby elephant"
+        },
+        "เสือ": {
+            "whatToDrawEn": "a single tiger, full body, standing, orange with black stripes, four legs visible, centered composition, jungle background",
+            "category": "animal",
+            "extraNegative": "lion, leopard, cheetah, multiple tigers"
+        },
+        "สิงโต": {
+            "whatToDrawEn": "a single lion, full body, standing, golden mane, four legs visible, centered composition, savanna background",
+            "category": "animal",
+            "extraNegative": "tiger, leopard, multiple lions"
+        },
+        "หมาป่า": {
+            "whatToDrawEn": "a single wolf, full body, standing, gray fur, pointed ears, bushy tail, four legs visible, centered composition, forest background",
+            "category": "animal",
+            "extraNegative": "dog, fox, coyote, multiple wolves, pack"
+        },
+        "หมาจิ้งจอก": {
+            "whatToDrawEn": "a single fox, full body, standing, orange-red fur, bushy tail, pointed ears, four legs visible, centered composition, forest background",
+            "category": "animal",
+            "extraNegative": "wolf, dog, coyote"
+        },
+        "กวาง": {
+            "whatToDrawEn": "a single deer, full body, standing, brown fur, antlers on head, four legs visible, centered composition, forest background",
+            "category": "animal",
+            "extraNegative": "moose, elk, reindeer, multiple deer"
+        },
+        "กระต่าย": {
+            "whatToDrawEn": "a single cute rabbit, full body, sitting, long ears, fluffy white fur, four legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "hare, bunny toy, multiple rabbits"
+        },
+        "แกะ": {
+            "whatToDrawEn": "a single sheep, full body, standing, white fluffy wool, four legs visible, centered composition, green meadow background",
+            "category": "animal",
+            "extraNegative": "goat, lamb, multiple sheep, ram"
+        },
+        "แมว": {
+            "whatToDrawEn": "a single cute cat, full body, sitting, fluffy fur, whiskers, four legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "dog, lion, tiger, multiple cats"
+        },
+        "หมา": {
+            "whatToDrawEn": "a single cute dog, full body, sitting, friendly face, wagging tail, four legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "cat, wolf, fox, multiple dogs"
+        },
+        "สุนัข": {
+            "whatToDrawEn": "a single cute dog, full body, sitting, friendly face, wagging tail, four legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "cat, wolf, fox, multiple dogs"
+        },
+        "วัว": {
+            "whatToDrawEn": "a single cow, full body, standing, spotted black and white pattern, four legs visible, centered composition, farm background",
+            "category": "animal",
+            "extraNegative": "buffalo, bull, ox, multiple cows"
+        },
+        "ม้า": {
+            "whatToDrawEn": "a single horse, full body, standing, brown coat, flowing mane and tail, four legs visible, centered composition, meadow background",
+            "category": "animal",
+            "extraNegative": "donkey, zebra, unicorn, multiple horses"
+        },
+        "หมู": {
+            "whatToDrawEn": "a single cute pig, full body, standing, pink skin, curly tail, four legs visible, centered composition, farm background",
+            "category": "animal",
+            "extraNegative": "boar, wild pig, multiple pigs"
+        },
+        "ไก่": {
+            "whatToDrawEn": "a single chicken, full body, standing, colorful feathers, red comb, two legs visible, centered composition, farm background",
+            "category": "animal",
+            "extraNegative": "rooster, duck, bird, multiple chickens"
+        },
+        "เป็ด": {
+            "whatToDrawEn": "a single duck, full body, standing, yellow or white feathers, orange beak, webbed feet, centered composition, pond background",
+            "category": "animal",
+            "extraNegative": "goose, swan, chicken, multiple ducks"
+        },
+        "ห่าน": {
+            "whatToDrawEn": "a single goose, full body, standing, white feathers, long neck, orange beak, centered composition, pond background",
+            "category": "animal",
+            "extraNegative": "duck, swan, multiple geese"
+        },
+        "กบ": {
+            "whatToDrawEn": "a single frog, full body, sitting, green skin, big eyes, four legs visible, centered composition, pond or lily pad background",
+            "category": "animal",
+            "extraNegative": "toad, tadpole, multiple frogs"
+        },
+        "เต่า": {
+            "whatToDrawEn": "a single turtle, full body, walking, green shell, four short legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "tortoise, sea turtle, multiple turtles"
+        },
+        "หนู": {
+            "whatToDrawEn": "a single cute mouse, full body, sitting, gray fur, big ears, long tail, four legs visible, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "rat, hamster, multiple mice"
+        },
+        "ลิง": {
+            "whatToDrawEn": "a single monkey, full body, sitting on branch, brown fur, long tail, four limbs visible, centered composition, tree background",
+            "category": "animal",
+            "extraNegative": "ape, gorilla, chimpanzee, multiple monkeys"
+        },
+        "หมี": {
+            "whatToDrawEn": "a single cute bear, full body, standing, brown fur, small ears, four legs visible, centered composition, forest background",
+            "category": "animal",
+            "extraNegative": "panda, polar bear, multiple bears"
+        },
+        "ปลา": {
+            "whatToDrawEn": "a single colorful fish, full body, swimming, scales, fins visible, centered composition, underwater blue background",
+            "category": "animal",
+            "extraNegative": "shark, whale, multiple fish, school of fish"
+        },
+        "ปลาทู": {
+            "whatToDrawEn": "a single mackerel fish, full body, silver-blue color, streamlined body, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "tuna, salmon, multiple fish"
+        },
+        "ปลาดุก": {
+            "whatToDrawEn": "a single catfish, full body, dark gray color, whisker-like barbels, centered composition, muddy water background",
+            "category": "animal",
+            "extraNegative": "carp, other fish, multiple catfish"
+        },
+        "แมลง": {
+            "whatToDrawEn": "a single colorful insect (butterfly or ladybug), full body, wings spread, six legs visible, centered composition, flower background",
+            "category": "animal",
+            "extraNegative": "spider, multiple insects, scary bugs"
+        },
+        "นกเขา": {
+            "whatToDrawEn": "a single dove, full body, perched on branch, gray-brown feathers, peaceful expression, centered composition, tree background",
+            "category": "animal",
+            "extraNegative": "pigeon, sparrow, multiple birds"
+        },
+        "นกกระจาบ": {
+            "whatToDrawEn": "a single sparrow bird, full body, perched on branch, brown feathers, small beak, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "finch, canary, multiple birds"
+        },
+        "นกเงือก": {
+            "whatToDrawEn": "a single hornbill bird, full body, perched on branch, large colorful beak, black and white feathers, centered composition",
+            "category": "animal",
+            "extraNegative": "toucan, parrot, multiple birds"
+        },
+        "นกเอี้ยง": {
+            "whatToDrawEn": "a single myna bird, full body, perched, dark feathers with yellow patches, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "crow, starling, multiple birds"
+        },
+        "นกแสก": {
+            "whatToDrawEn": "a single barn owl, full body, perched, white heart-shaped face, brown and white feathers, centered composition, night background",
+            "category": "animal",
+            "extraNegative": "eagle, hawk, multiple owls"
+        },
+        "แรด": {
+            "whatToDrawEn": "a single rhinoceros, full body, standing, gray thick skin, one or two horns, four legs visible, centered composition, savanna background",
+            "category": "animal",
+            "extraNegative": "hippo, elephant, multiple rhinos"
+        },
+        "หอย": {
+            "whatToDrawEn": "a single seashell with snail inside, colorful spiral shell, centered composition, beach or ocean background",
+            "category": "animal",
+            "extraNegative": "clam, oyster, multiple shells"
+        },
+        "ทาก": {
+            "whatToDrawEn": "a single slug, elongated body, gray-brown color, moving on leaf, centered composition, garden background",
+            "category": "animal",
+            "extraNegative": "snail, worm, leech"
+        },
+        "กระแต": {
+            "whatToDrawEn": "a single squirrel, full body, sitting, fluffy tail, holding nut, four legs visible, centered composition, tree background",
+            "category": "animal",
+            "extraNegative": "chipmunk, rat, multiple squirrels"
+        }
+    },
+    "พืช_ดอกไม้": {
+        "มะลิ": {
+            "whatToDrawEn": "a single jasmine flower, white petals, green leaves, close-up, centered composition, soft gradient background",
+            "category": "plant",
+            "extraNegative": "person, woman, face, multiple flowers"
+        },
+        "บัว": {
+            "whatToDrawEn": "a single lotus flower, pink petals, floating on water, green lily pad, centered composition, pond background",
+            "category": "plant",
+            "extraNegative": "person, buddha, statue, multiple flowers"
+        },
+        "ดอกบัว": {
+            "whatToDrawEn": "a single lotus flower, pink petals, floating on water, green lily pad, centered composition, pond background",
+            "category": "plant",
+            "extraNegative": "person, buddha, statue, multiple flowers"
+        },
+        "กุหลาบ": {
+            "whatToDrawEn": "a single rose flower, red petals, green stem with thorns, close-up, centered composition, soft gradient background",
+            "category": "plant",
+            "extraNegative": "multiple roses, bouquet, vase"
+        },
+        "ดอกไม้": {
+            "whatToDrawEn": "a single beautiful flower, colorful petals, green stem, close-up, centered composition, soft gradient background",
+            "category": "plant",
+            "extraNegative": "bouquet, vase, multiple flowers"
+        },
+        "ดอกชบา": {
+            "whatToDrawEn": "a single hibiscus flower, red petals, yellow center, close-up, centered composition, tropical background",
+            "category": "plant",
+            "extraNegative": "multiple flowers, bouquet"
+        },
+        "ดอกพุด": {
+            "whatToDrawEn": "a single gardenia flower, white petals, green leaves, fragrant, close-up, centered composition",
+            "category": "plant",
+            "extraNegative": "multiple flowers, bouquet"
+        },
+        "จำปา": {
+            "whatToDrawEn": "a single champaka flower (magnolia), white-yellow petals, fragrant, close-up, centered composition, soft background",
+            "category": "plant",
+            "extraNegative": "multiple flowers"
+        },
+        "ต้นไทร": {
+            "whatToDrawEn": "a single banyan tree, large trunk with aerial roots, wide spreading branches, green leaves, centered composition",
+            "category": "plant",
+            "extraNegative": "forest, multiple trees"
+        },
+        "หญ้า": {
+            "whatToDrawEn": "a patch of green grass, fresh green blades, simple composition, soft natural lighting",
+            "category": "plant",
+            "extraNegative": "weeds, flowers, complex scene"
+        },
+        "ต้นหญ้า": {
+            "whatToDrawEn": "a clump of green grass, fresh green blades growing from ground, simple composition, natural background",
+            "category": "plant",
+            "extraNegative": "weeds, flowers, complex scene"
+        },
+        "หญ้าคา": {
+            "whatToDrawEn": "a single cogon grass plant, tall silvery-white plumes, feathery seeds, simple field background",
+            "category": "plant",
+            "extraNegative": "wheat, rice, multiple plants"
+        }
+    },
+    "ผลไม้": {
+        "กล้วย": {
+            "whatToDrawEn": "a single bunch of bananas, yellow ripe bananas, curved shape, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "plantain, multiple bunches, sliced"
+        },
+        "มะม่วง": {
+            "whatToDrawEn": "a single mango fruit, yellow-orange ripe color, oval shape, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "papaya, multiple fruits, sliced"
+        },
+        "มังคุด": {
+            "whatToDrawEn": "a single mangosteen fruit, purple outer shell, white flesh inside, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "rambutan, multiple fruits"
+        },
+        "ทุเรียน": {
+            "whatToDrawEn": "a single durian fruit, spiky green-yellow shell, whole fruit, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "jackfruit, multiple fruits, opened"
+        },
+        "ลำไย": {
+            "whatToDrawEn": "a bunch of longan fruits, small round tan-brown skin, on branch, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "lychee, rambutan, multiple bunches"
+        },
+        "เงาะ": {
+            "whatToDrawEn": "a single rambutan fruit, red hairy skin, oval shape, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "lychee, longan, multiple fruits"
+        },
+        "ส้มโอ": {
+            "whatToDrawEn": "a single pomelo fruit, large round citrus, yellow-green skin, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "grapefruit, orange, multiple fruits"
+        },
+        "มะพร้าว": {
+            "whatToDrawEn": "a single coconut, brown hairy shell or green young coconut, close-up, centered composition, tropical background",
+            "category": "food",
+            "extraNegative": "palm tree, multiple coconuts"
+        },
+        "มะกอก": {
+            "whatToDrawEn": "a single Thai olive (madan), small green oval fruit, on branch, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "olive, grape, multiple fruits"
+        },
+        "มะยม": {
+            "whatToDrawEn": "a single star gooseberry fruit, small round green or yellow fruit, on branch, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "grape, berry, multiple fruits"
+        },
+        "มะเฟือง": {
+            "whatToDrawEn": "a single star fruit (carambola), yellow star-shaped cross section, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "other fruits, sliced many"
+        },
+        "มะกรูด": {
+            "whatToDrawEn": "a single kaffir lime, bumpy dark green skin, small round citrus, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "regular lime, lemon, multiple fruits"
+        }
+    },
+    "สิ่งของ_ภาชนะ": {
+        "โต๊ะ": {
+            "whatToDrawEn": "a single wooden table, four legs, rectangular or round top, simple design, close-up, centered composition, clean background",
+            "category": "concrete",
+            "extraNegative": "desk, multiple tables, cluttered"
+        },
+        "เก้าอี้": {
+            "whatToDrawEn": "a single wooden chair, four legs, backrest, simple design, close-up, centered composition, clean background",
+            "category": "concrete",
+            "extraNegative": "stool, sofa, multiple chairs"
+        },
+        "ถ้วย": {
+            "whatToDrawEn": "a single ceramic cup, round shape, handle on side, close-up, centered composition, clean background",
+            "category": "concrete",
+            "extraNegative": "mug, glass, multiple cups"
+        },
+        "ถ้วยชาม": {
+            "whatToDrawEn": "a single ceramic bowl, round deep shape, simple design, close-up, centered composition, clean background",
+            "category": "concrete",
+            "extraNegative": "plate, cup, multiple bowls"
+        },
+        "จาน": {
+            "whatToDrawEn": "a single ceramic plate, round flat shape, simple white design, close-up, centered composition, clean background",
+            "category": "concrete",
+            "extraNegative": "bowl, saucer, multiple plates"
+        },
+        "กระทะ": {
+            "whatToDrawEn": "a single wok or frying pan, round metal cooking pan, long handle, close-up, centered composition, kitchen background",
+            "category": "concrete",
+            "extraNegative": "pot, multiple pans"
+        },
+        "หม้อข้าว": {
+            "whatToDrawEn": "a single rice cooker pot, round metal pot with lid, close-up, centered composition, kitchen background",
+            "category": "concrete",
+            "extraNegative": "pressure cooker, multiple pots"
+        },
+        "ตะเกียบ": {
+            "whatToDrawEn": "a pair of chopsticks, wooden or bamboo, long thin sticks, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "spoon, fork, multiple pairs"
+        },
+        "ตะกร้า": {
+            "whatToDrawEn": "a single woven basket, bamboo or rattan, traditional Thai style, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "bag, box, multiple baskets"
+        },
+        "กระติกน้ำ": {
+            "whatToDrawEn": "a single water bottle or thermos, cylindrical shape, cap on top, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "jug, pitcher, multiple bottles"
+        },
+        "กระเป๋า": {
+            "whatToDrawEn": "a single bag or backpack, fabric or leather, handles or straps, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "suitcase, wallet, multiple bags"
+        },
+        "กระป๋อง": {
+            "whatToDrawEn": "a single metal can, cylindrical shape, colorful label, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "bottle, jar, multiple cans"
+        },
+        "ร่ม": {
+            "whatToDrawEn": "a single umbrella, colorful canopy, curved handle, open or closed, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "parasol, multiple umbrellas"
+        },
+        "เรือ": {
+            "whatToDrawEn": "a single traditional Thai boat, wooden long-tail boat, floating on water, centered composition, river background",
+            "category": "concrete",
+            "extraNegative": "ship, canoe, multiple boats"
+        },
+        "ตุ๊กตา": {
+            "whatToDrawEn": "a single cute doll, fabric or plastic, simple design, sitting pose, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "action figure, robot, multiple dolls"
+        },
+        "กระจก": {
+            "whatToDrawEn": "a single mirror, rectangular or oval frame, reflective surface, close-up, centered composition, simple background",
+            "category": "concrete",
+            "extraNegative": "window, glass, multiple mirrors"
+        },
+        "ตู้": {
+            "whatToDrawEn": "a single wooden cabinet or wardrobe, rectangular shape, doors, simple design, centered composition, room background",
+            "category": "concrete",
+            "extraNegative": "closet, shelf, multiple cabinets"
+        }
+    },
+    "คำกำกวม_สั้น": {
+        "กา": {
+            "whatToDrawEn": "a single crow bird, black feathers, full body, perched, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "kettle, pot, raven, multiple birds"
+        },
+        "ตา": {
+            "whatToDrawEn": "a single elderly grandfather, smiling face, white hair, sitting, friendly expression, centered composition",
+            "category": "action",
+            "extraNegative": "eye, eyes, body part, multiple people"
+        },
+        "ย่า": {
+            "whatToDrawEn": "a single elderly grandmother (paternal), smiling face, white hair, sitting, friendly expression, centered composition",
+            "category": "action",
+            "extraNegative": "young woman, multiple people"
+        },
+        "ป้า": {
+            "whatToDrawEn": "a single aunt (older), middle-aged woman, friendly smile, standing, centered composition, simple background",
+            "category": "action",
+            "extraNegative": "young woman, multiple people"
+        },
+        "ปู่": {
+            "whatToDrawEn": "a single elderly grandfather (paternal), smiling face, white hair, sitting, friendly expression, centered composition",
+            "category": "action",
+            "extraNegative": "crab, young man, multiple people"
+        },
+        "ไข่": {
+            "whatToDrawEn": "a single chicken egg, white or brown shell, oval shape, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "multiple eggs, basket, broken egg"
+        },
+        "แกง": {
+            "whatToDrawEn": "a bowl of Thai curry, colorful curry dish, coconut milk base, vegetables, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "soup, stew, multiple bowls"
+        },
+        "ผี": {
+            "whatToDrawEn": "a friendly cute ghost character, white sheet ghost, smiling face, cartoon style, child-friendly, centered composition",
+            "category": "action",
+            "extraNegative": "scary, horror, dark, skeleton, monster"
+        },
+        "พระ": {
+            "whatToDrawEn": "a single Buddhist monk, orange robes, bald head, peaceful expression, sitting meditation pose, centered composition, temple background",
+            "category": "culture",
+            "extraNegative": "god, deity, multiple monks"
+        },
+        "เยอะ": {
+            "whatToDrawEn": "a large pile of many colorful toy balls gathered together, lots of objects, a big group, abundance, centered composition, simple clean background",
+            "category": "concrete",
+            "extraNegative": "single object, one item, empty, few"
+        }
+    },
+    "อาหาร": {
+        "ทอฟฟี่": {
+            "whatToDrawEn": "a single wrapped toffee candy, glossy golden-brown sweet in a twisted clear cellophane wrapper, close-up, centered composition, simple clean background",
+            "category": "food",
+            "extraNegative": "chocolate bar, lollipop, multiple candies, text, label"
+        },
+        "ข้าว": {
+            "whatToDrawEn": "a bowl of steamed white rice, fluffy grains, in ceramic bowl, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "raw rice, rice plant, multiple bowls"
+        },
+        "น้ำปลา": {
+            "whatToDrawEn": "a bottle of fish sauce, brown liquid, glass bottle with label, close-up, centered composition, kitchen background",
+            "category": "food",
+            "extraNegative": "soy sauce, multiple bottles"
+        },
+        "น้ำมันหมู": {
+            "whatToDrawEn": "a jar of pork lard or cooking oil, clear or white fat, glass jar, close-up, centered composition, kitchen background",
+            "category": "food",
+            "extraNegative": "vegetable oil, multiple jars"
+        },
+        "ปลากระป๋อง": {
+            "whatToDrawEn": "a can of sardines or canned fish, opened tin can showing fish inside, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "fresh fish, multiple cans"
+        },
+        "ปลาเค็ม": {
+            "whatToDrawEn": "salted dried fish, preserved fish hanging or on plate, brown color, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "fresh fish, multiple fish"
+        },
+        "ปลาร้า": {
+            "whatToDrawEn": "a jar of fermented fish (Thai pla ra), brown fermented fish in jar, traditional Thai condiment, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "fish sauce, fresh fish"
+        },
+        "ผักบุ้ง": {
+            "whatToDrawEn": "a bunch of morning glory vegetable (water spinach), green leaves and hollow stems, fresh, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "spinach, other vegetables"
+        },
+        "ผักคะน้า": {
+            "whatToDrawEn": "a bunch of Chinese broccoli (kai-lan), dark green leaves, thick stems, fresh, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "broccoli, other vegetables"
+        },
+        "ขนม": {
+            "whatToDrawEn": "a colorful Thai dessert or snack, sweet treat on plate, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "cake, candy, multiple desserts"
+        },
+        "กระเทียม": {
+            "whatToDrawEn": "a single garlic bulb, white papery skin, multiple cloves, close-up, centered composition, simple background",
+            "category": "food",
+            "extraNegative": "onion, shallot, multiple garlic"
+        },
+        "ตะไคร้": {
+            "whatToDrawEn": "a stalk of lemongrass, long green grass-like leaves, pale bulb base, close-up, centered composition",
+            "category": "food",
+            "extraNegative": "grass, spring onion"
+        }
+    },
+    "นามธรรม_แนวคิด_คุณภาพ": {
+        "ราคา": {
+            "whatToDrawEn": "a single toy on a store shelf with a small blank hanging tag beside it, a stack of gold and silver coins next to the toy, a child's hand pointing at the coins, conveying cost, bright simple store background",
+            "extraNegative": "readable numbers, text, letters"
+        },
+        "มื้อ": {
+            "whatToDrawEn": "a happy child sitting at a table eating one full set meal, a plate of food with a bowl of rice and side dishes in front, eating with a spoon, simple dining room background",
+            "extraNegative": "empty plate, multiple tables, buffet"
+        },
+        "แน่": {
+            "whatToDrawEn": "a confident smiling child with a determined face giving a firm thumbs-up gesture, standing upright and self-assured, simple bright background",
+            "extraNegative": "doubt, confused face, shrug"
+        },
+        "ชื่อ": {
+            "whatToDrawEn": "a smiling child standing and introducing themselves with one open hand placed on their own chest and the other hand giving a friendly wave to another child who waves back, warm friendly expressions, simple classroom background",
+            "extraNegative": "readable text, letters, name tag, name badge"
+        },
+        "เก๊": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a shiny genuine gold coin gleaming with sparkles, panel 2 a dull crumbling cheap imitation coin that is chipped and flaking, simple clean background",
+            "extraNegative": "readable text, check mark, cross mark, identical coins"
+        },
+        "เรา": {
+            "whatToDrawEn": "a happy group of three smiling children standing close together with arms around each other's shoulders, facing the viewer as one united group, simple bright background",
+            "extraNegative": "single child, alone, one person"
+        },
+        "พอ": {
+            "whatToDrawEn": "a smiling content child holding up one open palm in a gentle 'stop, that's enough' gesture beside a bowl already filled to a satisfactory level, calm satisfied expression, simple background",
+            "extraNegative": "overflowing, empty, hungry"
+        },
+        "วิธี": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels showing a simple how-to sequence: panel 1 a hand holding an empty cup, panel 2 the same hand pouring water from a jug into the cup, panel 3 the hand holding the now-full cup, simple clean background",
+            "extraNegative": "readable text, numbers, numbered steps"
+        },
+        "เละ": {
+            "whatToDrawEn": "a ripe banana squashed into a soft mushy pulp on a plate, smeared and flattened with a gooey messy texture, simple background",
+            "extraNegative": "whole fruit, neat, clean, intact"
+        },
+        "ชั่ว": {
+            "whatToDrawEn": "a child-friendly cartoon villain character with a sly mischievous frown, crossed arms and a dark cape, scheming but not scary expression, simple background",
+            "extraNegative": "horror, gore, blood, scary, realistic, frightening"
+        },
+        "เมีย": {
+            "whatToDrawEn": "a smiling adult woman standing arm in arm beside her husband as a married couple, the woman as the clear focal point on the left, warm friendly expressions, simple home background",
+            "extraNegative": "child, single person, multiple couples"
+        },
+        "วิชา": {
+            "whatToDrawEn": "a globe, a stack of plain colorful books, a paintbrush and a science beaker arranged together on a school desk, emblematic of different study subjects, simple classroom background",
+            "extraNegative": "readable text, titles on books, letters"
+        },
+        "จรจัด": {
+            "whatToDrawEn": "a single thin scruffy stray dog with messy fur sitting alone on a quiet empty street beside a cardboard box, sad lonely expression, dim city alley background",
+            "extraNegative": "clean pet, owner, leash, collar, multiple dogs"
+        },
+        "เพลิดเพลิน": {
+            "whatToDrawEn": "a child joyfully playing on a swing in a sunny park, big delighted laughing smile, eyes bright with pure enjoyment, colorful playground background",
+            "extraNegative": "bored, sad, crying"
+        },
+        "กลมเกลียว": {
+            "whatToDrawEn": "a group of four happy children holding hands in a circle, smiling warmly at each other in unity and togetherness, sunny park background",
+            "extraNegative": "arguing, fighting, alone, single child"
+        },
+        "กะทัดรัด": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a large bulky overflowing bag that is awkward to carry, panel 2 a small neat compact bag held easily by a happy child, simple clean background",
+            "extraNegative": "readable text, identical items"
+        },
+        "กรุณา": {
+            "whatToDrawEn": "a kind child gently helping an elderly woman cross the street, holding her arm with a warm caring smile, soft sunny street background",
+            "extraNegative": "unkind, ignoring, rude"
+        },
+        "เฉลย": {
+            "whatToDrawEn": "a smiling teacher lifting a cloth cover off a picture on an easel to reveal it, while seated children react with delighted 'aha' faces and raised hands, simple classroom background",
+            "extraNegative": "readable text, numbers, equations, check mark"
+        },
+        "ละคร": {
+            "whatToDrawEn": "actors in colorful costumes performing on a theater stage with red curtains drawn open and bright spotlights, a small audience watching from below, lively stage background",
+            "extraNegative": "movie screen, cinema, single person, television"
+        },
+        "คุณค่า": {
+            "whatToDrawEn": "two open child's hands cupped together holding a single glowing golden gem that radiates light, treasured precious expression, dark simple background to make it shine",
+            "extraNegative": "readable text, price tag, many gems"
+        },
+        "กว้างขวาง": {
+            "whatToDrawEn": "a single small child standing with arms stretched wide in the middle of a vast open green field that stretches to the far horizon under a big sky, emphasizing spaciousness, simple background",
+            "extraNegative": "cramped, narrow, crowded, walls, indoors"
+        },
+        "ประเภท": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels sorting fruit by type: panel 1 a group of red apples, panel 2 a group of yellow bananas, panel 3 a group of orange oranges, each type grouped separately, simple clean background",
+            "extraNegative": "readable text, mixed pile, labels"
+        },
+        "กติกา": {
+            "whatToDrawEn": "a football referee blowing a whistle and holding up one hand to signal a rule, players pausing on a soccer field behind him, simple sports field background",
+            "extraNegative": "readable text, rulebook pages, signs"
+        },
+        "ทรุดโทรม": {
+            "whatToDrawEn": "an old run-down wooden house with a broken sagging roof, peeling paint, cracked walls and boarded windows, overgrown weeds in front, gloomy worn-out appearance, simple background",
+            "extraNegative": "new house, clean, modern, well-maintained"
+        },
+        "เฉพาะ": {
+            "whatToDrawEn": "a row of identical white toy rabbits with one single rabbit in the middle encircled by a glowing yellow highlight ring and a child's hand pointing at just that one chosen rabbit, simple clean background",
+            "extraNegative": "readable text, all highlighted, labels"
+        },
+        "บุญคุณ": {
+            "whatToDrawEn": "a child kneeling respectfully performing a Thai wai (palms pressed together) before a kind smiling parent who gently rests a hand on the child's head, warm grateful expressions, soft home background",
+            "extraNegative": "disrespect, conflict, anger"
+        },
+        "เฉลียวฉลาด": {
+            "whatToDrawEn": "a bright clever child with a big confident smile and a glowing light bulb floating above their head, one finger raised in an 'aha' moment, simple background",
+            "extraNegative": "readable text, confused, dull, sad"
+        },
+        "สว่าง": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a dark dim room in shadow, panel 2 the same room brightly lit and glowing with warm light from a lamp, simple clean background",
+            "extraNegative": "readable text, identical panels"
+        },
+        "เฒ่าชรา": {
+            "whatToDrawEn": "a single very old man with deep wrinkles, white hair and a long white beard, bent over leaning on a wooden walking cane, kind gentle expression, simple background",
+            "extraNegative": "young person, child, middle-aged"
+        },
+        "คำสาป": {
+            "whatToDrawEn": "a child-friendly cartoon witch in a purple hat raising a glowing magic wand, casting a swirl of purple sparkly magic toward a frog, gentle storybook style not scary, simple dark background",
+            "extraNegative": "horror, gore, scary, realistic, frightening"
+        },
+        "กระจ้อยร่อย": {
+            "whatToDrawEn": "a tiny ant standing next to a giant human hand for scale, the ant minuscule beside the huge fingertip, emphasizing how very small it is, simple clean background",
+            "extraNegative": "large, equal size, many ants"
+        },
+        "โชคดี": {
+            "whatToDrawEn": "a happy excited child holding up a green four-leaf clover and a horseshoe, beaming with delight, sparkles around them, simple bright background",
+            "extraNegative": "bad luck, sad, broken"
+        },
+        "นายพราน": {
+            "whatToDrawEn": "a single hunter man wearing a wide-brimmed hat and carrying a bow over his shoulder, walking through a forest searching with an alert focused expression, green forest background",
+            "extraNegative": "soldier, gun, violence, blood, dead animal"
+        },
+        "ประมวล": {
+            "whatToDrawEn": "a pair of hands gathering many scattered loose papers and small objects from the left side of a desk into one neat tidy stack on the right side, scattered pieces becoming a single organized pile, simple clean classroom desk background"
+        },
+        "ผลาญ": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a tall stack of gold coins and full money bags on a table, panel 2 the same table now nearly empty with only a few scattered coins and a sad child holding empty open hands, showing wealth wasted away, simple plain background",
+            "extraNegative": "fire, war, violence"
+        },
+        "สรุป": {
+            "whatToDrawEn": "a big messy tall stack of papers on the left and a single small folded note card on the right, a glowing arrow shape pointing from the big stack to the small note, condensing many pages into one, simple clean desk background",
+            "extraNegative": "readable text, letters, words, numbers"
+        },
+        "หมวดหมู่": {
+            "whatToDrawEn": "three separate bins on a table sorted by type: one bin full of red apples, one bin full of blue toy cars, one bin full of yellow rubber ducks, neatly grouped by kind, a child's hand placing one item into its matching bin, simple clean background",
+            "extraNegative": "text labels, words, mixed pile"
+        },
+        "ตระหนก": {
+            "whatToDrawEn": "a single child with a shocked startled face, wide eyes, open mouth, both hands raised up near the cheeks in surprise and alarm, leaning back, expressive body language of sudden fright, simple plain background",
+            "extraNegative": "scary, horror, monster, blood"
+        },
+        "ดาษดา": {
+            "whatToDrawEn": "a wide open field completely covered with countless colorful wildflowers spreading everywhere to the horizon, dense abundance of blossoms filling the whole frame, bright sunny sky background",
+            "extraNegative": "empty field, few flowers, single flower"
+        },
+        "เหยื่อ": {
+            "whatToDrawEn": "a fishing hook on a line with a wriggling worm as bait dangling underwater, a fish swimming up toward the bait about to bite, clear blue underwater background",
+            "extraNegative": "violence, blood, human victim, scary"
+        },
+        "โอกาส": {
+            "whatToDrawEn": "a single open door full of bright golden light, a cheerful child stepping forward through the open doorway with arms reaching toward the glowing path ahead, an inviting opening, hopeful warm background",
+            "extraNegative": "closed door, dark, scary"
+        },
+        "เกลื่อนกลาด": {
+            "whatToDrawEn": "many toys, papers and clothes scattered messily all over a bedroom floor, items strewn in disorder everywhere across the whole floor, a cluttered untidy room, simple room background",
+            "extraNegative": "tidy, organized, single object, neat"
+        },
+        "จริง": {
+            "whatToDrawEn": "a sincere honest smiling child giving a confident thumbs-up gesture, beside a single large bright green check mark glowing inside a circle, conveying truth and certainty, simple clean background",
+            "extraNegative": "text, words, letters, cross mark"
+        },
+        "รื่นรมย์": {
+            "whatToDrawEn": "a child lying happily and relaxed on soft green grass in a beautiful blooming garden, peaceful blissful smile, eyes closed in contentment, gentle sunshine and colorful flowers all around, serene joyful background",
+            "extraNegative": "sad, gloomy, dark"
+        },
+        "สัมพันธ์": {
+            "whatToDrawEn": "two smiling children warmly holding hands with a glowing heart shape floating between their joined hands, showing a strong friendly bond and connection between them, simple warm background",
+            "extraNegative": "fighting, separated, alone"
+        },
+        "บริสุทธิ์": {
+            "whatToDrawEn": "a single crystal-clear glass of pure sparkling water with a bright sparkle highlight, set against a clean pristine white background, water droplets glistening, conveying purity and cleanliness",
+            "category": "concrete",
+            "extraNegative": "dirty, murky, polluted"
+        },
+        "ฤทธิ์": {
+            "whatToDrawEn": "a child's open hand raised with bright glowing magical energy and sparkling light rays radiating from the palm, swirling magical aura, conveying a burst of supernatural power, dark sky background to make the glow stand out",
+            "extraNegative": "scary, evil, weapon, gun"
+        },
+        "จัดสรร": {
+            "whatToDrawEn": "a pair of hands dividing a big pile of gold coins into three separate equal smaller stacks on a table, fairly distributing the coins into portions, simple clean background",
+            "extraNegative": "text, numbers, single pile"
+        },
+        "กิจกรรม": {
+            "whatToDrawEn": "three cheerful children doing fun activities together in a schoolyard: one drawing, one jumping rope, one kicking a ball, all actively engaged and smiling, bright outdoor school background",
+            "extraNegative": "sitting still, empty, alone"
+        },
+        "ศักดิ์ศรี": {
+            "whatToDrawEn": "a single child standing tall and proud with chin up, chest out, shoulders back, a confident dignified posture and proud smile, a gentle golden glow of honor around the child, simple clean background",
+            "extraNegative": "slouching, ashamed, sad"
+        },
+        "สร้างสรรค์": {
+            "whatToDrawEn": "a happy child painting a colorful imaginative picture on an easel, with a glowing lightbulb and floating colorful shapes, stars and paint splashes above the child's head, conveying creativity, bright art-room background",
+            "extraNegative": "copying, dull, text"
+        },
+        "ประสงค์": {
+            "whatToDrawEn": "a child with hands clasped together and eyes closed making a heartfelt wish, a glowing thought bubble above showing a wished-for toy, a hopeful longing expression, soft dreamy background",
+            "extraNegative": "text, words"
+        },
+        "สรรพสิ่ง": {
+            "whatToDrawEn": "a wide harmonious nature scene showing a great variety of things together: trees, animals, mountains, sun and water under a bright sky, abundance and diversity of all things in one view",
+            "extraNegative": "empty, single object, void"
+        },
+        "บรรยากาศ": {
+            "whatToDrawEn": "a cozy warm scene of children sitting happily around a campfire at dusk, soft glowing warm light, gentle smoke rising, a pleasant relaxed mood filling the air, dreamy evening background",
+            "extraNegative": "empty, cold, text"
+        },
+        "บันดาล": {
+            "whatToDrawEn": "a magic wand waving with a trail of sparkling stars, and a beautiful flower magically appearing and blooming where the sparkles fall, conveying something brought into being by magical power, soft glowing background",
+            "extraNegative": "scary, evil, dark"
+        },
+        "รัฐบาล": {
+            "whatToDrawEn": "a grand classical government building with tall white columns, a domed roof and a flag pole on top, a stately official capitol building, blue sky background",
+            "extraNegative": "readable text, signs, house, temple"
+        },
+        "มรรยาท": {
+            "whatToDrawEn": "a polite Thai child performing a respectful wai gesture (palms pressed together at the chest, head slightly bowed) greeting an elder who smiles warmly, showing good manners, simple warm background",
+            "extraNegative": "rude, fighting, text"
+        },
+        "นโยบาย": {
+            "whatToDrawEn": "a leader standing and pointing forward along a curving path on the ground that leads to a single flag planted on a small hill goal, a small group of people following behind, conveying a guiding plan toward a goal, simple outdoor background",
+            "extraNegative": "readable text, words, letters, diagram, chart"
+        },
+        "เอกลักษณ์": {
+            "whatToDrawEn": "a row of identical plain white eggs with one single egg in the middle uniquely painted in bright rainbow colors standing out, a glowing highlight circle around the unique colorful egg, simple clean background",
+            "extraNegative": "all same, text"
+        },
+        "อารมณ์": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels showing the same child's face with three different emotions: panel 1 a big happy smile, panel 2 a sad crying face, panel 3 an angry frowning face, simple plain background in each panel",
+            "extraNegative": "text, words"
+        },
+        "บรรเจิด": {
+            "whatToDrawEn": "a single dazzling brilliant firework bursting in the night sky in radiant golden and rainbow sparkles, magnificent splendid bright light filling the frame, dark night sky background",
+            "extraNegative": "dull, dim, plain"
+        },
+        "บันเทิง": {
+            "whatToDrawEn": "happy children watching a fun colorful puppet stage show, laughing and clapping with delight, a bright cheerful theater stage with curtains and spotlights, festive entertaining background",
+            "extraNegative": "boring, sad, text"
+        },
+        "แคลเซียม": {
+            "whatToDrawEn": "a tall glass of fresh white milk and a wedge of cheese beside a child happily flexing a strong arm with a sparkle, conveying the bone-strengthening mineral found in milk, simple clean background",
+            "extraNegative": "text, chemical symbols, pills bottle label"
+        },
+        "พืชพันธุ์": {
+            "whatToDrawEn": "a lush garden with many different kinds of plants and crops growing together: tall corn, leafy vegetables, flowering plants and a small tree, a rich variety of green flora, bright sunny field background",
+            "extraNegative": "single plant, bare ground, dead plants"
+        },
+        "จรรยา": {
+            "whatToDrawEn": "a kind child helping an elderly person cross the road safely, holding their arm gently with a caring smile, showing good moral conduct and kindness, simple street background",
+            "extraNegative": "rude, fighting, text"
+        },
+        "ทฤษฎี": {
+            "whatToDrawEn": "a child scientist in a lab coat pointing thoughtfully at a large floating model of an atom with planets orbiting around it, a glowing lightbulb above the head, simple science-room background",
+            "extraNegative": "readable text, equations, words, numbers, chalkboard"
+        },
+        "มรดก": {
+            "whatToDrawEn": "an elderly grandfather's hands passing an old ornate treasure chest of gold coins to a young child's open hands, handing down a precious legacy, warm soft background",
+            "extraNegative": "text, will document words"
+        },
+        "สุขทุกข์": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a child with a big joyful happy smile under bright sunshine, panel 2 the same child with a sad teary face under a gray rain cloud, contrasting happiness and sadness, simple plain background",
+            "extraNegative": "text, words"
+        },
+        "วรรณคดี": {
+            "whatToDrawEn": "an open antique illustrated storybook lying on a wooden table, its two visible pages each showing an ornate painted picture of a Thai classical hero and a mythical figure (pictures only, no writing), a feather quill and a single flower beside it, warm cozy library background",
+            "extraNegative": "readable text, letters, words on the pages, paragraphs, gibberish writing"
+        },
+        "พฤติกรรม": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a child politely helping an elderly person walk, smiling and well-mannered; panel 2 the same child cheerfully sharing toys with a friend, both showing good behavior, simple classroom background in both panels",
+            "extraNegative": "text, speech bubbles, comic page, dense grid"
+        },
+        "บรรจง": {
+            "whatToDrawEn": "a close-up of a child's hands very carefully and delicately painting fine detail on a small flower with a tiny brush, a calm concentrated expression, neat tidy work, soft desk background",
+            "extraNegative": "text, messy, sloppy, rushed"
+        },
+        "ครรภ์": {
+            "whatToDrawEn": "a happy pregnant mother in a flowing dress, both hands gently cradling her large rounded belly, a warm tender smile looking down at her bump, soft home background",
+            "extraNegative": "text, x-ray, medical diagram, fetus organ, scary"
+        },
+        "เปรมปรีดิ์": {
+            "whatToDrawEn": "a happy child jumping in the air with both arms raised high, a huge joyful smile and sparkling eyes, colorful balloons floating around, bright cheerful background",
+            "extraNegative": "text, sad, angry, crying"
+        },
+        "สุขสันต์": {
+            "whatToDrawEn": "a small group of cheerful children celebrating together around a birthday cake with colorful balloons, all smiling and laughing, wearing party hats, warm bright party background",
+            "extraNegative": "text, letters, banner words, sad"
+        },
+        "กระวีกระวาด": {
+            "whatToDrawEn": "a child rushing energetically while carrying a stack of books and a bag, legs in mid-stride as if running, motion-blur speed lines streaming behind, a hurried busy expression, simple background",
+            "extraNegative": "text, calm, sitting still, slow"
+        },
+        "ครึกครื้น": {
+            "whatToDrawEn": "a lively outdoor festival with a few children dancing and laughing together under colorful strung flags and paper lanterns, confetti in the air, joyful festive atmosphere, bright background",
+            "extraNegative": "text, quiet, empty, sad, dense comic grid"
+        },
+        "คลาคล่ำ": {
+            "whatToDrawEn": "a busy marketplace street absolutely packed with many people walking shoulder to shoulder, a dense crowd filling the lane, market stalls on both sides, bustling daytime background",
+            "extraNegative": "text, empty street, single person, few people"
+        },
+        "ทรวง": {
+            "whatToDrawEn": "a child with both hands pressed gently over the center of the chest, eyes closed with a peaceful tender expression, a soft warm glow over the heart area, soft plain background",
+            "extraNegative": "text, anatomical organ, ribcage, x-ray, gore"
+        },
+        "ขนาง": {
+            "whatToDrawEn": "a shy child half-hiding their face behind both raised hands, rosy blushing cheeks and a bashful downward glance, a small sheepish smile, soft plain background",
+            "extraNegative": "text, crying, angry, scared"
+        },
+        "จารีต": {
+            "whatToDrawEn": "two Thai children in traditional costume performing a respectful wai while gently pouring scented water over a seated elder's hands during a Songkran ceremony, warm traditional Thai home background",
+            "extraNegative": "text, modern clothes, western setting"
+        },
+        "ปลอดภัย": {
+            "whatToDrawEn": "a child wearing a bright safety helmet crossing the street at a crosswalk while an adult holds their hand protectively, a calm reassuring scene, simple street background",
+            "extraNegative": "text, danger, accident, scary, blood"
+        },
+        "คัน": {
+            "whatToDrawEn": "a child scratching their forearm with their fingers, a slightly uncomfortable scrunched face, a small red itchy patch on the skin with little itch-mark lines around it, simple plain background",
+            "extraNegative": "text, car, vehicle, fishing rod, blood, wound"
+        },
+        "เด็ดเดี่ยว": {
+            "whatToDrawEn": "a child standing tall with a confident determined expression, fists clenched at the sides, chin up and eyes forward with a brave resolute look, a single mountain peak behind, simple background",
+            "extraNegative": "text, hesitant, scared, crying, weak"
+        },
+        "จิ๋ว": {
+            "whatToDrawEn": "a single tiny kitten sitting on the open palm of a large adult human hand, the kitten extremely small compared to the hand, the size contrast emphasizing how tiny it is, simple soft background",
+            "extraNegative": "text, large, giant, normal size"
+        },
+        "ระบบ": {
+            "whatToDrawEn": "a set of interlocking mechanical gears of different sizes meshed together turning as one connected mechanism, the cogs clearly linked, clean light technical background",
+            "extraNegative": "text, single gear, random unconnected parts"
+        },
+        "กฎเกณฑ์": {
+            "whatToDrawEn": "a teacher standing at the front with one finger raised to signal a rule while several children sit attentively in a tidy row with hands neatly raised, an orderly classroom, simple background",
+            "extraNegative": "readable text, words on board, chaos, gibberish writing"
+        },
+        "ทรัพย์": {
+            "whatToDrawEn": "an open treasure chest overflowing with gold coins, shining jewels and a few gold bars, sparkles rising from it, warm golden glow, simple dark background",
+            "extraNegative": "text, numbers, dollar sign, single coin"
+        },
+        "ต้วมเตี้ยม": {
+            "whatToDrawEn": "a chubby toddler taking wobbly unsteady first steps with both arms out for balance, a slightly clumsy off-balance pose, a parent's hands reaching nearby, warm home background",
+            "extraNegative": "text, running fast, confident walking, adult"
+        },
+        "ซีดเซียว": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a child with a normal healthy rosy face smiling; panel 2 the same child looking unwell with a noticeably pale washed-out colorless face and a weak tired expression, simple plain background in both panels",
+            "extraNegative": "text, blood, gore, scary, dense comic grid"
+        },
+        "ธรรมดา": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a plain ordinary white t-shirt looking simple and normal; panel 2 a fancy sparkly decorated shirt for contrast, emphasizing how plain and ordinary the first one is, simple clean background in both panels",
+            "extraNegative": "text, special, fancy only, dense comic grid"
+        },
+        "บุราณ": {
+            "whatToDrawEn": "an ancient weathered stone temple ruin with crumbling brick walls, old moss-covered pillars and a worn pagoda, overgrown with vines, an old historical atmosphere, soft daylight background",
+            "extraNegative": "text, modern building, new, glass tower"
+        },
+        "ครื้นเครง": {
+            "whatToDrawEn": "a joyful group of a few children and an adult laughing loudly and clapping at a lively party, one playing a drum, big open-mouth laughs and raised hands, an energetic merry atmosphere, bright festive background",
+            "extraNegative": "text, quiet, calm, sad, dense comic grid"
+        },
+        "กระจายเสียง": {
+            "whatToDrawEn": "a tall radio broadcast tower with a microphone in front of it, curved sound-wave ripples spreading outward in all directions through the air, bright sky background",
+            "extraNegative": "text, silent, single speaker only"
+        },
+        "คลาดแคล้ว": {
+            "whatToDrawEn": "a child stepping safely around a banana peel on the ground without slipping, looking relieved and careful, a glowing highlight circle drawn around the avoided banana peel, simple sidewalk background",
+            "extraNegative": "text, accident, falling, hurt, blood"
+        },
+        "รันทด": {
+            "whatToDrawEn": "a child sitting alone with head bowed and shoulders slumped, tears on the cheeks, a downcast heartbroken expression, a soft muted rainy-window background",
+            "extraNegative": "text, happy, smiling, violent, gore"
+        },
+        "ฝีเท้า": {
+            "whatToDrawEn": "a child sprinting fast in a running pose, the legs blurred with motion-speed lines streaming behind the feet, dust kicking up, a forward lean, simple running-track background",
+            "extraNegative": "text, standing still, slow walking, footprint only"
+        },
+        "ชนนี": {
+            "whatToDrawEn": "a loving mother tenderly cradling and smiling down at her baby in her arms, a warm affectionate maternal embrace, soft gentle home background",
+            "extraNegative": "text, father, old woman, multiple"
+        },
+        "คมนาคม": {
+            "whatToDrawEn": "a travel landscape showing different modes of transport together: a car on a road, a train on tracks, a boat on a river and an airplane in the sky, all connected in one scene, bright daytime background",
+            "extraNegative": "text, single vehicle only, empty road"
+        },
+        "ชนบท": {
+            "whatToDrawEn": "a peaceful rural Thai countryside village with a wooden stilt house, green rice paddy fields, a water buffalo grazing and palm trees, distant mountains, calm sunny background",
+            "extraNegative": "text, city, skyscrapers, traffic, urban"
+        },
+        "พวกพ้อง": {
+            "whatToDrawEn": "a close-knit group of cheerful friends and relatives standing together in a warm huddle with arms around each other's shoulders, all smiling at the viewer, a sense of belonging and togetherness, simple bright background",
+            "extraNegative": "text, single person alone, crowd of strangers"
+        },
+        "แปลกปลอม": {
+            "whatToDrawEn": "a neat row of five identical yellow rubber ducks, and one odd gray stone duck-shaped object clearly out of place among them, a child's hand pointing at the odd one, simple clean background"
+        },
+        "อดอยาก": {
+            "whatToDrawEn": "a thin child sitting at a bare table holding up an empty bowl, sad hungry face, one hand on the stomach, completely empty plate, dim plain background",
+            "extraNegative": "food on table, full plate, feast"
+        },
+        "กตเวที": {
+            "whatToDrawEn": "a child kneeling respectfully and offering a flower garland with both hands to a smiling elderly grandparent, warm grateful expressions, both bowing slightly, soft warm background"
+        },
+        "แปลงกาย": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a friendly green frog sitting on a lily pad with magical sparkles around it, panel 2 the same spot now a smiling prince with a crown standing where the frog was, glowing transformation sparkles, storybook background"
+        },
+        "อิทธิพล": {
+            "whatToDrawEn": "a large confident child standing on a small box gesturing, and three smaller children copying the exact same pose and following behind, showing one person's influence over a group, simple clean background"
+        },
+        "ความเขลา": {
+            "whatToDrawEn": "a child sitting with a very puzzled confused face, scratching the head and shrugging both shoulders, a big dim gray thought bubble above the head containing only floating question-mark shapes and a tangled curly line, plain background",
+            "extraNegative": "readable text, letters, words, numbers, bright lightbulb, clever, smart"
+        },
+        "บังเอิญ": {
+            "whatToDrawEn": "two children walking from opposite directions around a corner and suddenly bumping into each other, both wide-eyed and surprised, books tumbling mid-air, small surprise burst marks around them, outdoor path background"
+        },
+        "คุณสมบัติ": {
+            "whatToDrawEn": "a single bright red apple in the center, shiny and round with a fresh green leaf and a water droplet on its skin, a glowing highlight circle around the whole apple drawing attention to its distinct visual qualities, clean white background",
+            "extraNegative": "text labels, charts, arrows pointing to icons, words, numbers"
+        },
+        "ถนัด": {
+            "whatToDrawEn": "a smiling child confidently drawing a neat picture with the right hand while giving a thumbs-up, the active right hand inside a soft glowing highlight circle, bright cheerful background",
+            "extraNegative": "readable text, letters, words, left hand emphasized, struggling, frustrated"
+        },
+        "นิทรา": {
+            "whatToDrawEn": "a child peacefully asleep in bed, eyes closed, head on a pillow, blanket pulled up, a few small floating sleep symbols above, a calm crescent moon and stars through the window, soft night-blue background",
+            "extraNegative": "awake, eyes open, daytime, readable letters"
+        },
+        "ขณะ": {
+            "whatToDrawEn": "a close-up of a single hourglass with one bright grain of sand frozen mid-fall in the narrow middle, a glowing highlight circle around that single falling grain, soft simple background",
+            "extraNegative": "clock face numbers, calendar, readable text"
+        },
+        "ถมึงทึง": {
+            "whatToDrawEn": "a close-up of a single adult face with a stern fierce frowning expression, heavy lowered eyebrows, intense glaring eyes and a tight mouth, intimidating but not monstrous, plain dark background",
+            "extraNegative": "monster, smiling, happy, friendly, cute"
+        },
+        "ม่าย": {
+            "whatToDrawEn": "a sad woman in plain dark clothing sitting alone holding a framed portrait of a man to her chest, a single empty chair beside her, a wilted flower on the table, somber quiet room background",
+            "extraNegative": "couple together, wedding, happy celebration"
+        },
+        "ละโล่ง": {
+            "whatToDrawEn": "a child standing on a hilltop with arms stretched wide open, eyes closed and a relaxed relieved smile taking a deep breath, a wide open clear blue sky and rolling green fields behind, bright airy background",
+            "extraNegative": "cramped, crowded, worried, anxious"
+        },
+        "ตริตรอง": {
+            "whatToDrawEn": "a child sitting with chin resting on one hand in a thoughtful thinking pose, eyes looking up, a soft glowing thought bubble with a few gentle interlocking gears above the head, calm quiet background",
+            "extraNegative": "readable text, letters, equations, numbers"
+        },
+        "หนักหน่วง": {
+            "whatToDrawEn": "a child straining to carry a single very large heavy boulder on the back, bent forward under the weight, strained effortful face, sweat drops and small strain lines, plain background",
+            "extraNegative": "light, floating, easy, balloon"
+        },
+        "โปรดปราน": {
+            "whatToDrawEn": "a kind adult gently patting the head of one beaming happy child while two other children watch, a glowing highlight circle and a small heart symbol over the favored child, warm affectionate background"
+        },
+        "มัธยัสถ์": {
+            "whatToDrawEn": "a smiling child carefully dropping a single coin into a piggy bank, a small neat stack of saved coins beside it, content proud expression, clean simple background",
+            "extraNegative": "spending, shopping spree, wasteful, throwing money"
+        },
+        "ราชวงศ์": {
+            "whatToDrawEn": "a regal royal family in ornate golden Thai royal robes and crowns, a king and queen seated on thrones with a young prince and princess standing beside them, golden Thai palace throne hall background",
+            "extraNegative": "commoners, peasants, modern clothes"
+        },
+        "เผอิญ": {
+            "whatToDrawEn": "a walking child looking down and surprised to find a shiny coin unexpectedly on the path, reaching for it with a delighted surprised face, a small sparkle on the coin, outdoor path background"
+        },
+        "เดียรัจฉาน": {
+            "whatToDrawEn": "a small group of common four-legged animals together in a field, a buffalo, a dog and a pig standing on all fours grazing, ordinary natural daytime field background",
+            "extraNegative": "human, person, demon, monster, scary"
+        },
+        "แดดาล": {
+            "whatToDrawEn": "a child with one hand on the chest over the heart, eyes gently moved and warm, a soft glowing radiant heart on the chest emitting gentle light rays, warm tender emotional background",
+            "extraNegative": "anger, fear, scary"
+        },
+        "เหตุ": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels showing cause and effect: panel 1 a child's hand pushing the first domino in a row, panel 2 all the dominoes fallen in a chain, a small arrow between the panels, clean simple background",
+            "extraNegative": "readable text, letters, numbers"
+        },
+        "เลื่อมใส": {
+            "whatToDrawEn": "a child kneeling with hands pressed together in a respectful wai, looking up with a sincere admiring devoted expression toward a softly glowing seated Buddha statue, warm temple background"
+        },
+        "สีข้าง": {
+            "whatToDrawEn": "a child standing and turning slightly sideways, one hand pressing on the side of the torso (the flank below the ribs), a glowing highlight circle around that side area, simple clean background",
+            "extraNegative": "back, stomach front, internal organs"
+        },
+        "อนุกูล": {
+            "whatToDrawEn": "an older child reaching down and helping a smaller fallen child up by the hand, the smaller child smiling gratefully, warm supportive gesture, friendly outdoor background",
+            "extraNegative": "fighting, pushing, ignoring"
+        },
+        "ถึงแก่กรรม": {
+            "whatToDrawEn": "a peaceful respectful memorial scene with a framed portrait of an elderly person on a small table, surrounded by white flowers and a softly glowing candle, calm quiet reverent background, no body shown",
+            "extraNegative": "corpse, body, blood, coffin, scary, skeleton"
+        },
+        "อุบัติเหตุ": {
+            "whatToDrawEn": "a child who has tripped and fallen off a bicycle on a path, the bike tipped over beside, a scraped knee and a surprised upset face, small impact burst marks, mild and non-graphic, outdoor background",
+            "extraNegative": "blood, gore, serious injury, death, car crash flames"
+        },
+        "หมองศรี": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels of the same child's face: panel 1 a bright glowing radiant happy face with sparkles, panel 2 the same face now dim, dull, gloomy and sad with the glow gone, soft plain background"
+        },
+        "ข้าพเจ้า": {
+            "whatToDrawEn": "a single polite child standing and pointing one hand to own chest with a calm respectful expression, a slight formal bow, looking directly forward, simple clean background",
+            "extraNegative": "group, multiple people, pointing at others"
+        },
+        "เหตุการณ์": {
+            "whatToDrawEn": "a group of children and people gathered watching a notable happening unfolding in front of them, pointing and reacting with surprise, an outdoor public scene as the focal event, simple town background",
+            "extraNegative": "calendar, clock, text"
+        },
+        "วิทยากร": {
+            "whatToDrawEn": "a friendly adult speaker standing at the front of a room presenting to a seated audience of attentive children and adults, gesturing with one hand toward a blank board, classroom or seminar room background",
+            "extraNegative": "readable text on board, slides with words"
+        },
+        "ห่างเหิน": {
+            "whatToDrawEn": "two children standing far apart on opposite sides of the frame, both looking away with sad lonely expressions, a wide empty gap between them, cool muted background showing emotional distance",
+            "extraNegative": "hugging, close together, happy together"
+        },
+        "เชาวน์": {
+            "whatToDrawEn": "a smart child with a bright delighted aha expression, eyes wide and one finger raised in a sudden moment of insight, a glowing yellow lightbulb shining brightly just above the head, simple bright background",
+            "extraNegative": "text, letters, equations, dull expression"
+        },
+        "ชีวัน": {
+            "whatToDrawEn": "a tender close-up of two cupped hands gently holding a small green sprout growing from soil, symbolizing life, soft warm sunlight, simple natural background",
+            "extraNegative": "death, withered plant, text"
+        },
+        "อึดอัด": {
+            "whatToDrawEn": "a child squeezed uncomfortably inside a too-small cramped cardboard box, knees pulled up tight, an uneasy strained uncomfortable facial expression, simple plain background",
+            "extraNegative": "relaxed, spacious, happy, smiling"
+        },
+        "ถิ่นฐาน": {
+            "whatToDrawEn": "a cozy traditional Thai village settlement with stilt houses, families living, fields and trees around, a warm sense of home community and native land, gentle daytime sky background",
+            "extraNegative": "city skyscrapers, text, signs"
+        },
+        "สาบสูญ": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a person standing on a path; panel 2 the same path now empty with only faint fading footprints and a puff of mist where the person was, the person gone without trace, muted background",
+            "extraNegative": "text, ghost, scary"
+        },
+        "ยากแค้น": {
+            "whatToDrawEn": "a poor family in worn ragged clothes sitting outside a small bare run-down hut, sad weary faces, an empty bowl beside them, conveying hardship and poverty, dim muted background",
+            "extraNegative": "wealthy, happy feast, mansion, text"
+        },
+        "บำนาญ": {
+            "whatToDrawEn": "a happy smiling elderly retired person receiving a stack of money and gold coins into their open palms, comfortable retirement, cozy home background",
+            "extraNegative": "young worker, empty hands, text, numbers"
+        },
+        "ตรึกตรา": {
+            "whatToDrawEn": "a child sitting with one hand resting on the chin in a deep thoughtful pondering pose, eyes looking up, a soft thought-bubble cloud above the head containing a few small floating gears and swirling lines, plain calm background",
+            "extraNegative": "text, question mark, sleeping, distracted"
+        },
+        "หมองหมาง": {
+            "whatToDrawEn": "two children sitting back to back with arms crossed, both frowning and sulking with upset resentful faces, refusing to look at each other, a small gray storm cloud hovering over them, plain background",
+            "extraNegative": "hugging, smiling, friends playing, text"
+        },
+        "ดึกดำบรรพ์": {
+            "whatToDrawEn": "a prehistoric primeval landscape with friendly dinosaurs, giant ferns and volcanoes in the distance, a cave and ancient rocks, conveying very ancient times, warm storybook background",
+            "extraNegative": "modern city, cars, text, scary"
+        },
+        "ซีก": {
+            "whatToDrawEn": "a single round orange fruit cut cleanly into two halves, one half lifted slightly apart to clearly show it is one separated portion, a child's hand pointing at that single half, simple background",
+            "extraNegative": "whole fruit, many slices, text"
+        },
+        "อุทาน": {
+            "whatToDrawEn": "a child with a wide open mouth and a surprised excited face suddenly exclaiming, both hands flung up, short radiating motion lines and a small burst of star shapes around the head to show a sudden outburst, bright energetic background",
+            "extraNegative": "exclamation mark, text, calm, quiet, sleeping"
+        },
+        "วับแวม": {
+            "whatToDrawEn": "tiny sparkling lights twinkling and glittering in the dark, scattered shimmering star-like glints and sparkle highlights against a deep blue night background, magical flickering glow",
+            "extraNegative": "steady bright light, daylight, text"
+        },
+        "พิศวาส": {
+            "whatToDrawEn": "a child tenderly hugging a beloved pet kitten close to the chest with a warm loving smile, soft glowing pink hearts floating above, soft affectionate background",
+            "extraNegative": "anger, fear, text, romance adult"
+        },
+        "สูตร": {
+            "whatToDrawEn": "a cooking recipe scene: a mixing bowl with measuring cups, eggs, flour and a whisk arranged together, a clear curved arrow pointing from the raw ingredients to a finished cake beside them, conveying a set recipe, kitchen counter background",
+            "extraNegative": "readable text, written numbers, chalkboard equations"
+        },
+        "เปรอะ": {
+            "whatToDrawEn": "a child with face, hands and clothes smeared and splattered all over with mud and dirt stains, looking messy, standing in a muddy yard, plain background",
+            "extraNegative": "clean, tidy, neat clothes, text"
+        },
+        "พลบค่ำ": {
+            "whatToDrawEn": "a peaceful dusk landscape at twilight, the sun half set on the horizon glowing orange-pink, sky fading from orange to deep blue, a few early stars and a silhouetted tree, evening background",
+            "extraNegative": "bright midday sun, full night, text"
+        },
+        "ปัจจุบัน": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels: panel 1 a faded sepia old-fashioned village from the past; panel 2 a bright sharply-focused modern present-day city street with a child standing and a glowing highlight circle drawn around the child; panel 3 a hazy faint pale future skyline; the middle panel is by far the brightest and most in focus, the side panels dim and blurred",
+            "extraNegative": "readable text, calendar numbers, clock dials with numbers"
+        },
+        "วิบัติ": {
+            "whatToDrawEn": "a scene of a great calamity: a house and trees toppled and broken after a storm, cracked ground and scattered debris, a gloomy stormy sky, conveying disaster and ruin, child-friendly non-gory style",
+            "extraNegative": "injured people, blood, fire victims, text, gore"
+        },
+        "มหัศจรรย์": {
+            "whatToDrawEn": "a child gazing up in awe with a wide-eyed amazed delighted face at a magical glowing wonder in the air, sparkles and a shining rainbow burst of light, a sense of marvel, dreamy background",
+            "extraNegative": "bored face, ordinary plain scene, text"
+        },
+        "ความเพียร": {
+            "whatToDrawEn": "a determined child sweating and straining hard while steadily climbing up a tall steep hill step by step toward the top, focused effortful expression, conveying persistent effort, mountain background",
+            "extraNegative": "giving up, resting lazily, text"
+        },
+        "เหนียมอาย": {
+            "whatToDrawEn": "a shy bashful child half-hiding behind their own raised hands and peeking out, rosy blushing cheeks, a timid embarrassed little smile, looking down slightly, soft simple background",
+            "extraNegative": "bold confident, angry, crying, text"
+        },
+        "เผ่าพันธุ์": {
+            "whatToDrawEn": "a warm multi-generation family group of people of the same ethnic group standing close together, grandparents, parents and children sharing similar facial features and matching traditional clothing, a group portrait conveying shared lineage and kinship, centered composition, simple outdoor background",
+            "extraNegative": "single person, text, flag, mixed unrelated strangers"
+        },
+        "ทะเล้น": {
+            "whatToDrawEn": "a single cheeky playful child making a funny teasing face, sticking out the tongue and winking one eye, big mischievous grin, hands framing the cheeks in a teasing gesture, lively cheerful body language, child-friendly cartoon style, centered composition, bright simple background",
+            "extraNegative": "angry, crying, scary, multiple children"
+        },
+        "หรรษา": {
+            "whatToDrawEn": "a small group of three happy children laughing and playing together joyfully, arms raised with big bright smiles, jumping with delight among a few colorful balloons, festive cheerful mood, child-friendly cartoon style, centered composition, bright sunny background",
+            "extraNegative": "sad, crying, angry, alone, crowd"
+        },
+        "ขลุก": {
+            "whatToDrawEn": "a single child deeply absorbed and focused, hunched over a desk fully engrossed in building a small model and tinkering with tools, intense concentration on the face, craft materials scattered around, oblivious to surroundings, child-friendly style, centered composition, simple room background",
+            "extraNegative": "bored, looking away, distracted, multiple children"
+        },
+        "มั่นหมาย": {
+            "whatToDrawEn": "a single determined child with a confident resolute expression, one fist clenched and raised, gazing forward with firm eyes toward a distant mountain peak ahead, strong purposeful body language conveying resolve, child-friendly style, centered composition, simple inspiring background",
+            "extraNegative": "giving up, sad, confused, weak"
+        },
+        "กรรมสิทธิ์": {
+            "whatToDrawEn": "a proud child standing beside a brand-new bicycle with one hand placed possessively on the seat and the other thumb pointing to himself, a happy 'this is mine' gesture conveying rightful ownership, child-friendly style, centered composition, simple background",
+            "extraNegative": "text, document, readable words, sharing, multiple owners"
+        },
+        "อุดมการณ์": {
+            "whatToDrawEn": "a single child standing tall with a hand over the heart, gazing upward with an inspired idealistic expression toward a bright glowing star above, a hopeful aspirational pose conveying devotion to a noble ideal, warm uplifting mood, child-friendly style, centered composition, dawn sky background",
+            "extraNegative": "flag, text, political symbol, sad"
+        },
+        "ผจญภัย": {
+            "whatToDrawEn": "a single brave child explorer on an exciting adventure, wearing a backpack and an explorer hat, holding a rolled map and a flashlight, climbing over rocks toward a mysterious cave at a jungle edge, sense of excitement and discovery, child-friendly storybook style, centered composition, lush jungle background",
+            "extraNegative": "danger, scary, monster, war, readable map text"
+        },
+        "นักปราชญ์": {
+            "whatToDrawEn": "a single wise old sage with a long white beard, sitting cross-legged thoughtfully stroking his beard, a few stacks of old closed books and a rolled scroll beside him, a knowing thoughtful expression conveying great wisdom, gentle warm aura, child-friendly storybook style, centered composition, study background",
+            "extraNegative": "wizard, magic, wand, monk, readable book text"
+        },
+        "ขลาดกลัว": {
+            "whatToDrawEn": "a single timid frightened child cowering and trembling, hiding behind a chair with both hands covering part of the face, wide fearful eyes peeking out, hunched body language conveying fear and cowardice, child-friendly cartoon style, centered composition, simple plain background",
+            "extraNegative": "brave, smiling, monster, scary, multiple children"
+        },
+        "คร้าน": {
+            "whatToDrawEn": "a single lazy child lounging and yawning, sprawled on a sofa with arms behind the head and a big sleepy yawn, droopy half-closed eyes, an untouched broom leaning nearby ignored, conveying laziness and reluctance to work, child-friendly cartoon style, centered composition, simple room background",
+            "extraNegative": "energetic, working hard, active, multiple children"
+        },
+        "ประหลาด": {
+            "whatToDrawEn": "a single child with a wide astonished face, mouth open and eyebrows raised, pointing in wonder at a strange floating glowing object with an unusual peculiar shape, conveying amazement at something odd and strange, child-friendly cartoon style, centered composition, simple background",
+            "extraNegative": "scary, monster, normal ordinary, bored"
+        },
+        "หม่นหมอง": {
+            "whatToDrawEn": "a single sad gloomy child sitting alone with a downcast melancholy expression, head lowered, slumped shoulders and a single tear, dull muted gray mood, conveying gloom and sadness, child-friendly gentle style, centered composition, muted gray rainy-window background",
+            "extraNegative": "happy, smiling, bright cheerful, multiple children"
+        },
+        "เสน่ห์": {
+            "whatToDrawEn": "a single charming child with a warm captivating smile and sparkling eyes, surrounded by little glowing sparkle and heart shine effects, two other children nearby looking on with admiring delighted faces, conveying personal charm and appeal, child-friendly wholesome style, centered composition, soft bright background",
+            "extraNegative": "romance, love potion, magic spell, ugly"
+        },
+        "อวสาน": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a colorful storybook scene full of lively action in progress; panel 2 the same story now finished with a closed storybook, a sunset on the horizon and a child waving goodbye, conveying the end and conclusion of a story, child-friendly style, simple background",
+            "extraNegative": "readable text, words, death, scary"
+        },
+        "ลักษณะ": {
+            "whatToDrawEn": "a child's hand holding a magnifying glass over one distinctive object such as a uniquely patterned leaf, a glowing highlight circle around its special shape and texture, conveying the notion of features and traits, child-friendly style, centered composition, simple clean background",
+            "extraNegative": "readable labels, text, identical objects"
+        },
+        "จ้าละหวั่น": {
+            "whatToDrawEn": "a chaotic commotion of three cartoon children and a couple of animals running in different directions in a flurry, a few papers flying in the air, arms waving, surprised faces, motion lines conveying frantic chaos, child-friendly non-scary cartoon style, centered composition, simple background",
+            "extraNegative": "calm, orderly, quiet, scary, violence"
+        },
+        "เตลิด": {
+            "whatToDrawEn": "a small herd of cartoon goats and chickens scattering and bolting away in all directions in a panic, dust clouds and motion lines, wide-eyed startled faces fleeing outward from the center, conveying scattering and fleeing, child-friendly non-scary cartoon style, centered composition, open field background",
+            "extraNegative": "calm grazing, gathered together, scary, predator"
+        },
+        "ชาติพันธุ์": {
+            "whatToDrawEn": "a friendly group of three children from different ethnic groups standing side by side, each wearing distinctive traditional ethnic costumes from a different culture, varied skin tones and clothing, warm welcoming smiles, conveying ethnicity and diversity, child-friendly style, centered composition, simple background",
+            "extraNegative": "flags, text, single ethnicity, conflict"
+        },
+        "วิจิตร": {
+            "whatToDrawEn": "a single exquisitely ornate Thai golden artifact, an intricately carved and gilded decorative vessel with elaborate fine patterns and delicate filigree, gleaming and beautiful, conveying exquisite intricate craftsmanship, child-friendly style, centered composition, soft spotlight background",
+            "extraNegative": "plain, simple, broken, ugly, text"
+        },
+        "ภยันตราย": {
+            "whatToDrawEn": "a single child stopping short with both palms raised in a warning gesture at the edge of a steep crumbling cliff, an alert cautious wide-eyed expression conveying danger and peril, child-friendly non-scary style, centered composition, simple background",
+            "extraNegative": "readable warning text, sign, accident, gore, scary monster"
+        },
+        "ป่าโปร่ง": {
+            "whatToDrawEn": "a sparse open forest with a few tall trees spaced widely apart, plenty of bright sunlight streaming through to the grassy ground between them, airy and not dense, lots of open space, conveying an open sparse woodland, child-friendly style, centered composition, bright daytime sky",
+            "extraNegative": "dense jungle, thick dark forest, crowded trees"
+        },
+        "อร่าม": {
+            "whatToDrawEn": "a brilliantly shining golden Thai temple pagoda gleaming resplendently in bright sunlight, radiant golden glow and sparkling light rays beaming off its surface, dazzling shine, conveying glittering golden brilliance, child-friendly style, centered composition, clear blue sky background",
+            "extraNegative": "dull, dark, plain, gray, text"
+        },
+        "สมาธิ": {
+            "whatToDrawEn": "a single child sitting cross-legged in a calm meditation pose, eyes gently closed, hands resting on the knees, a peaceful serene expression, a soft glowing aura of calm around the head, conveying meditation and focused calm, child-friendly style, centered composition, tranquil simple background",
+            "extraNegative": "distracted, restless, scary, multiple children"
+        },
+        "ขลาด": {
+            "whatToDrawEn": "a single timid child shrinking back with a fearful expression, knees shaking and hands clutched nervously to the chest, looking afraid of a tiny harmless mouse on the floor, exaggerated comical timidity conveying cowardice, child-friendly cartoon style, centered composition, simple plain background",
+            "extraNegative": "brave, bold, confident, scary monster"
+        },
+        "ผลิดอก": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a bare green plant branch with only tight closed buds; panel 2 the same branch now bursting with fresh blooming flowers in full blossom, conveying the act of blooming and putting forth flowers, child-friendly style, simple background",
+            "extraNegative": "wilting, dying flowers, text"
+        },
+        "ชาญฉลาด": {
+            "whatToDrawEn": "a single clever child with a bright confident grin and one finger raised in an 'aha' eureka gesture, a glowing lightbulb shining above the head, sparkling intelligent eyes, conveying cleverness and intelligence, child-friendly cartoon style, centered composition, simple bright background",
+            "extraNegative": "confused, dull, sad, multiple children"
+        },
+        "รูปทรง": {
+            "whatToDrawEn": "a neat row of three large simple solid geometric shapes side by side, a red cube, a blue sphere and a yellow cone, clean three-dimensional forms, a child's hand gesturing toward them, conveying the concept of shapes and forms, child-friendly style, centered composition, simple clean background",
+            "extraNegative": "readable numbers, text, complex objects, clutter"
+        },
+        "ตำหนิ": {
+            "whatToDrawEn": "an adult teacher with a stern disapproving frown wagging a pointing finger at a child who looks down guiltily, the teacher gesturing in reprimand, conveying scolding and criticism, child-friendly non-scary style, centered composition, simple classroom background",
+            "extraNegative": "hitting, violence, smiling, praising, readable text"
+        },
+        "สนิทสนม": {
+            "whatToDrawEn": "two best-friend children standing close together with arms warmly around each other's shoulders, big happy smiles, leaning in cheek to cheek, conveying close intimate friendship and familiarity, child-friendly wholesome style, centered composition, simple bright background",
+            "extraNegative": "strangers, distant, arguing, sad, crowd"
+        },
+        "รณรงค์": {
+            "whatToDrawEn": "a small group of cheerful children marching together holding up blank colorful placards and one megaphone, raised fists and enthusiastic expressions promoting a good cause, a green recycle symbol on one placard, conveying a campaign or rally, child-friendly style, centered composition, simple street background",
+            "extraNegative": "readable slogans, text on signs, protest violence, angry mob"
+        },
+        "แหนงหน่าย": {
+            "whatToDrawEn": "a single child turning away with a weary tired expression and crossed arms, looking bored and fed up, pushing away a plate of food with a dismissive hand gesture, conveying weariness and being fed up, child-friendly style, centered composition, simple plain background",
+            "extraNegative": "happy, eager, excited, multiple children"
+        },
+        "กิโลเมตร": {
+            "whatToDrawEn": "a single small child standing in the foreground at the start of a very long winding road that stretches far away into the distance toward distant mountains, the road shrinking with perspective to show great length, conveying a long distance, child-friendly style, centered composition, open countryside background",
+            "extraNegative": "readable numbers, marker post, sign, short path, dashed measuring line"
+        },
+        "ทระนง": {
+            "whatToDrawEn": "a confident young Thai boy standing tall with hands on hips, chin slightly raised, a proud determined smile, chest out in a dignified pose, soft plain background",
+            "extraNegative": "arrogant sneer, mean face"
+        },
+        "เนืองนิตย์": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels showing the same boy watering the same potted plant each day: panel 1 the boy watering a small sprout, panel 2 the boy watering it again as it grows taller, panel 3 the boy watering it again as it blooms with flowers, conveying a repeated daily routine, plain background"
+        },
+        "อนุเคราะห์": {
+            "whatToDrawEn": "a kind adult kneeling to hand a bag of food and a warm folded blanket to a small grateful child, gentle caring expressions on both faces, warm helpful scene, plain background"
+        },
+        "ปรารถนา": {
+            "whatToDrawEn": "a child with hands clasped together near the chest, eyes closed, a hopeful longing smile, a glowing dreamy thought-bubble cloud above the head showing a single wished-for golden star, wishful expression, soft plain background",
+            "extraNegative": "praying to deity, text"
+        },
+        "กระเซอะกระเซิง": {
+            "whatToDrawEn": "a child with wildly messy tangled disheveled hair sticking out in all directions, rumpled untidy clothes, a slightly dazed expression, comically unkempt appearance, plain background",
+            "extraNegative": "neat tidy hair, scary"
+        },
+        "วัยเยาว์": {
+            "whatToDrawEn": "a happy small young Thai child playing joyfully with a toy and a balloon, cheerful innocent toddler at play, bright wholesome childhood scene, plain background",
+            "extraNegative": "adult, elderly, teenager"
+        },
+        "คันไม้คันมือ": {
+            "whatToDrawEn": "a boy looking eagerly at a drum, his hands twitching and reaching out with an excited tempted grin, fingers wiggling as if itching to grab it, eager-to-act body language, plain background",
+            "extraNegative": "scratching skin, mosquito bite"
+        },
+        "ดุริยางค์": {
+            "whatToDrawEn": "a small group of three children playing musical instruments together as a band, one with a trumpet, one with a drum, one with a flute, lively performance, plain background",
+            "extraNegative": "single instrument, text"
+        },
+        "หลักฐาน": {
+            "whatToDrawEn": "a child detective crouching and pointing a large magnifying glass at a single clear muddy footprint on the ground, the magnifying glass enlarging the footprint, investigative scene, plain background",
+            "extraNegative": "text, documents with writing"
+        },
+        "แยบยล": {
+            "whatToDrawEn": "a clever-looking child with a raised index finger and a bright glowing lightbulb appearing above the head, a sly knowing grin showing a clever idea, ingenious expression, plain background",
+            "extraNegative": "text"
+        },
+        "หฤหันต์": {
+            "whatToDrawEn": "a comparison scene: a tiny child standing next to an absolutely enormous towering boulder that dwarfs the child, dramatic size difference showing immense scale, awe-struck child looking up, plain background",
+            "extraNegative": "monster, blood, gore, scary face"
+        },
+        "โศกศัลย์": {
+            "whatToDrawEn": "a child sitting alone with head bowed, hands over the face, tears on the cheeks, a single falling tear, deeply sad sorrowful posture, soft muted plain background",
+            "extraNegative": "death, blood, scary"
+        },
+        "ปรุโปร่ง": {
+            "whatToDrawEn": "a single large leaf full of many small holes held up to bright sunlight, beams of light shining through the perforations, see-through airy texture, close-up against a bright plain background",
+            "category": "concrete",
+            "extraNegative": "solid surface, text"
+        },
+        "ประจักษ์": {
+            "whatToDrawEn": "a child with eyes wide open in realization, one hand pointing at a bright clearly-visible glowing object right in front, an expression of clear understanding seeing it plainly, a glowing highlight circle around the object, plain background",
+            "extraNegative": "text"
+        },
+        "เกษมศานต์": {
+            "whatToDrawEn": "a peaceful happy family sitting together on a grassy meadow under a bright sky, all smiling serenely and relaxed, a calm content joyful scene, soft warm plain background"
+        },
+        "ประชากร": {
+            "whatToDrawEn": "a large diverse crowd of many people of different ages standing close together filling the frame, a big group of citizens representing a whole population, plain background",
+            "extraNegative": "single person, text"
+        },
+        "สังสรรค์": {
+            "whatToDrawEn": "a group of cheerful friends gathered around a table at a fun party, laughing and chatting together with colorful balloons and food, festive social get-together, warm lively plain background"
+        },
+        "มหันต์": {
+            "whatToDrawEn": "a comparison scene: a tiny child standing beside a gigantic enormous mountain that towers far above, dramatic size contrast showing immense greatness, child gazing up in wonder, plain background",
+            "extraNegative": "text"
+        },
+        "ศัตรู": {
+            "whatToDrawEn": "two cartoon children facing each other as rivals, glaring with frowns and crossed arms, a clear opposition standoff between two foes, mild confrontational body language, plain background",
+            "extraNegative": "weapons, blood, fighting, violence"
+        },
+        "เวทมนตร์": {
+            "whatToDrawEn": "a friendly wizard holding up a glowing magic wand with colorful sparkles and swirling magical light streaming from the tip, casting a spell, whimsical magical glow, plain background",
+            "extraNegative": "dark evil, scary, text"
+        },
+        "กร่อน": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a brand-new smooth sharp pencil, panel 2 the same pencil worn down to a tiny short stub, showing it being worn away over time, plain background",
+            "extraNegative": "text"
+        },
+        "สลด": {
+            "whatToDrawEn": "a child with a downcast crestfallen face, shoulders slumped, a gloomy heavy-hearted expression looking down sadly, dejected posture, soft muted plain background",
+            "extraNegative": "death, blood, scary"
+        },
+        "ขรุขระ": {
+            "whatToDrawEn": "a close-up of a rough bumpy uneven rocky dirt road full of stones, lumps and ruts, clearly rugged and uneven textured surface, plain background",
+            "category": "concrete",
+            "extraNegative": "smooth flat surface, text"
+        },
+        "สราญ": {
+            "whatToDrawEn": "a child jumping in the air with both arms raised high, a big joyful laughing smile, radiating happiness and delight, cheerful energetic pose, bright plain background"
+        },
+        "โพล้เพล้": {
+            "whatToDrawEn": "a dim twilight scene at dusk, the sun half-set on the horizon with an orange and purple darkening sky, a few early stars appearing, soft fading evening light over silhouetted trees",
+            "extraNegative": "bright midday, full night, text"
+        },
+        "พิสมัย": {
+            "whatToDrawEn": "a child gazing fondly at a kitten held in the arms with floating heart shapes above and an adoring loving smile, enamored affectionate expression, warm plain background",
+            "extraNegative": "romantic adult, text"
+        },
+        "สามารถ": {
+            "whatToDrawEn": "a confident child flexing an arm muscle with a proud capable grin and a thumbs-up, a small glowing star of success nearby, an 'I can do it' capable pose, plain background",
+            "extraNegative": "text"
+        },
+        "เพริศพราย": {
+            "whatToDrawEn": "a dazzling sparkling crystal gem radiating bright twinkling light and colorful sparkles all around it, shimmering brilliance, close-up against a soft plain background",
+            "category": "concrete",
+            "extraNegative": "dull, dark, text"
+        },
+        "เสื่อมโทรม": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a bright new well-kept house with a tidy garden, panel 2 the same house now old, run-down, cracked, with peeling walls and overgrown weeds, showing decline and deterioration, plain background",
+            "extraNegative": "text"
+        },
+        "ประหวั่น": {
+            "whatToDrawEn": "a child hugging itself with a worried anxious face, wide nervous eyes and slightly trembling, a fearful apprehensive expression, nervous body language, soft plain background",
+            "extraNegative": "terror, horror, scary monster"
+        },
+        "เศร้าสร้อย": {
+            "whatToDrawEn": "a child sitting by a window resting the chin on a hand, gazing out wistfully with a melancholy forlorn sad expression, a lonely sorrowful mood, soft muted plain background",
+            "extraNegative": "crying blood, death, scary"
+        },
+        "ปรากฏ": {
+            "whatToDrawEn": "a child looking up surprised and delighted as a colorful rainbow suddenly appears in the sky, the child pointing up at it with an open-mouthed expression of wonder, bright outdoor background"
+        },
+        "คละคลุ้ง": {
+            "whatToDrawEn": "a steaming bowl of hot food on a table with curling wavy aroma swirls rising and spreading outward through the air, a child nearby leaning in and sniffing happily with eyes closed, warm kitchen background"
+        },
+        "โปรยปราย": {
+            "whatToDrawEn": "many colorful flower petals scattered and drifting gently downward through the air over a smiling child who reaches up with open hands to catch them, soft sunny garden background"
+        },
+        "พิพัฒน์": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels showing growth: panel 1 a tiny green sprout in soil, panel 2 the same plant grown into a small leafy bush, panel 3 the same plant now a tall flourishing tree full of fruit, clean bright background"
+        },
+        "ปรับปรุงเปลี่ยนแปลง": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a messy dusty cluttered room with toys scattered everywhere, panel 2 the same room now clean tidy and neatly organized, a big curved arrow pointing from the left panel to the right panel, bright background"
+        },
+        "สินทรัพย์": {
+            "whatToDrawEn": "a large open treasure chest overflowing with shiny gold coins, beside it a small toy house, a small car, and a stack of gold bars all grouped together as valuable possessions, bright simple background"
+        },
+        "อิสระ": {
+            "whatToDrawEn": "a child standing in an open green field with arms thrown wide and head tilted up joyfully, beside an open empty birdcage with its little door swung open and a bird flying freely up into a wide blue sky, bright sense of freedom"
+        },
+        "ฟุ้งเฟื่อง": {
+            "whatToDrawEn": "a happy prosperous family standing proudly in front of a large beautiful house, golden sparkles and light rays radiating outward all around them conveying thriving success, bright cheerful background"
+        },
+        "อนาถ": {
+            "whatToDrawEn": "a single small child sitting alone hunched on the ground in worn ragged clothes, sad and forlorn with a downcast expression, a kind passerby's hand reaching out toward the child with compassion, soft muted background"
+        },
+        "กรรม": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels showing cause and effect: panel 1 a kind child watering and caring for a small plant, panel 2 the same child later happily receiving fruit from that now grown tree, a curved arrow linking panel 1 to panel 2, warm bright background"
+        },
+        "ศรัทธา": {
+            "whatToDrawEn": "a child kneeling and bowing respectfully with palms pressed together in a wai and eyes closed in devotion before a glowing golden Buddha statue, soft light rays, peaceful temple background"
+        },
+        "ปริศนา": {
+            "whatToDrawEn": "a child sitting and thinking hard with one finger on the chin and a puzzled curious expression, looking at a single jigsaw puzzle piece held up in one hand with one matching gap in a small puzzle on the table, plain bright background",
+            "extraNegative": "question mark, text, letters, numbers"
+        },
+        "ชิวหา": {
+            "whatToDrawEn": "a close-up of a child's smiling open mouth sticking out a healthy pink tongue, friendly cartoon style, clean simple background",
+            "extraNegative": "snake tongue, lizard, scary"
+        },
+        "ปรีชา": {
+            "whatToDrawEn": "a bright clever child with a wide confident smile holding up one finger in an 'aha' gesture, a glowing yellow light bulb shining brightly above the child's head with small sparkles around it, plain bright background",
+            "extraNegative": "text, letters, numbers"
+        },
+        "พิโรธ": {
+            "whatToDrawEn": "a single king in royal Thai costume and crown standing with a deeply angry frowning face, furrowed brows and a clenched raised fist, small steam puffs of fury at his head, throne room background, clearly angry but not frightening"
+        },
+        "พรรณราย": {
+            "whatToDrawEn": "a graceful radiant young woman in elegant traditional Thai dress with a gentle smile, soft golden sparkles and a glowing aura around her, looking lovely and luminous, soft bright background"
+        },
+        "กัลป์": {
+            "whatToDrawEn": "a gigantic stone mountain beside a single tiny bird brushing the mountaintop with a soft cloth, a huge hourglass nearby with sand almost frozen in place, conveying an unimaginably long span of time, soft golden cosmic sky background",
+            "extraNegative": "text, letters, numbers"
+        },
+        "วุฒิ": {
+            "whatToDrawEn": "a proud smiling child wearing a black graduation cap and gown, holding up a rolled diploma scroll tied with a red ribbon, the mortarboard tassel hanging to the side, bright celebratory background",
+            "extraNegative": "readable text, words on diploma, letters"
+        },
+        "สังขาร": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels of one person aging over a lifetime: panel 1 a small baby crawling, panel 2 the same person as a grown smiling adult standing, panel 3 the same person now an elderly grey-haired figure leaning on a cane, soft neutral background"
+        },
+        "เปรื่องปราด": {
+            "whatToDrawEn": "a sharp clever child with a confident grin and bright alert eyes snapping the fingers of one hand in a flash of insight, a glowing light bulb above the head with a small lightning spark, plain bright background",
+            "extraNegative": "text, letters, numbers"
+        },
+        "พรรณนา": {
+            "whatToDrawEn": "a child speaking expressively with one hand gesturing outward, a large rounded picture bubble above showing a vivid colorful scene of mountains and a river being described, plain background",
+            "extraNegative": "readable text, letters, speech bubble text"
+        },
+        "พัลวัน": {
+            "whatToDrawEn": "a big chaotic tangled ball of colorful yarn and string all snarled together, a frustrated child trying to pull one strand loose with a confused expression, plain bright background"
+        },
+        "พลุกพล่าน": {
+            "whatToDrawEn": "a busy bustling market street crowded with many people walking in different directions, colorful stalls on both sides, a lively teeming crowd, bright daytime background",
+            "extraNegative": "empty street, single person, deserted"
+        },
+        "ศักดิ์สิทธิ์": {
+            "whatToDrawEn": "a small revered Thai shrine with a glowing golden Buddha amulet, wrapped in a radiant golden halo of light rays and floating sparkles, an incense holder with curling smoke, reverent dim temple background"
+        },
+        "พันธุกรรม": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels showing inherited traits: panel 1 a father and mother both with the same curly hair, panel 2 their child who also has the same curly hair, a curved arrow pointing from the parents to the child, plain bright background"
+        },
+        "อารักขา": {
+            "whatToDrawEn": "a large protective adult sheltering a small child under a big umbrella, a transparent glowing shield bubble surrounding them both, a watchful caring expression, soft reassuring background"
+        },
+        "ผลิตภัณฑ์": {
+            "whatToDrawEn": "a neat arrangement of assorted finished consumer products grouped on a shelf: a plain boxed package, a blank plastic bottle, a tube, and a wrapped item, all labels blank, clean bright simple background",
+            "extraNegative": "readable labels, brand text, words, letters"
+        },
+        "อิดหนาระอาใจ": {
+            "whatToDrawEn": "a child slumped over a desk with cheek resting on one hand, heavy droopy eyelids and a long weary sigh, an exhausted fed-up expression, plain muted background"
+        },
+        "ภัยพิบัติ": {
+            "whatToDrawEn": "a great flood scene, houses partly submerged in rising muddy water with a few palm trees bending in stormy wind and dark clouds above, conveying calamity but with no people and nothing gory",
+            "extraNegative": "injured people, blood, corpses, gore"
+        },
+        "นพคุณ": {
+            "whatToDrawEn": "a shining stack of pure gold bars and a few gleaming gold nuggets glowing with a bright golden luster and sparkles, conveying precious high-grade gold, clean dark background to make the gold stand out",
+            "extraNegative": "brass, copper, coins with text, letters"
+        },
+        "ปรัชญา": {
+            "whatToDrawEn": "a thoughtful child sitting with chin resting on one hand in a classic thinking pose, gazing up at a vast starry night sky with a glowing moon and swirling galaxy, a calm reflective mood, soft dark background",
+            "extraNegative": "text, letters, question mark, numbers"
+        },
+        "สมเพช": {
+            "whatToDrawEn": "a kind child kneeling and gently reaching out with a caring sympathetic facial expression toward a small sad shivering puppy sitting alone, the child's face full of pity and compassion, warm tender mood, on a soft background"
+        },
+        "มรคา": {
+            "whatToDrawEn": "a clear winding dirt path leading through a peaceful green countryside toward distant hills, the path as the single obvious focal point, gentle daylight, on a soft sky background",
+            "extraNegative": "people, crowd, cars"
+        },
+        "อรรถรส": {
+            "whatToDrawEn": "a child sitting cozily reading an open storybook with a delighted absorbed smile and sparkling eyes, small glowing sparkles of imagination rising from the open book, conveying deep enjoyment of a story, on a warm soft background",
+            "extraNegative": "food, eating, taste, tongue"
+        },
+        "ฟรี": {
+            "whatToDrawEn": "a smiling shopkeeper happily handing a wrapped gift item to a delighted child with an open giving gesture, and floating beside them a stack of gold coins with a large red circle and a diagonal slash drawn over it to show no payment is needed, on a bright cheerful background",
+            "extraNegative": "price tag text, written words, numbers"
+        },
+        "นภา": {
+            "whatToDrawEn": "a wide beautiful blue sky filling the frame with soft fluffy white clouds and a bright gentle sun, the open sky as the single focal subject, peaceful, on a clear horizon background",
+            "extraNegative": "airplane, birds, buildings, people"
+        },
+        "วัณโรค": {
+            "whatToDrawEn": "a child sitting up in a hospital bed coughing into a tissue while holding their chest, a worried gentle expression, a glowing highlight circle over the chest and lungs area to show the lung illness, a caring nurse standing nearby, soft clean clinic background",
+            "extraNegative": "blood, scary, gore, x-ray"
+        },
+        "เสเพล": {
+            "whatToDrawEn": "a messy careless boy lounging lazily and idly on a bench with a slouched careless posture, surrounded by scattered dropped items and an untidy mess he ignores, a carefree irresponsible expression, on a plain background",
+            "extraNegative": "alcohol, cigarette, gambling, violence"
+        },
+        "ริษยา": {
+            "whatToDrawEn": "a child with a frowning resentful jealous expression and crossed arms staring sideways with envy at another happy child who is proudly holding a big shiny trophy, the jealous child's unhappy face as the focus, on a simple background",
+            "extraNegative": "green skin monster, anger violence"
+        },
+        "บรรพชน": {
+            "whatToDrawEn": "a warm framed family portrait painting on a wall showing rows of older grandparents and great-grandparents in traditional Thai clothing, with a small present-day child looking up at it respectfully, conveying ancestors and lineage, on a soft home background",
+            "extraNegative": "ghost, scary, gravestone"
+        },
+        "เหมันต์": {
+            "whatToDrawEn": "a cheerful child bundled in a warm knitted hat, scarf and thick coat, hugging themselves and breathing out a puff of visible cold mist, bare leafless trees and falling snowflakes around, clearly the cold winter season, on a pale wintry blue background",
+            "extraNegative": "summer, sun, hot, flowers blooming"
+        },
+        "โรแมนติก": {
+            "whatToDrawEn": "a cozy candlelit dinner table set for two with a small vase of red roses and floating cartoon hearts above it, warm glowing soft light, a sweet romantic atmosphere, wholesome, on a softly blurred dim background",
+            "extraNegative": "adult intimacy, kissing, suggestive, people figures"
+        },
+        "อินทรีย์": {
+            "whatToDrawEn": "a smiling child's face shown clearly with small glowing highlight circles around each of the five sense areas: the eye, the ear, the nose, the mouth, and a hand touching a surface, conveying the body's senses, on a clean soft background",
+            "extraNegative": "eagle bird, hawk, organic food"
+        },
+        "มนุสสา": {
+            "whatToDrawEn": "a warm group of friendly people of different ages standing together, an old grandparent, a parent, and a child side by side smiling, representing human beings and humankind, on a simple bright background",
+            "extraNegative": "robot, animal, alien, monster"
+        },
+        "สวามิภักดิ์": {
+            "whatToDrawEn": "a loyal soldier kneeling on one knee with head bowed and a fist placed respectfully over his heart, pledging devoted allegiance before a dignified noble lord standing above him, respectful solemn mood, on a soft palace background",
+            "extraNegative": "violence, weapon raised, fighting, fear"
+        },
+        "อุปถัมภ์": {
+            "whatToDrawEn": "a kind generous adult benefactor with a caring smile placing a protective supporting hand on the shoulder of a grateful child and offering help, a warm gesture of patronage and support, on a soft warm background",
+            "extraNegative": "money handout only"
+        },
+        "กาลเทศะ": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels showing the same boy: panel 1 the boy sits quietly and politely with hands folded in a calm library setting behaving appropriately, panel 2 the same boy joyfully runs and plays freely in a playground, showing knowing the right behavior for each time and place, on a soft background",
+            "extraNegative": "scary, conflict"
+        },
+        "สันนิษฐาน": {
+            "whatToDrawEn": "a thoughtful child detective kneeling and examining a single footprint clue on the ground with a magnifying glass, one finger raised and a thought bubble above showing a glowing idea lightbulb, conveying making a deduction or guess, on a clean background",
+            "extraNegative": "text, written words, equation"
+        },
+        "สุขศานติ์": {
+            "whatToDrawEn": "a serene child sitting cross-legged with a calm content smile and closed eyes, hands resting peacefully on the knees, a gentle white dove perched nearby and soft glowing light around, conveying peace and happiness, on a tranquil pastel background",
+            "extraNegative": "conflict, sadness, dark"
+        },
+        "แบคทีเรีย": {
+            "whatToDrawEn": "several friendly cartoon bacteria germs with simple rod and round shapes and tiny wiggly tails, shown greatly magnified as if seen through a round magnifying lens, colorful and cute not scary, conveying tiny microbes, on a clean light background",
+            "extraNegative": "virus, scary monster, gore, text"
+        },
+        "สุขภาพจิต": {
+            "whatToDrawEn": "a happy calm child with a serene smile, a glowing warm heart symbol drawn inside a soft thought bubble above their head radiating gentle light, conveying a healthy peaceful mind, on a soft cheerful background",
+            "extraNegative": "sadness, brain gore, anatomy, text"
+        },
+        "มหรสพ": {
+            "whatToDrawEn": "a lively traditional Thai outdoor festival stage at night with colorful lanterns and a single performer on a brightly lit stage entertaining a small cheerful crowd watching below, joyful festive mood, conveying a public entertainment show, on a warm night background",
+            "extraNegative": "modern concert lasers"
+        },
+        "อัปลักษณ์": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a pretty fresh blooming flower bright and lovely with a small green leaf, panel 2 the same kind of flower but wilted brown crumpled and drooping with a glowing highlight circle around the wilted one to mark it as the ugly unsightly one, friendly children's book style, soft pastel background",
+            "extraNegative": "scary, horror, monster, frightening face, gore"
+        },
+        "เปอร์เซ็นต์": {
+            "whatToDrawEn": "a round pie chart drawn as a colorful cake seen from above, divided into ten equal slices, with about three slices in a bright contrasting color and the rest plain, a child's hand pointing at the colored slices to show a portion out of the whole, soft pastel background",
+            "extraNegative": "text, numbers, percent sign, letters, math symbols"
+        },
+        "สัประยุทธ์": {
+            "whatToDrawEn": "two cartoon ancient Thai warriors facing each other in a friendly mock-combat pose, each holding a wooden sword raised, dynamic action stance showing a battle, child-friendly non-violent storybook style, simple outdoor background",
+            "extraNegative": "blood, gore, death, injury, realistic violence, guns"
+        },
+        "สารคดี": {
+            "whatToDrawEn": "a child sitting on a couch watching a large television screen that clearly shows real wild animals in a savanna, a film camera on a tripod beside the TV pointing toward the nature scene to suggest filmed real-life footage, cozy living room, friendly children's book style",
+            "extraNegative": "text, letters, subtitles, cartoon characters on screen"
+        },
+        "สรรพางค์": {
+            "whatToDrawEn": "a cheerful child standing facing forward with arms stretched out wide showing the entire body from head to toe, small glowing highlight rings on the head, both hands, the torso and the feet to emphasize every part of the whole body, simple soft background, children's book style",
+            "extraNegative": "dismembered, separated body parts, anatomy diagram, skeleton, scary"
+        },
+        "อุตลุด": {
+            "whatToDrawEn": "a lively cartoon classroom in playful chaos: a few children running around, a paper plane and loose papers flying in the air, one chair tipped over, cheerful commotion everywhere, one child in the middle looking overwhelmed with hands on cheeks, bright children's book style",
+            "extraNegative": "calm, orderly, empty room, violence, fighting"
+        },
+        "ปณิธาน": {
+            "whatToDrawEn": "a determined child standing tall with one fist pressed over the heart and eyes looking up with hope, a soft glowing thought-cloud above showing a single bright star to represent the goal being vowed, warm inspiring background, children's book style",
+            "extraNegative": "text, letters, written words, scroll with writing"
+        },
+        "ลิขสิทธิ์": {
+            "whatToDrawEn": "a proud child author hugging a book they made close to their chest, a large glowing protective shield floating in front of the book to show it is owned and protected, the child's other hand raised in a gentle stop gesture, soft simple background, children's book style",
+            "extraNegative": "copyright symbol, text, letters, dollar sign"
+        },
+        "อหังการ์": {
+            "whatToDrawEn": "a cartoon child with an exaggerated proud arrogant expression, chin lifted high and nose up, both hands on hips, looking down smugly, simple plain background, children's book style",
+            "extraNegative": "humble, kind, sad, crying, friendly smile"
+        },
+        "ทัศนาจร": {
+            "whatToDrawEn": "a cheerful small group of children on a sightseeing excursion wearing backpacks and sun hats, one child pointing happily at scenic green mountains and a distant temple, a touring vibe, bright sunny outdoor background, children's book style",
+            "extraNegative": "airport security, passport, indoor office"
+        },
+        "บริษัท": {
+            "whatToDrawEn": "a tall modern glass office building with many windows, a few friendly business people in suits carrying briefcases walking in and out of the glass entrance, a company headquarters, clear daytime city background, children's book style",
+            "extraNegative": "company name text, logo, brand letters, signboard text"
+        },
+        "พิฆาต": {
+            "whatToDrawEn": "a brave cartoon hero in Thai warrior costume standing victorious with a wooden sword raised high, a cartoon ogre tumbling over backwards harmlessly defeated in front of him, triumphant non-violent storybook style, simple background",
+            "extraNegative": "blood, gore, death, corpse, realistic weapon, injury, horror"
+        },
+        "อัชฌาสัย": {
+            "whatToDrawEn": "a kind gentle child with a warm friendly smile helping an elderly person walk along a path, a soft glowing heart floating nearby to show a kind amiable nature, warm sunny background, children's book style",
+            "extraNegative": "angry, mean, frowning, fighting, sad"
+        },
+        "อัศจรรย์": {
+            "whatToDrawEn": "a child with a wide-open amazed expression and both hands raised in wonder, sparkling eyes, looking up at a glowing magical burst of light with floating stars in front of them, a sense of marvel, soft dreamy background, children's book style",
+            "extraNegative": "bored, scared, ordinary, plain, sad"
+        },
+        "ภวังค์": {
+            "whatToDrawEn": "a child sitting by a window staring blankly into the distance lost in a daydream, a soft dreamy thought-cloud with swirling little stars drifting above the head to show a trance-like reverie, gentle hazy background, children's book style",
+            "extraNegative": "sleeping in bed, unconscious, fainting, scary, alert active"
+        },
+        "กัมปนาท": {
+            "whatToDrawEn": "a bright lightning bolt striking from a dark storm cloud with bold radiating sound-wave rings spreading outward to show a deafening thunderous roar, a child below covering both ears in surprise, simple stormy background, children's book style",
+            "extraNegative": "text, onomatopoeia letters, calm sky, quiet, gentle"
+        },
+        "โทมนัส": {
+            "whatToDrawEn": "a child sitting alone with head bowed and a very sad sorrowful face, a single tear on the cheek, hands resting in the lap, a small grey rain cloud floating above the head to show deep sadness, soft muted background, gentle children's book style",
+            "extraNegative": "happy, smiling, laughing, scary, gore"
+        },
+        "พรรษา": {
+            "whatToDrawEn": "a Buddhist monk in orange robes sitting peacefully in meditation inside a temple hall while heavy rain falls outside an open window, a lit candle beside him, the rains-retreat mood, calm soft background, children's book style",
+            "extraNegative": "hindu deity, christian, no monk, summer sunny, text"
+        },
+        "เทศกาล": {
+            "whatToDrawEn": "a joyful Thai festival scene with a few children in traditional costume, colorful lanterns and small flags strung overhead, flower garlands and bright decorations, a happy celebration, festive cheerful background, children's book style",
+            "extraNegative": "text banner letters, christmas only, halloween, scary"
+        },
+        "สัมฤทธิ์": {
+            "whatToDrawEn": "a happy child standing on top of a small grassy hill with both arms raised high in triumph, holding a glowing trophy in one hand, a bright star burst behind them, reaching the top to show achievement and success, sunny background, children's book style",
+            "extraNegative": "failure, sad, giving up, text, bronze metal"
+        },
+        "อนาคต": {
+            "whatToDrawEn": "a child looking forward with a hopeful smile while a glowing thought-cloud above shows a futuristic city with flying cars and tall towers, a big forward-pointing arrow beside them suggesting time moving ahead, bright optimistic background, children's book style",
+            "extraNegative": "calendar text, numbers, clock numbers, past, old ruins"
+        },
+        "ปฏิภาณ": {
+            "whatToDrawEn": "a clever child with a bright smile and one finger raised in a sudden aha moment, a glowing lightbulb shining above the head to show a quick witty idea, simple bright background, children's book style",
+            "extraNegative": "text, dull, confused, sad, dark"
+        },
+        "บรรพบุรุษ": {
+            "whatToDrawEn": "a warm multi-generation Thai family standing together: smiling elderly great-grandparents and grandparents at the back, younger parents and a small child in front, an old framed family portrait hanging on the wall behind them, showing ancestors and forefathers, cozy home background, children's book style",
+            "extraNegative": "graveyard, ghosts, scary, single person, text"
+        },
+        "นิทานปรัมปรา": {
+            "whatToDrawEn": "a kind elderly grandparent sitting and telling a story to a few wide-eyed children gathered around, a glowing dreamy thought-cloud above showing a tiny castle and a friendly mythical dragon to represent the old legend being told, cozy warm background, children's book style",
+            "extraNegative": "text, open book with readable words, scary monster, horror"
+        },
+        "มณฑล": {
+            "whatToDrawEn": "a bird's-eye view of a small stylized landscape with a cluster of little houses, trees and a temple, a big glowing circle outline drawn around that cluster to mark one region or zone, a child's hand pointing at the circled area, soft background, children's book style",
+            "extraNegative": "mandala religious symbol, text labels, place name letters, single building"
+        }
+    },
+    "วัฒนธรรม_ตำนาน_วรรณคดี": {
+        "มัทรี": {
+            "whatToDrawEn": "a graceful ancient Thai princess in traditional Thai royal costume and gold jewelry, gentle devoted expression, carrying a woven basket of forest fruit, standing in a forest hermitage setting, classical Thai mural art style",
+            "extraNegative": "modern clothing, Indian sari, Japanese, Chinese, crown of Western queen"
+        },
+        "พระมเหสี": {
+            "whatToDrawEn": "a single elegant Thai queen, a beautiful royal woman wearing an ornate golden Thai crown and traditional Thai royal gown with golden jewelry, seated gracefully on an ornate throne, regal and dignified, palace background",
+            "extraNegative": "western queen, king, princess, multiple people"
+        },
+        "พระอินทร์": {
+            "whatToDrawEn": "the Thai deity Indra (Phra In), a majestic god with bright green skin wearing an ornate golden Thai crown and royal celestial armor, holding a thunderbolt, standing on a cloud in the heavens, divine golden glow background",
+            "extraNegative": "buddha, monk, demon, ravana, blue skin, multiple figures"
+        },
+        "ทรงฤทธิ์": {
+            "whatToDrawEn": "a mighty Thai mythological hero figure in golden ornate Thai costume standing in a powerful heroic pose, brilliant glowing magical energy and light rays radiating from the whole body, conveying great supernatural might, dramatic glowing sky background",
+            "extraNegative": "scary, evil, weak, ordinary person, western superhero"
+        },
+        "ฤทัย": {
+            "whatToDrawEn": "a single large glowing soft-red heart shape held gently in two cupped child's hands at the center of the chest, warm light radiating outward, simple soft pastel background",
+            "extraNegative": "text, anatomical organ, blood, gore"
+        },
+        "มณฑา": {
+            "whatToDrawEn": "a single montha flower, one large creamy-white magnolia-like blossom with thick fragrant petals and glossy green leaves, close-up centered composition, soft gradient background",
+            "category": "concrete",
+            "extraNegative": "text, woman, person, face, rose, multiple flowers"
+        },
+        "รัชกาล": {
+            "whatToDrawEn": "a golden royal crown resting on a red velvet cushion atop a tall pedestal, an ornate empty throne and a tiered golden royal umbrella behind it, regal palace hall background",
+            "extraNegative": "text, numbers, specific royal portrait, buddha, monk"
+        },
+        "งูกินหาง": {
+            "whatToDrawEn": "a group of cheerful Thai children playing a circle chasing game outdoors, holding onto each other's waists in a long curving line, the child at the front reaching playfully to tag the child at the tail end, joyful motion, sunny schoolyard background",
+            "extraNegative": "text, real snake, scary, biting, blood"
+        },
+        "ทรามวัย": {
+            "whatToDrawEn": "a graceful young Thai woman in a traditional silk dress with flowers in her hair, a gentle demure smile, standing elegantly in a classical Thai garden, soft warm background",
+            "extraNegative": "text, child, old woman, western dress"
+        },
+        "ฎีกา": {
+            "whatToDrawEn": "a person kneeling respectfully holding up a rolled blank scroll with both hands toward an ornate empty Thai royal throne on a raised platform, golden Thai palace interior, reverent humble posture",
+            "extraNegative": "readable writing, letters on scroll, modern courtroom, judge gavel"
+        },
+        "โฉมตรู": {
+            "whatToDrawEn": "a single graceful Thai lady in traditional classical Thai court dress, beautiful gentle face, elegant posture, hair adorned with a flower, soft glowing aura, ornate Thai pavilion background",
+            "extraNegative": "modern clothing, western dress, ugly"
+        },
+        "ทรงทราบ": {
+            "whatToDrawEn": "a dignified king in ornate golden Thai royal robes and crown sitting on a throne with a calm knowing expression, one hand raised slightly as if understanding, courtiers bowing below, golden Thai palace background",
+            "extraNegative": "commoner, monk, buddha, peasant"
+        },
+        "ศักดา": {
+            "whatToDrawEn": "a single mighty Thai warrior-king figure in ornate golden armor standing tall on a rock with a fist raised, a radiant burst of golden light and aura around him showing great power, dramatic sky background",
+            "extraNegative": "weak, small, modern soldier, gun"
+        },
+        "สิ้นพระชนม์": {
+            "whatToDrawEn": "a solemn respectful scene of an ornate golden Thai royal urn on a tiered decorated platform surrounded by white flower wreaths and softly glowing candles, reverent calm temple hall, no people, dignified somber mood",
+            "extraNegative": "corpse, body, blood, scary, coffin, skeleton"
+        },
+        "วิมาน": {
+            "whatToDrawEn": "a magnificent golden celestial Thai-style palace floating among soft white clouds in a bright sky, ornate multi-tiered roofs and spires glowing, rays of light, dreamy heavenly background",
+            "extraNegative": "earthly building, ruins, dark, modern city"
+        },
+        "ฤทธา": {
+            "whatToDrawEn": "a heroic classical Thai figure raising one hand from which a burst of glowing magical energy and sparkles radiates outward, confident powerful pose, dramatic mystical glowing background",
+            "extraNegative": "modern superhero, gun, weak"
+        },
+        "สินสมุทร": {
+            "whatToDrawEn": "a cheerful young half-human half-fish boy hero (merboy) with a human upper body and a shimmering blue-green fish tail, swimming proudly underwater near a coral reef, brave friendly expression, sunlit ocean background",
+            "extraNegative": "mermaid girl, full human, full fish, adult"
+        },
+        "ยุรยาตร": {
+            "whatToDrawEn": "a graceful Thai noble lady in traditional ancient Thai costume walking slowly and elegantly in a dignified stately manner, head held high, smooth flowing posture mid-step, royal palace courtyard background",
+            "extraNegative": "running, marching soldiers, modern clothes"
+        },
+        "ดวงสมร": {
+            "whatToDrawEn": "a beautiful gentle young Thai woman in traditional classical Thai dress, serene sweet smile, soft graceful pose, idealized beloved-maiden look, soft romantic garden background",
+            "extraNegative": "modern clothes, man, child, text"
+        },
+        "หฤทัย": {
+            "whatToDrawEn": "a single glowing warm pink heart shape held gently in two cupped hands, soft radiant light around it, tender and pure feeling, soft gradient background",
+            "extraNegative": "anatomical organ, blood, text"
+        },
+        "ยมนา": {
+            "whatToDrawEn": "a wide serene mythical river flowing through a lush enchanted Thai Himmaphan forest, calm shining water, golden trees and lotus along the banks, dreamy storybook background",
+            "extraNegative": "modern bridge, city, text, people"
+        },
+        "สุมาลี": {
+            "whatToDrawEn": "a beautiful cluster of fresh blooming flowers woven into a delicate garland, colorful soft petals, classical poetic floral beauty, soft gradient background",
+            "extraNegative": "woman, person, face, single plain flower, text"
+        },
+        "ดวงสุดา": {
+            "whatToDrawEn": "a lovely gentle young Thai girl in traditional classical Thai dress, sweet innocent smile, graceful pose like a cherished daughter, soft warm garden background",
+            "extraNegative": "modern clothes, boy, old woman, text"
+        },
+        "โอรสา": {
+            "whatToDrawEn": "a young Thai prince boy in ornate golden traditional royal Thai costume and a pointed ceremonial crown, gentle dignified posture, ornate palace hall background",
+            "extraNegative": "king adult, princess girl, commoner, modern clothes, text"
+        },
+        "วชิรญาณ": {
+            "whatToDrawEn": "a brilliant sparkling diamond gem radiating beams of bright wisdom-light, a glowing halo of light around it, majestic and pure, deep soft gradient background",
+            "extraNegative": "text, person, weapon, scary"
+        },
+        "ยักขินี": {
+            "whatToDrawEn": "a tall mythical Thai female giantess (yakshini) in ornate golden traditional Thai guardian costume, large but with a calm not-scary cartoon face, green-tinted skin, standing guard, temple background, child-friendly storybook style",
+            "extraNegative": "gore, blood, horror, realistic monster, fangs dripping, scary"
+        },
+        "สวรรค์": {
+            "whatToDrawEn": "a serene heavenly realm in the sky, golden glowing clouds and radiant light beams, a peaceful Thai-style celestial palace with golden spires floating among soft clouds, a few gentle celestial beings with soft halos, warm dreamy wholesome paradise, centered composition, bright blue sky background",
+            "extraNegative": "hell, dark, scary, demons, christian cross, angel wings church"
+        },
+        "ทรชน": {
+            "whatToDrawEn": "a single cartoon villain man with a sly sneaky smirk, raised eyebrow and a scheming expression, wearing a dark cloak, sneaking on tiptoe with hunched shoulders and rubbing his hands together, exaggerated mischievous storybook body language, child-friendly non-scary, centered composition, plain background",
+            "extraNegative": "scary, gore, weapon, blood, monster, demon"
+        },
+        "เถลิง": {
+            "whatToDrawEn": "a young king in golden royal Thai regalia seated on an ornate golden throne as a tall golden Thai crown is lowered onto his head by hands from above, courtiers kneeling and bowing respectfully, ceremonial celebratory mood, child-friendly storybook style, centered composition, gilded Thai palace background",
+            "extraNegative": "western king, european crown, modern, war"
+        },
+        "กะเหรี่ยง": {
+            "whatToDrawEn": "a friendly Karen hill-tribe woman in a traditional handwoven red-and-white tunic with colorful embroidered patterns, standing in a mountain village, warm welcoming smile, conveying the Karen ethnic group, respectful child-friendly style, centered composition, terraced hillside background",
+            "extraNegative": "generic asian person, japanese, chinese, long-neck brass rings, text"
+        },
+        "ทรามเชย": {
+            "whatToDrawEn": "a graceful beautiful young Thai woman in classical traditional Thai dress, a gentle sweet smile, elegant poised posture, holding a single flower, classical poetic charm, wholesome child-friendly style, centered composition, soft garden background",
+            "extraNegative": "romance, intimate, kiss, modern clothes, ugly, old woman"
+        },
+        "โคลง": {
+            "whatToDrawEn": "an open antique Thai palm-leaf manuscript with elegant decorative golden borders and a quill pen resting on it, soft warm candlelight, a child in traditional Thai dress reading it thoughtfully, conveying classical Thai poetry, child-friendly style, centered composition, warm traditional study background",
+            "extraNegative": "readable text, modern book, english letters"
+        },
+        "ปรัก": {
+            "whatToDrawEn": "a single shiny polished silver ingot beside a few bright silver coins, gleaming metallic silver sheen, close-up studio shot on a plain neutral background",
+            "category": "concrete",
+            "extraNegative": "gold, text, gemstones"
+        },
+        "สยาม": {
+            "whatToDrawEn": "a smiling Thai child in traditional Thai costume standing beside a golden Thai-style temple and a friendly elephant draped in ornate Thai ceremonial cloth, classic Thai cultural icons, warm friendly scene, plain background",
+            "extraNegative": "japan, china, western flags, text, map outline"
+        },
+        "มอญ": {
+            "whatToDrawEn": "a smiling Mon woman in traditional Mon ethnic costume balancing a clay pot on her head, traditional Mon dress with a sash, beside a Mon-style golden pagoda, warm cultural scene, plain background",
+            "extraNegative": "thai costume, chinese, japanese, text"
+        },
+        "ไพร่พล": {
+            "whatToDrawEn": "a group of ancient Thai foot-soldiers standing in formation holding round shields and spears, traditional old Siamese warrior outfits, an orderly army troop, friendly cartoon style, plain background",
+            "extraNegative": "modern soldiers, guns, blood, text"
+        },
+        "อมนุษย์": {
+            "whatToDrawEn": "a friendly cute cartoon Thai folklore spirit creature with greenish skin, big round eyes and a gentle smile, clearly non-human but cute and harmless, glowing softly, plain background",
+            "extraNegative": "scary, horror, blood, realistic demon, human"
+        },
+        "เทพารักษ์": {
+            "whatToDrawEn": "a benevolent Thai guardian deity in golden traditional Thai costume and a tall ornate Thai crown, hovering protectively beside a small Thai spirit house, gentle glowing aura, watching over the place, plain background",
+            "extraNegative": "western angel, buddha, monk, scary, text"
+        },
+        "โยชน์": {
+            "whatToDrawEn": "a long winding road stretching far into the distance toward distant mountains on the horizon, a small child standing at the near end gazing at the very long faraway path, conveying a great long distance, plain background",
+            "extraNegative": "ruler, measuring tape, text, numbers"
+        },
+        "บวงสรวง": {
+            "whatToDrawEn": "a respectful Thai person kneeling and presenting a tray of offerings, flowers, fruit and incense, before a Thai spirit house, hands pressed together in a wai, reverent ceremonial scene, plain background",
+            "extraNegative": "western altar, animal sacrifice, blood, text"
+        },
+        "ภพไตร": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels: panel 1 a bright heavenly realm with clouds and golden light, panel 2 the human world with green hills and a small village, panel 3 a dim gentle lower realm underground with soft blue shadows, depicting three layered realms of existence, child-friendly style, plain background",
+            "extraNegative": "hell fire, demons, scary, blood, text"
+        },
+        "ไสยศาสตร์": {
+            "whatToDrawEn": "a friendly Thai mystic figure surrounded by softly glowing mystical symbols and lit candles, holding a sacred amulet and a rolled palm-leaf scroll with a swirling magical aura, an air of gentle mystery, child-friendly non-scary style, plain background",
+            "extraNegative": "horror, blood, scary, evil, readable text"
+        },
+        "ทศกัณฐ์": {
+            "whatToDrawEn": "Thotsakan the demon king from the Ramakien, a green-faced giant with multiple stacked faces and many arms, wearing an ornate tall green Thai khon mask crown and golden Thai warrior costume, standing in a heroic pose, colorful child-friendly cartoon style, plain background",
+            "extraNegative": "scary realistic, blood, gore, western demon, buddha"
+        },
+        "สลา": {
+            "whatToDrawEn": "a traditional Thai betel set: a round areca nut cut open beside fresh green betel leaves and a small brass betel tray, close-up centered composition, simple background",
+            "extraNegative": "tobacco, cigarette, candy"
+        },
+        "กระตั้ว": {
+            "whatToDrawEn": "a single white cockatoo, full body, perched on a branch, distinctive raised yellow crest of feathers on its head, hooked beak, centered composition, simple background",
+            "category": "animal",
+            "extraNegative": "parrot, macaw, owl, multiple birds"
+        },
+        "ธรรม": {
+            "whatToDrawEn": "a glowing golden eight-spoked Dhamma wheel floating above an open lotus flower, soft radiant light rays, a peaceful temple silhouette in the background, serene reverent mood",
+            "extraNegative": "text, letters, scripture pages"
+        },
+        "ราหู": {
+            "whatToDrawEn": "a large mythological Rahu figure, only his upper half, a giant smiling face with a decorative Thai-style crown opening his huge mouth to swallow a glowing round full moon, starry night sky background, dramatic but child-friendly and not scary",
+            "extraNegative": "demon, devil, scary monster, blood"
+        },
+        "โลกนิติ": {
+            "whatToDrawEn": "an old traditional Thai folding palm-leaf manuscript lying open on a wooden table, blank aged pages with no readable writing, glowing softly to suggest ancient wisdom, a small oil lamp beside it, warm scholarly background",
+            "extraNegative": "readable text, letters, modern book, english words, gibberish writing"
+        },
+        "วายปราณ": {
+            "whatToDrawEn": "a single wilted flower with drooping stem and falling petals beside a small candle whose flame has just gone out with a thin wisp of smoke rising, soft muted peaceful background, gentle and not frightening",
+            "extraNegative": "corpse, blood, skeleton, scary, dead body"
+        },
+        "แม่โพสพ": {
+            "whatToDrawEn": "Mae Posop the Thai rice goddess, a graceful woman in golden traditional Thai costume and crown gently cradling a bundle of golden rice stalks, standing in a lush green rice paddy field, soft glowing halo, warm reverent mood",
+            "extraNegative": "buddha, generic woman, farmer"
+        },
+        "รัตนตรัย": {
+            "whatToDrawEn": "one wide image split into 3 side-by-side panels of the Buddhist Triple Gem: panel 1 a glowing golden Buddha statue, panel 2 a golden eight-spoked Dhamma wheel above a lotus, panel 3 a serene Buddhist monk in orange robes seated in meditation, soft reverent golden light",
+            "extraNegative": "text, scripture, hindu deity"
+        },
+        "การเวก": {
+            "whatToDrawEn": "the Karawek, a graceful mythical Thai Himmapan bird with an elegant long curved neck, ornate golden and red plumage and decorative flowing tail feathers, perched and singing, soft magical glowing forest background",
+            "category": "animal",
+            "extraNegative": "peacock, swan, real bird, ordinary bird"
+        },
+        "เทวัญ": {
+            "whatToDrawEn": "a single graceful Thai celestial deity (deva), a serene figure in golden ornate traditional Thai costume and pointed crown with palms pressed together, a soft glowing halo, floating gently among clouds in a bright heavenly sky",
+            "extraNegative": "buddha, monk, western angel with feather wings"
+        },
+        "อัปรา": {
+            "whatToDrawEn": "a sad defeated cartoon warrior kneeling on the ground with head bowed and shoulders slumped, his wooden sword fallen on the grass beside him, gentle gloomy mood, soft expression of loss, child-friendly and not violent, on a muted gray background",
+            "extraNegative": "blood, gore, death, scary, weapon raised, fighting"
+        },
+        "บรรลัย": {
+            "whatToDrawEn": "one wide image split into 2 side-by-side panels: panel 1 a neat tidy toy town of small wooden houses standing whole and complete, panel 2 the same toy town collapsed into a scattered heap of rubble showing total destruction, gentle cartoon style not scary, on a soft pale background",
+            "extraNegative": "fire, explosion, blood, scary, dark horror"
+        },
+        "อาตมา": {
+            "whatToDrawEn": "a single Buddhist monk in orange robes with a calm peaceful smile, one hand gently placed flat on his own chest to indicate himself while speaking, temple background",
+            "extraNegative": "god, deity, hindu, multiple monks"
+        },
+        "พระธิดา": {
+            "whatToDrawEn": "a single young princess wearing a traditional Thai royal dress and a golden pointed Thai crown headpiece, gentle graceful smile, standing pose, palace interior background",
+            "extraNegative": "prince, boy, western princess, multiple people"
+        },
+        "สวาท": {
+            "whatToDrawEn": "two happy children gently holding hands and smiling warmly at each other with small floating cartoon hearts between them, conveying tender affection, wholesome and innocent, on a soft pink pastel background",
+            "extraNegative": "romance adult, kissing, intimate, suggestive"
+        },
+        "ทรงศักดิ์": {
+            "whatToDrawEn": "a dignified noble figure in elegant traditional Thai royal-style attire standing tall and proud with a regal honored bearing, head held high, a soft golden glow of prestige around him, palace background",
+            "extraNegative": "western king, multiple people"
+        },
+        "มรณภาพ": {
+            "whatToDrawEn": "a peaceful temple scene with a serene empty monk's seat and a folded orange robe placed respectfully on it, a single glowing candle and a lotus flower offered beside it, calm reverent mournful mood, soft and gentle not scary, on a quiet temple background",
+            "extraNegative": "dead body, corpse, skeleton, blood, scary, ghost"
+        },
+        "ทรามสวาสดิ": {
+            "whatToDrawEn": "a single graceful young woman in traditional Thai classical dress with a gentle sweet smile, depicted as a beloved beauty in old-Thai literary style, demure standing pose, soft floral background",
+            "extraNegative": "romance adult, intimate, suggestive, multiple people"
+        },
+        "พระโอษฐ์": {
+            "whatToDrawEn": "a glowing highlight circle drawn around the gently smiling mouth and lips of a dignified king's face shown in elegant traditional Thai royal style, the mouth as the clear focal point, on a soft palace background",
+            "extraNegative": "teeth gore, western king, full crowd"
+        },
+        "อรหันต์": {
+            "whatToDrawEn": "a single serene enlightened Buddhist monk-sage seated in calm meditation with a gentle radiant golden halo of light glowing softly around his head, eyes peacefully closed, deeply tranquil, on a soft temple background",
+            "extraNegative": "buddha statue, hindu god, deity, multiple figures"
+        },
+        "มรณะ": {
+            "whatToDrawEn": "a single wilted drooping flower with a few fallen petals beside a small extinguished candle with a thin wisp of smoke rising, a quiet gentle symbol of the end of life, soft and peaceful not scary, on a muted gray background",
+            "extraNegative": "skeleton, corpse, skull, blood, ghost, grim reaper, scary"
+        },
+        "อวตาร": {
+            "whatToDrawEn": "a radiant blue-skinned Hindu deity figure descending from glowing heavenly clouds down toward the green earth below, beams of divine light around the figure, conveying a god taking earthly form, child-friendly and majestic, on a soft sky background",
+            "extraNegative": "sci-fi movie avatar, blue alien Na'vi, gaming, robot"
+        },
+        "พระราชธิดา": {
+            "whatToDrawEn": "a single elegant princess wearing an ornate traditional Thai royal gown and a tall golden Thai crown, regal and graceful with a kind smile, standing in a grand throne hall, palace background",
+            "extraNegative": "prince, boy, western princess, multiple people"
+        },
+        "ม้วยมรณ์": {
+            "whatToDrawEn": "a single delicate flower petal gently drifting down and settling on calm still water, a soft fading sunset glow behind, a quiet poetic symbol of passing away, peaceful and gentle not scary, on a tranquil dusk background",
+            "extraNegative": "skeleton, corpse, skull, blood, ghost, grim reaper, scary"
+        },
+        "พระเศียร": {
+            "whatToDrawEn": "a glowing highlight circle drawn around the crowned head of a dignified king depicted in elegant traditional Thai royal style, the head wearing a tall golden Thai crown as the clear focal point, on a soft palace background",
+            "extraNegative": "decapitation, gore, western king, full body crowd"
+        },
+        "ตรีกูฏ": {
+            "whatToDrawEn": "a single majestic legendary mountain with three distinct tall rocky peaks rising side by side above the clouds, a mythical golden palace faintly visible on its summit, grand and fairy-tale-like, on a soft sky background",
+            "extraNegative": "two peaks, single peak, modern buildings, people"
+        },
+        "บิตุเรศ": {
+            "whatToDrawEn": "a kind dignified father in traditional Thai attire standing warmly beside his child with a gentle protective smile, a hand resting lovingly on the child's shoulder, conveying a revered father, on a soft warm background",
+            "extraNegative": "western suit, multiple people, grandfather"
+        },
+        "นักษัตร": {
+            "whatToDrawEn": "a circular ring arrangement of the twelve cute Thai zodiac animals (rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig) drawn small around a circle, conveying the twelve-year animal cycle, on a soft background",
+            "extraNegative": "western zodiac symbols, stars constellations only, text"
+        },
+        "พระพิฆเนศ": {
+            "whatToDrawEn": "Ganesha, a friendly Hindu deity with a single elephant head on a seated human body, four arms in a calm pose, golden ornaments and a small crown, a warm soft glow around him, child-friendly devotional storybook style, soft temple background",
+            "extraNegative": "buddha, monk, real elephant animal, scary, many elephants, christian"
+        },
+        "พระลักษมณ์": {
+            "whatToDrawEn": "Phra Lak, a noble young Thai prince from the Ramakien epic, golden skin, ornate green-and-gold Thai costume and a tall pointed Thai crown (chada), holding a bow, standing in a heroic friendly pose, soft palace background, child-friendly Thai classical style",
+            "extraNegative": "monkey, hanuman, demon, ten faces, ravana, buddha, real person photo"
+        },
+        "สีหบัญชร": {
+            "whatToDrawEn": "an ornate golden royal balcony window set high on a grand Thai palace wall, an arched window with gilded carvings and a small balcony railing, viewed from below against a bright sky, no people, Thai classical palace architecture, children's book style",
+            "extraNegative": "ordinary house window, modern building, glass skyscraper, lion animal"
+        },
+        "น้ำอมฤต": {
+            "whatToDrawEn": "an ornate golden divine chalice holding a glowing magical nectar with gentle sparkles rising from it, soft heavenly light and clouds around it, the sacred elixir of the gods, child-friendly mythical storybook style, simple glowing background",
+            "extraNegative": "ordinary water glass, soda, juice, modern potion bottle, skull, poison"
+        },
+        "เสวยราชย์": {
+            "whatToDrawEn": "a young Thai king in golden royal regalia and a tall pointed Thai crown seated on an ornate golden throne, a tiered royal umbrella above him, a few courtiers bowing respectfully, grand Thai palace hall, child-friendly classical Thai style",
+            "extraNegative": "western king, european crown, buddha, modern president, real photo"
+        },
+        "กาฬสินธุ์": {
+            "whatToDrawEn": "a friendly scenic view of Kalasin province in northeast Thailand featuring a giant dinosaur skeleton statue (the famous Sirindhorn dinosaur museum landmark) beside a rural Isan rice field with a traditional wooden house, sunny sky, children's book style",
+            "extraNegative": "text, place name letters, map with labels, big city skyline"
+        },
+        "นพมาศ": {
+            "whatToDrawEn": "Nang Noppamas, a graceful young Thai lady in ornate ancient Thai court dress and a pointed golden headdress, kneeling by a river at night and gently holding a beautiful lotus-shaped krathong float decorated with flowers and a lit candle, soft moonlit Loy Krathong background, child-friendly classical Thai style",
+            "extraNegative": "modern woman, western dress, queen crown, text, real photo"
+        },
+        "โอรส": {
+            "whatToDrawEn": "a young Thai prince, a boy wearing an ornate golden traditional Thai royal headdress (chada) and princely costume, standing proudly in a palace hall, warm friendly child face, soft ornate palace background",
+            "extraNegative": "adult king, old man, girl, princess, readable text, crown of europe"
+        }
+    },
+    "รูปธรรม_เฉพาะเจาะจง": {
+        "สีคราม": {
+            "whatToDrawEn": "a large solid swatch of deep indigo blue color filling the frame, one smooth flat indigo-blue paint blob, plain white background to make the color pop",
+            "extraNegative": "other colors, rainbow, light blue, purple, green"
+        },
+        "นิทรรศการ": {
+            "whatToDrawEn": "an indoor exhibition hall with several display boards and stands showing colorful pictures and artwork, a few children walking and looking at the displays, bright gallery hall background",
+            "extraNegative": "readable text, words on posters"
+        },
+        "อินเตอร์เน็ต": {
+            "whatToDrawEn": "a glowing blue globe of the earth surrounded by a network of connected glowing lines and nodes linking laptops, phones and computers around it, digital connection web, dark tech background",
+            "extraNegative": "readable text, letters, brand logos"
+        },
+        "โอลิมปิก": {
+            "whatToDrawEn": "five interlocking colored rings (blue, yellow, black, green, red) above a lit golden torch with a bright flame, a sports stadium silhouette behind, simple sky background",
+            "extraNegative": "text, letters, words, gibberish writing"
+        },
+        "เว็บไซต์": {
+            "whatToDrawEn": "a laptop computer open on a desk, its screen showing a colorful webpage layout made of image thumbnails, icon tiles and a magnifying-glass search icon (no readable text), an arrow mouse cursor on the screen, simple desk background",
+            "extraNegative": "readable text, words, letters, paragraphs, gibberish writing"
+        },
+        "คอน": {
+            "whatToDrawEn": "a person carrying a long bamboo shoulder-pole across one shoulder with a woven basket of vegetables hanging from each end, the load balanced, a walking pose, rural village background",
+            "extraNegative": "text, backpack, hand carry, modern bag, bird perch"
+        },
+        "เส้น": {
+            "whatToDrawEn": "a single neatly coiled length of cotton thread/string resting on a plain surface, one clean continuous strand, close-up centered composition, simple white background",
+            "category": "concrete",
+            "extraNegative": "many threads, tangle, fabric, ruler markings"
+        },
+        "อุตสาหกรรม": {
+            "whatToDrawEn": "a large industrial factory building with tall smokestacks emitting white steam, conveyor belts and big gears, a few machines around it, daytime industrial zone background",
+            "extraNegative": "farm, office, house, store"
+        },
+        "รวงรัง": {
+            "whatToDrawEn": "a single golden honeycomb beehive hanging from a tree branch, hexagonal cells dripping honey, a few bees around it, green leafy background",
+            "category": "concrete",
+            "extraNegative": "wasp nest, bird nest, empty"
+        },
+        "วัฒนธรรม": {
+            "whatToDrawEn": "a joyful group of Thai children in traditional Thai costumes performing a classical Thai dance with graceful curved-finger hand gestures, a temple and Thai instruments in the background, festive cultural scene",
+            "extraNegative": "western clothing, modern city, generic"
+        },
+        "บ้านจัดสรร": {
+            "whatToDrawEn": "a neat modern housing estate, several identical row houses lined up side by side along a clean paved street, tidy front lawns, suburban planned-development look, clear sky background",
+            "extraNegative": "single house, slum, ancient village, text"
+        },
+        "อีเลิร์นนิง": {
+            "whatToDrawEn": "a happy child sitting at a desk learning from a laptop computer that shows a friendly teacher's face on the screen, headphones on, books beside, cozy study room background",
+            "extraNegative": "readable text on screen, words, empty classroom"
+        },
+        "แกละ": {
+            "whatToDrawEn": "a close-up of a cute young Thai child with a shaved head and a single small tuft topknot of hair tied on the crown, traditional Thai style, smiling, simple soft background",
+            "extraNegative": "full head of hair, adult, ponytail, text"
+        },
+        "กระเปาะ": {
+            "whatToDrawEn": "a close-up of a clear glass thermometer's rounded bulb end filled with red liquid, the smooth bulbous swollen tip shown clearly as one isolated rounded part, a child's hand pointing at the bulb, plain studio background",
+            "extraNegative": "light bulb electric, flower, full thermometer scale markings, text, numbers"
+        },
+        "คณิตศาสตร์": {
+            "whatToDrawEn": "a tidy arrangement of math objects, an abacus, a wooden ruler, a geometry compass, a triangle set-square, and a few colorful solid geometric shapes like a cube and sphere, conveying the school subject of mathematics through tools and shapes only, child-friendly style, centered composition, simple desk background",
+            "extraNegative": "readable words, numbers, equations, jumbled letters, blackboard text"
+        },
+        "จุลินทรีย์": {
+            "whatToDrawEn": "a giant friendly cartoon microbe viewed through a round microscope lens, a cute single-celled microorganism with a smiling face, a simple round green-and-blue blob body with little wavy flagella, conveying a tiny microbe made visible, child-friendly style, centered composition, round microscope-view background",
+            "extraNegative": "scary virus, disease, monster, text"
+        },
+        "อียิปต์": {
+            "whatToDrawEn": "the great pyramids of Giza and the Sphinx standing in a golden desert under a clear blue sky, with a single camel nearby, iconic Egypt scene, on a sandy horizon background",
+            "extraNegative": "mummy scary, modern city"
+        },
+        "สรรพสินค้า": {
+            "whatToDrawEn": "the bright interior of a department store with neat shelves and racks full of many kinds of colorful goods, clothes, toys and household items, a single shopper with a cart browsing, conveying a store of all merchandise, on a clean store background",
+            "extraNegative": "single product, empty shelves, brand logos"
+        },
+        "เวหาหาว": {
+            "whatToDrawEn": "a wide open bright blue daytime sky filling the frame with soft fluffy white clouds and a few small birds gliding high, a thin strip of green hilltop along the bottom for scale, vast airy peaceful heavens, children's book style, light blue background",
+            "extraNegative": "outer space, planets, stars, night, cave"
+        },
+        "ไอคอน": {
+            "whatToDrawEn": "a large smartphone held upright showing one big colorful rounded app icon button glowing in the center of the screen, a child's finger reaching to tap it, clean simple background, children's book style",
+            "extraNegative": "religious icon, orthodox painting, saint, famous celebrity person, text, app name letters"
+        },
+        "เทคโนโลยี": {
+            "whatToDrawEn": "a cheerful child surrounded by friendly modern gadgets: a laptop, a smartphone, a small cute robot, with glowing gear and circuit shapes floating around to represent technology, bright clean background, children's book style",
+            "extraNegative": "text, brand logos, letters, scary robot"
+        },
+        "เอกซเรย์": {
+            "whatToDrawEn": "a glowing medical X-ray film displayed on a bright light-box panel, showing the clean white bones of a human hand against a dark transparent background, one clear radiograph image, close-up centered composition, simple clinic wall background",
+            "category": "concrete",
+            "extraNegative": "scary full skeleton, standing skeleton, skull, ghost, horror, color photograph, readable text, numbers, letters, labels"
+        },
+        "วัคซีน": {
+            "whatToDrawEn": "a single small glass vaccine vial filled with clear liquid standing upright next to one clean medical syringe lying beside it, a small round bandage with a heart nearby, conveying a vaccine, close-up centered composition, simple clean background",
+            "category": "concrete",
+            "extraNegative": "pills, perfume bottle, wine bottle, many bottles, blood, scary giant needle, readable text, brand logo, label letters"
+        }
+    }
+}

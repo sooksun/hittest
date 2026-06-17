@@ -142,6 +142,22 @@ who already has `toYear` scores). `promote_school.php` / `admin_promote_all.php`
 (`dash_year_trend`, `dash_student_trend`) join `studenteval` to the **current-year** `students` row
 (`AND s.years = current_year()`) so a student with rows in two years isn't double-counted.
 
+### Soft delete นักเรียน (migration 012 — preserve this invariant)
+Schools can **soft-delete** a student from `students_list.php` (🗑️ ลบ → `student_delete.php`, `require_editor`),
+which sets `students.deleted_at`/`deleted_by` instead of removing the row (history + scores kept). This is
+distinct from "ย้ายออก" (`stustatus=4`, still visible). **Invariant: every user-facing read of `students`
+must filter `deleted_at IS NULL`.** The chokepoint is `find_student()` (covers exam/edit/delete/evaluations);
+also applied in `students_list`, `menu`, `includes/dashboard.php`, `area_results`, `paper(_export)`,
+`settings`, `reset_results`, `exam_control`, `includes/promote_lib.php` (deleted students aren't promoted),
+and `includes/student_auth.php` (a deleted student can't log in). Restore is **admin-only** via
+`admin_students_trash.php` (clears `deleted_at`).
+
+### Admin-toggleable "เลื่อนชั้นทั้งโรงเรียน" menu
+The promote menu is gated by `promote_menu_enabled()` (`app_settings.promote_enabled`, default `'0'`=closed).
+Superadmin/SMIS-admin (`is_admin()`) always see+use it and toggle it at `admin_config.php`; schools see it
+only when enabled. Gate is `is_admin() || promote_menu_enabled()` in `header.php`, `promote.php`,
+`promote_school.php`, `promote_rollback.php`.
+
 ### Games subsystem
 PHP wrappers `game_memory.php` / `game_balloon.php` / `game_bubble.php` / `game_hangman.php` /
 `game_training.php` each call `game_asset_tags('<entry>')` (`includes/game_assets.php`), which reads

@@ -135,7 +135,7 @@ function student_pin_verify(string $scId, string $pin): ?array
     $st = db()->prepare(
         'SELECT sp.stuid, sp.pin_hash, s.stuname, s.class_id, s.rooms
          FROM student_pin sp
-         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ?
+         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ? AND s.deleted_at IS NULL
          WHERE sp.sc_id = ? AND sp.pin_plain = ? AND sp.is_active = 1'
     );
     $st->execute([current_year(), $scId, $pin]);
@@ -154,7 +154,7 @@ function student_pin_verify(string $scId, string $pin): ?array
  */
 function student_login_by_id(string $stuid): ?array
 {
-    $st = db()->prepare('SELECT stuid, stuname, sc_id, class_id, rooms FROM students WHERE stuid = ? AND years = ?');
+    $st = db()->prepare('SELECT stuid, stuname, sc_id, class_id, rooms FROM students WHERE stuid = ? AND years = ? AND deleted_at IS NULL');
     $st->execute([$stuid, current_year()]);
     $r = $st->fetch();
     if (!$r) {
@@ -208,7 +208,7 @@ function class_pins(string $scId, int $classId): array
     $st = db()->prepare(
         'SELECT sp.stuid, sp.pin_plain
          FROM student_pin sp
-         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ?
+         JOIN students s ON s.stuid = sp.stuid AND s.sc_id = sp.sc_id AND s.years = ? AND s.deleted_at IS NULL
          WHERE sp.sc_id = ? AND s.class_id = ? AND sp.is_active = 1'
     );
     $st->execute([current_year(), $scId, $classId]);

@@ -37,13 +37,16 @@ $page_title = $page_title ?? APP_NAME;
     <a class="ht-side-link<?= $active === 'settings' ? ' active' : '' ?>" href="settings.php">🗑️ รีเซตผลการสอบ</a>
     <a class="ht-side-link<?= $active === 'examctl' ? ' active' : '' ?>" href="exam_control.php">🚦 จัดการสอบ</a>
     <a class="ht-side-link<?= $active === 'pins' ? ' active' : '' ?>" href="teacher_pins.php">🪪 การ์ด login นักเรียน</a>
-    <a class="ht-side-link<?= $active === 'promote' ? ' active' : '' ?>" href="promote.php">⬆️ เลื่อนชั้นทั้งโรงเรียน</a>
+    <?php if (is_admin() || promote_menu_enabled()): ?>
+    <a class="ht-side-link<?= $active === 'promote' ? ' active' : '' ?>" href="promote.php">⬆️ เลื่อนชั้นทั้งโรงเรียน<?= !promote_menu_enabled() ? ' 🔒' : '' ?></a>
+    <?php endif; ?>
     <a class="ht-side-link<?= $active === 'stu_import' ? ' active' : '' ?>" href="students_import.php">📥 นำเข้ารายชื่อนักเรียน</a>
 <?php endif; ?>
 
 <?php if (is_admin()): ?>
     <div class="ht-side-label">ผู้ดูแลระบบ</div>
     <a class="ht-side-link<?= $active === 'admin_users' ? ' active' : '' ?>" href="admin_users.php">👤 จัดการผู้ใช้</a>
+    <a class="ht-side-link<?= $active === 'admin_trash' ? ' active' : '' ?>" href="admin_students_trash.php">🗑️ ถังขยะนักเรียน</a>
     <a class="ht-side-link<?= $active === 'admin_config' ? ' active' : '' ?>" href="admin_config.php">⚙️ ตั้งค่าระบบ</a>
     <a class="ht-side-link<?= $active === 'admin_media' ? ' active' : '' ?>" href="admin_media.php">🎨 สร้างสื่อ (เสียง/ภาพ)</a>
     <a class="ht-side-link<?= $active === 'admin_backup' ? ' active' : '' ?>" href="admin_backup.php">💾 สำรอง/กู้คืน DB</a>

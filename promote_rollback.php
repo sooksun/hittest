@@ -10,6 +10,11 @@ require __DIR__ . '/includes/auth.php';
 require_editor();   // บัญชีผู้ชม (viewer) ยกเลิกเลื่อนชั้นไม่ได้
 require __DIR__ . '/includes/promote_lib.php';
 
+// เมนูเลื่อนชั้นถูกปิดโดยผู้ดูแลระบบ → บล็อก (ผู้ดูแลระบบยังทำได้)
+if (!is_admin() && !promote_menu_enabled()) {
+    json_response(['status' => 'error', 'message' => 'เมนูเลื่อนชั้นถูกปิดโดยผู้ดูแลระบบ'], 403);
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['status' => 'error', 'message' => 'method not allowed'], 405);
 }

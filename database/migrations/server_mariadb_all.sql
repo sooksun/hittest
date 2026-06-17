@@ -403,3 +403,17 @@ CREATE TABLE IF NOT EXISTS users (
   KEY idx_area (area_code),
   KEY idx_sc (sc_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ============================================================================
+-- Migration 012 — Soft delete นักเรียน (deleted_at / deleted_by) — idempotent
+-- ============================================================================
+SET @has_col := (SELECT COUNT(*) FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'students' AND COLUMN_NAME = 'deleted_at');
+SET @ddl := IF(@has_col = 0,
+  'ALTER TABLE students ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL, ADD COLUMN deleted_by VARCHAR(50) NULL DEFAULT NULL', 'DO 0');
+PREPARE stmt FROM @ddl; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+SET @has_idx := (SELECT COUNT(*) FROM information_schema.STATISTICS
+  WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'students' AND INDEX_NAME = 'idx_students_deleted');
+SET @ddl2 := IF(@has_idx = 0,
+  'ALTER TABLE students ADD INDEX idx_students_deleted (sc_id, years, deleted_at)', 'DO 0');
+PREPARE stmt2 FROM @ddl2; EXECUTE stmt2; DEALLOCATE PREPARE stmt2;

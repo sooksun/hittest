@@ -119,11 +119,18 @@
             u.lang = 'th-TH'; u.rate = 0.9;
             window.speechSynthesis.speak(u);
         }
-        function speak(text) {
+        // audioUrl (ไม่บังคับ) = path ไฟล์ MP3 ที่สร้างไว้แล้ว; ถ้าไม่มีจึงโทร TTS API
+        function speak(text, audioUrl) {
             var t = Date.now();
             if (text === lastSpeakText && (t - lastSpeakAt) < 800) { return; }   // กันเล่นซ้ำถี่
             lastSpeakText = text; lastSpeakAt = t;
             stopListen(); stopAudio();
+            if (audioUrl) {
+                ttsAudio = new Audio(audioUrl);
+                var pr = ttsAudio.play();
+                if (pr && pr.then) { pr.catch(function () { lastSpeakText = ''; speakFallback(text); }); }
+                return;
+            }
             fetch(TTS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
@@ -324,6 +331,16 @@
             el('pHeard').textContent = '';
             attempts = 0; solved = false;
             el('pBar').style.width = (total ? Math.round(idx / total * 100) : 0) + '%';
+            var imgEl = el('pWordImg');
+            if (imgEl) {
+                if (cur && cur.image) {
+                    imgEl.src = cur.image;
+                    imgEl.style.display = 'block';
+                } else {
+                    imgEl.src = '';
+                    imgEl.style.display = 'none';
+                }
+            }
         }
         function addResult(word, tries) {
             el('pResultsWrap').style.display = '';
@@ -363,7 +380,7 @@
             if (el('pUnsupported')) { el('pUnsupported').classList.remove('d-none'); }
             if (el('pMic')) { el('pMic').disabled = true; }
         }
-        el('pSpeak').addEventListener('click', function () { unlockAudio(); var c = WORDS[idx]; if (c) { speak(c.word); } });
+        el('pSpeak').addEventListener('click', function () { unlockAudio(); var c = WORDS[idx]; if (c) { speak(c.word, c.audio || null); } });
         el('pMic').addEventListener('click', function () {
             unlockAudio();
             if (!SR) { return; }

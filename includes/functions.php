@@ -99,6 +99,13 @@ function app_setting_set(string $key, string $value): void
     $stmt->execute([$key, $value]);
 }
 
+/** เมนู "เลื่อนชั้นทั้งโรงเรียน" เปิดให้โรงเรียนใช้ไหม — ผู้ดูแลระบบเปิด/ปิดได้ที่หน้าตั้งค่าระบบ
+ *  ค่าเริ่มต้น = ปิด ('0') · ผู้ดูแลระบบ (is_admin) เห็น/ใช้ได้เสมอไม่ว่าค่านี้จะเป็นอะไร */
+function promote_menu_enabled(): bool
+{
+    return (string)app_setting('promote_enabled', '0') === '1';
+}
+
 /** รายชื่อผู้ดูแล "ส่วนเพิ่ม" ที่เก็บในฐานข้อมูล (app_settings.admin_smis) — ไม่รวมที่ตายตัวใน config */
 function admin_smis_db_list(): array
 {
@@ -203,10 +210,10 @@ function user_authenticate(string $username, string $password, ?PDO $pdo = null)
     return ($u && password_verify($password, (string)$u['password_hash'])) ? $u : null;
 }
 
-/** ดึงข้อมูลนักเรียน "ปีปัจจุบัน" จำกัดเฉพาะโรงเรียนที่ login — คืน null ถ้าไม่พบ/ไม่มีสิทธิ์ */
+/** ดึงข้อมูลนักเรียน "ปีปัจจุบัน" จำกัดเฉพาะโรงเรียนที่ login — คืน null ถ้าไม่พบ/ไม่มีสิทธิ์/ถูกลบ (soft delete) */
 function find_student(string $stuid): ?array
 {
-    $stmt = db()->prepare('SELECT * FROM students WHERE stuid = ? AND sc_id = ? AND years = ?');
+    $stmt = db()->prepare('SELECT * FROM students WHERE stuid = ? AND sc_id = ? AND years = ? AND deleted_at IS NULL');
     $stmt->execute([$stuid, current_sc_id(), current_year()]);
     return $stmt->fetch() ?: null;
 }

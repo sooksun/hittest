@@ -20,10 +20,24 @@ $selClass = $class_id ?: ((int)$me['class_id'] ?: 1);     // ดีฟอลต�
 
 $words = [];
 if ($started) {
-    $stmt = db()->prepare('SELECT id, word, spoken_form FROM words
-        WHERE class_id = ? AND hittest = ? AND sethit = ? ORDER BY orders');
+    $stmt = db()->prepare(
+        'SELECT w.id, w.word, w.spoken_form, wt.image_path AS wt_img, wt.image_status, wt.sound_path
+         FROM words w
+         LEFT JOIN wordstest wt ON wt.word = w.word COLLATE utf8mb4_bin
+         WHERE w.class_id = ? AND w.hittest = ? AND w.sethit = ?
+         ORDER BY w.orders'
+    );
     $stmt->execute([$class_id, $hittest, $sethit]);
-    $words = array_map(fn($w) => ['id' => (int)$w['id'], 'word' => $w['word'], 'spoken' => $w['spoken_form']], $stmt->fetchAll());
+    $words = array_map(function ($w) {
+        $img = null;
+        if (($w['image_status'] ?? '') === 'DONE' && !empty($w['wt_img'])) {
+            $d = json_decode($w['wt_img'], true);
+            $raw = is_array($d) ? ($d['image_original'] ?? null) : null;
+            if ($raw) { $img = ltrim($raw, '/'); }
+        }
+        $audio = !empty($w['sound_path']) ? ltrim($w['sound_path'], '/') : null;
+        return ['id' => (int)$w['id'], 'word' => $w['word'], 'spoken' => $w['spoken_form'], 'image' => $img, 'audio' => $audio];
+    }, $stmt->fetchAll());
 }
 $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
 ?>
@@ -123,6 +137,7 @@ $cssver = @filemtime(__DIR__ . '/assets/css/theme.css') ?: '1';
     </div>
 
     <div class="mp-card mb-2">
+        <img id="pWordImg" src="" alt="" style="position:relative;z-index:1;max-height:240px;width:100%;object-fit:contain;border-radius:16px;margin-bottom:16px;display:none">
         <div class="mp-word" id="pWord">—</div>
         <div class="mp-heard" id="pHeard"></div>
     </div>

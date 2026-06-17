@@ -9,7 +9,7 @@ if ($class_id < 1 || $class_id > 6) {
 }
 
 // ห้อง + จำนวนต่อห้องของชั้นที่เลือก (ปีปัจจุบัน)
-$rs = db()->prepare('SELECT rooms, COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND class_id = ? GROUP BY rooms ORDER BY rooms');
+$rs = db()->prepare('SELECT rooms, COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND deleted_at IS NULL AND stustatus <> 4 GROUP BY rooms ORDER BY rooms');
 $rs->execute([$scid, current_year(), $class_id]);
 $rooms = $rs->fetchAll();
 $roomCount = [];
@@ -18,7 +18,7 @@ foreach ($rooms as $r) {
 }
 
 // สรุปทั้งโรงเรียน (ปีปัจจุบัน)
-$tot = db()->prepare('SELECT COUNT(*) total, COALESCE(SUM(hit1tested+hit2tested+hit3tested),0) tested FROM students WHERE sc_id = ? AND years = ?');
+$tot = db()->prepare('SELECT COUNT(*) total, COALESCE(SUM(hit1tested+hit2tested+hit3tested),0) tested FROM students WHERE sc_id = ? AND years = ? AND deleted_at IS NULL AND stustatus <> 4');
 $tot->execute([$scid, current_year()]);
 $tot = $tot->fetch();
 

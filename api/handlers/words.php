@@ -8,7 +8,7 @@ $difficulty = isset($_GET['difficulty']) && $_GET['difficulty'] !== ''
     ? max(1, min(3, (int)$_GET['difficulty']))
     : null;
 
-$base = 'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, h.sound_path
+$base = 'SELECT h.id, h.word, h.level, h.class_id, h.spoken_form, h.sound_path, h.image_path
          FROM wordstest h
          WHERE h.class_id = ? AND h.word IS NOT NULL';
 
@@ -22,6 +22,9 @@ if ($difficulty !== null) {
 $rows = $stmt->fetchAll();
 
 $words = array_map(function ($r) {
+    $imgRaw = (string)($r['image_path'] ?? '');
+    $imgDec = $imgRaw !== '' ? json_decode($imgRaw, true) : null;
+    $imgPath = is_array($imgDec) ? ($imgDec['image_original'] ?? null) : null;
     return [
         'id'         => (int)$r['id'],
         'word'       => (string)$r['word'],
@@ -29,6 +32,7 @@ $words = array_map(function ($r) {
         'classId'    => $r['class_id'] !== null ? (int)$r['class_id'] : null,
         'spokenForm' => $r['spoken_form'] ?? null,
         'soundPath'  => $r['sound_path'] ?: null,
+        'imagePath'  => $imgPath ?: null,
     ];
 }, $rows);
 

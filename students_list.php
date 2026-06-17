@@ -11,7 +11,7 @@ $sc = current_sc_id();
 $yr = current_year();
 
 // ห้องที่มีอยู่จริงของชั้นที่เลือก (ไว้สร้างตัวกรองห้อง)
-$roomStmt = db()->prepare('SELECT DISTINCT rooms FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND rooms IS NOT NULL ORDER BY rooms');
+$roomStmt = db()->prepare('SELECT DISTINCT rooms FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND rooms IS NOT NULL AND deleted_at IS NULL AND stustatus <> 4 ORDER BY rooms');
 $roomStmt->execute([$sc, $yr, $class_id]);
 $roomList = array_map('intval', $roomStmt->fetchAll(PDO::FETCH_COLUMN));
 
@@ -21,7 +21,8 @@ if ($room !== null && !in_array($room, $roomList, true)) {
     $room = null;
 }
 
-$sql    = 'SELECT * FROM students WHERE sc_id = ? AND years = ? AND class_id = ?';
+// ซ่อนนักเรียนที่ "ลบ" (deleted_at) และ "ย้ายออก" (stustatus = 4) ออกจากรายชื่อสอบ
+$sql    = 'SELECT * FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND deleted_at IS NULL AND stustatus <> 4';
 $params = [$sc, $yr, $class_id];
 if ($room !== null) {
     $sql .= ' AND rooms = ?';
@@ -64,7 +65,7 @@ require __DIR__ . '/includes/header.php';
     <table class="ht-table ht-table--cards">
         <thead>
             <tr>
-                <th class="num">#</th><th>ชื่อ - สกุล</th><th>รหัสนักเรียน</th><th class="num">ห้อง</th>
+                <th class="num">#</th><th>ชื่อ - สกุล</th><th class="num">ห้อง</th>
                 <th class="text-center">Hit-1</th><th class="text-center">Hit-2</th><th class="text-center">Hit-3</th>
                 <th>ประเภท</th>
                 <th class="text-center">จัดการ</th>
@@ -72,13 +73,12 @@ require __DIR__ . '/includes/header.php';
         </thead>
         <tbody>
         <?php if (!$students): ?>
-            <tr><td colspan="9" class="text-center text-muted" style="padding:40px">ยังไม่มีนักเรียนในชั้นนี้</td></tr>
+            <tr><td colspan="8" class="text-center text-muted" style="padding:40px">ยังไม่มีนักเรียนในชั้นนี้</td></tr>
         <?php else: foreach ($students as $i => $s):
             $special = (int)$s['stustatus'] === 2; ?>
             <tr>
                 <td class="num text-muted cardhide" data-label="#"><?= $i + 1 ?></td>
                 <td class="fw-7 cardhead"><?= htmlspecialchars($s['stuname']) ?></td>
-                <td class="num" data-label="รหัสนักเรียน"><?= htmlspecialchars($s['stuid']) ?></td>
                 <td class="num text-center" data-label="ห้อง"><?= (int)$s['rooms'] ?></td>
                 <td class="text-center" data-label="Hit-1"><?= hit_cell($s, 1, $class_id) ?></td>
                 <td class="text-center" data-label="Hit-2"><?= hit_cell($s, 2, $class_id) ?></td>
@@ -103,6 +103,9 @@ require __DIR__ . '/includes/header.php';
                         data-stuid="<?= htmlspecialchars($s['stuid'], ENT_QUOTES) ?>"
                         data-stuname="<?= htmlspecialchars((string)$s['stuname'], ENT_QUOTES) ?>">📤 ย้ายออก</button>
                     <?php endif; ?>
+                    <button type="button" class="ht-btn ht-btn--ghost ht-btn--sm js-delete" style="color:var(--c-coral-ink)"
+                        data-stuid="<?= htmlspecialchars($s['stuid'], ENT_QUOTES) ?>"
+                        data-stuname="<?= htmlspecialchars((string)$s['stuname'], ENT_QUOTES) ?>">🗑️ ลบ</button>
                 </td>
             </tr>
         <?php endforeach; endif; ?>
@@ -352,6 +355,35 @@ document.querySelectorAll('.js-moveout').forEach(function (btn) {
                 .then(function (d) {
                     if (d.status === 'ok') {
                         Swal.fire({ icon: 'success', title: 'ย้ายออกแล้ว', confirmButtonColor: '#4D96FF' })
+                            .then(function () { location.reload(); });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: d.message || '', confirmButtonColor: '#4D96FF' });
+                    }
+                })
+                .catch(function () { Swal.fire({ icon: 'error', title: 'ผิดพลาด', confirmButtonColor: '#4D96FF' }); });
+        });
+    });
+});
+
+/* ---- ลบนักเรียนรายคน (soft delete — ซ่อนจากระบบ กู้คืนได้โดยผู้ดูแลระบบ) ---- */
+document.querySelectorAll('.js-delete').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        var stuid = this.dataset.stuid, stuname = this.dataset.stuname || '';
+        Swal.fire({
+            title: 'ลบนักเรียนคนนี้?',
+            html: 'ลบ <b>' + stuname + '</b> ออกจากรายชื่อ<br><span class="text-muted">เป็นการลบแบบซ่อน (เก็บข้อมูล/ผลสอบไว้) — หากต้องการกู้คืน ติดต่อผู้ดูแลระบบ</span>',
+            icon: 'warning', showCancelButton: true,
+            confirmButtonText: 'ลบ', cancelButtonText: 'ยกเลิก', confirmButtonColor: '#FF6B6B'
+        }).then(function (r) {
+            if (!r.isConfirmed) return;
+            fetch('student_delete.php', {
+                method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: new URLSearchParams({ stuid: stuid })
+            })
+                .then(function (x) { return x.json(); })
+                .then(function (d) {
+                    if (d.status === 'ok') {
+                        Swal.fire({ icon: 'success', title: 'ลบแล้ว', confirmButtonColor: '#4D96FF' })
                             .then(function () { location.reload(); });
                     } else {
                         Swal.fire({ icon: 'error', title: 'ผิดพลาด', text: d.message || '', confirmButtonColor: '#4D96FF' });

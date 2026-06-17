@@ -37,7 +37,7 @@ function dash_overview(string $scid, int $hit, ?int $classid = null): array
                 COALESCE(SUM(CASE WHEN $tcol=1 THEN $col END),0)               AS score_sum,
                 COALESCE(SUM(CASE WHEN $tcol=1 AND $col>=$p THEN 1 ELSE 0 END),0) AS passed
              FROM students
-             WHERE sc_id = ? AND years = ?";
+             WHERE sc_id = ? AND years = ? AND deleted_at IS NULL AND stustatus <> 4";
     $params = [$scid, current_year()];
     if ($classid !== null) {                 // scope แคบลงระดับชั้น (ยังผูก sc_id อยู่)
         $sql .= " AND class_id = ?";
@@ -61,7 +61,7 @@ function dash_by_class(string $scid): array
                 COALESCE(SUM(s.hit2tested),0) AS h2t, ROUND(AVG(CASE WHEN s.hit2tested=1 THEN s.hit2 END),2) AS h2avg, COALESCE(SUM(CASE WHEN s.hit2tested=1 AND s.hit2>=$p THEN 1 ELSE 0 END),0) AS h2pass,
                 COALESCE(SUM(s.hit3tested),0) AS h3t, ROUND(AVG(CASE WHEN s.hit3tested=1 THEN s.hit3 END),2) AS h3avg, COALESCE(SUM(CASE WHEN s.hit3tested=1 AND s.hit3>=$p THEN 1 ELSE 0 END),0) AS h3pass
              FROM class c
-             LEFT JOIN students s ON s.class_id = c.class_id AND s.sc_id = ? AND s.years = ?
+             LEFT JOIN students s ON s.class_id = c.class_id AND s.sc_id = ? AND s.years = ? AND s.deleted_at IS NULL AND s.stustatus <> 4
              GROUP BY c.class_id, c.classname
              ORDER BY c.class_id";
     $st = db()->prepare($sql);
@@ -80,7 +80,7 @@ function dash_year_trend(string $scid): array
     $sql = "SELECT se.years AS years, ROUND(AVG(se.score),2) AS avg_score, COUNT(*) AS n
             FROM studenteval se
             JOIN students s ON CAST(s.stuid AS UNSIGNED) = se.stuid AND s.years = ?
-            WHERE s.sc_id = ?
+            WHERE s.sc_id = ? AND s.deleted_at IS NULL AND s.stustatus <> 4
             GROUP BY se.years
             ORDER BY se.years";
     $st = db()->prepare($sql);
@@ -126,7 +126,7 @@ function dash_class_students(string $scid, int $classid): array
         'SELECT stuid, stuname, rooms, stustatus,
                 hit1, hit1tested, hit2, hit2tested, hit3, hit3tested
          FROM students
-         WHERE sc_id = ? AND years = ? AND class_id = ?
+         WHERE sc_id = ? AND years = ? AND class_id = ? AND deleted_at IS NULL AND stustatus <> 4
          ORDER BY stuname'
     );
     $st->execute([$scid, current_year(), $classid]);
@@ -163,7 +163,7 @@ function dash_find_student(string $stuid): ?array
 /** snapshot นักเรียน 1 คน scope ด้วย sc_id (ใช้ในหน้านักเรียน my_dashboard ที่ไม่มี admin session) */
 function dash_student_snapshot(string $scid, string $stuid): ?array
 {
-    $st = db()->prepare('SELECT * FROM students WHERE stuid = ? AND sc_id = ? AND years = ?');
+    $st = db()->prepare('SELECT * FROM students WHERE stuid = ? AND sc_id = ? AND years = ? AND deleted_at IS NULL');
     $st->execute([$stuid, $scid, current_year()]);
     return $st->fetch() ?: null;
 }
@@ -178,7 +178,7 @@ function dash_student_trend(string $scid, string $stuid): array
     $st = db()->prepare(
         'SELECT se.years AS years, se.hittest AS hittest, se.score AS score
          FROM studenteval se
-         JOIN students s ON CAST(s.stuid AS UNSIGNED) = se.stuid AND s.years = ?
+         JOIN students s ON CAST(s.stuid AS UNSIGNED) = se.stuid AND s.years = ? AND s.deleted_at IS NULL AND s.stustatus <> 4
          WHERE s.sc_id = ? AND s.stuid = ?
          ORDER BY se.years, se.hittest'
     );

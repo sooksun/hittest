@@ -89,18 +89,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'promo
 
 /* ---------- พรีวิว (อิงแถวปีก่อนหน้า = ปีที่จะถูกเลื่อน) ---------- */
 $dist = [];
-$distStmt = $pdo->prepare('SELECT class_id, COUNT(*) total, SUM(stustatus <> 4) active FROM students WHERE years = ? GROUP BY class_id ORDER BY class_id');
+$distStmt = $pdo->prepare('SELECT class_id, COUNT(*) total, SUM(stustatus <> 4) active FROM students WHERE years = ? AND deleted_at IS NULL GROUP BY class_id ORDER BY class_id');
 $distStmt->execute([$fromYear]);
 foreach ($distStmt as $r) {
     $dist[(int)$r['class_id']] = ['total' => (int)$r['total'], 'active' => (int)$r['active']];
 }
-$scStmt = $pdo->prepare('SELECT COUNT(DISTINCT sc_id) FROM students WHERE years = ? AND class_id BETWEEN 1 AND 6 AND stustatus <> 4');
+$scStmt = $pdo->prepare('SELECT COUNT(DISTINCT sc_id) FROM students WHERE years = ? AND class_id BETWEEN 1 AND 6 AND stustatus <> 4 AND deleted_at IS NULL');
 $scStmt->execute([$fromYear]);
 $schoolCnt = (int)$scStmt->fetchColumn();
-$pStmt = $pdo->prepare('SELECT COUNT(*) FROM students WHERE years = ? AND class_id BETWEEN 1 AND 5 AND stustatus <> 4');
+$pStmt = $pdo->prepare('SELECT COUNT(*) FROM students WHERE years = ? AND class_id BETWEEN 1 AND 5 AND stustatus <> 4 AND deleted_at IS NULL');
 $pStmt->execute([$fromYear]);
 $toProm = (int)$pStmt->fetchColumn();
-$gStmt = $pdo->prepare('SELECT COUNT(*) FROM students WHERE years = ? AND class_id = 6 AND stustatus <> 4');
+$gStmt = $pdo->prepare('SELECT COUNT(*) FROM students WHERE years = ? AND class_id = 6 AND stustatus <> 4 AND deleted_at IS NULL');
 $gStmt->execute([$fromYear]);
 $toGrad = (int)$gStmt->fetchColumn();
 

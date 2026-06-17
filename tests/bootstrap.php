@@ -278,6 +278,8 @@ function create_test_db(): PDO
             hit3 INT NOT NULL DEFAULT 0, hit3tested INT NOT NULL DEFAULT 0,
             sethit1 INT DEFAULT 1, sethit2 INT DEFAULT 1, sethit3 INT DEFAULT 1,
             updatedDate TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            deleted_at  DATETIME NULL DEFAULT NULL,
+            deleted_by  VARCHAR(50) NULL DEFAULT NULL,
             PRIMARY KEY (stuid, years)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");

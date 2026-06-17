@@ -28,11 +28,11 @@ if ($mode === 'room') {
     if ($class_id < 1 || $class_id > 6) {
         json_response(['status' => 'error', 'message' => 'ชั้นไม่ถูกต้อง'], 400);
     }
-    $where  = 'sc_id = ? AND years = ? AND class_id = ? AND rooms = ?';
+    $where  = 'sc_id = ? AND years = ? AND class_id = ? AND rooms = ? AND deleted_at IS NULL AND stustatus <> 4';
     $params = [$scid, $year, $class_id, $rooms];
     $label  = "ป.$class_id ห้อง $rooms";
 } elseif ($mode === 'school') {
-    $where  = 'sc_id = ? AND years = ?';
+    $where  = 'sc_id = ? AND years = ? AND deleted_at IS NULL AND stustatus <> 4';
     $params = [$scid, $year];
     $label  = 'ทั้งโรงเรียน';
 } else {

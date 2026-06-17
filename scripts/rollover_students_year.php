@@ -43,7 +43,7 @@ if (!$schools) {
 $info     = $pdo->prepare('SELECT sc_smis, sc_name FROM schools WHERE sc_id = ? LIMIT 1');
 $cntStmt  = $pdo->prepare(
     'SELECT SUM(class_id BETWEEN 1 AND 5) prom, SUM(class_id = 6) grad
-     FROM students WHERE sc_id = ? AND years = ? AND stustatus <> 4'
+     FROM students WHERE sc_id = ? AND years = ? AND stustatus <> 4 AND deleted_at IS NULL'
 );
 $totP = $totG = $totSchools = 0;
 

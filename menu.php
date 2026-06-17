@@ -6,7 +6,7 @@ $scid = current_sc_id();
 
 $yr = current_year();
 
-$total = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND years = ?');
+$total = db()->prepare('SELECT COUNT(*) c FROM students WHERE sc_id = ? AND years = ? AND deleted_at IS NULL AND stustatus <> 4');
 $total->execute([$scid, $yr]);
 $total = (int)$total->fetch()['c'];
 
@@ -14,7 +14,7 @@ $h = db()->prepare('SELECT
         COALESCE(SUM(hit1tested),0) h1,
         COALESCE(SUM(hit2tested),0) h2,
         COALESCE(SUM(hit3tested),0) h3
-    FROM students WHERE sc_id = ? AND years = ?');
+    FROM students WHERE sc_id = ? AND years = ? AND deleted_at IS NULL AND stustatus <> 4');
 $h->execute([$scid, $yr]);
 $h = $h->fetch();
 
@@ -24,7 +24,7 @@ $byClass = db()->prepare('SELECT c.class_id, c.classname,
         COALESCE(SUM(s.hit2tested),0) h2,
         COALESCE(SUM(s.hit3tested),0) h3
     FROM class c
-    LEFT JOIN students s ON s.class_id = c.class_id AND s.sc_id = ? AND s.years = ?
+    LEFT JOIN students s ON s.class_id = c.class_id AND s.sc_id = ? AND s.years = ? AND s.deleted_at IS NULL AND s.stustatus <> 4
     GROUP BY c.class_id, c.classname ORDER BY c.class_id');
 $byClass->execute([$scid, $yr]);
 $classes = $byClass->fetchAll();

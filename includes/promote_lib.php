@@ -30,7 +30,7 @@ function promote_school_year(PDO $pdo, string $scId, int $fromYear, int $toYear,
     // รายชื่อที่จะเลื่อน (ยังไม่มีแถวปีใหม่) — เก็บไว้ลง log_item เพื่อ rollback
     $promStmt = $pdo->prepare(
         'SELECT stuid, class_id, stustatus FROM students src
-         WHERE src.sc_id = ? AND src.years = ? AND src.class_id BETWEEN 1 AND 5 AND src.stustatus <> 4
+         WHERE src.sc_id = ? AND src.years = ? AND src.class_id BETWEEN 1 AND 5 AND src.stustatus <> 4 AND src.deleted_at IS NULL
            AND NOT EXISTS (SELECT 1 FROM students d WHERE d.stuid = src.stuid AND d.years = ?)'
     );
     $promStmt->execute([$scId, $fromYear, $toYear]);
@@ -39,7 +39,7 @@ function promote_school_year(PDO $pdo, string $scId, int $fromYear, int $toYear,
     // ป.6 ที่จบ (เพื่อนับ/ลง log — ไม่สร้างแถวปีใหม่)
     $gradStmt = $pdo->prepare(
         'SELECT stuid, class_id, stustatus FROM students
-         WHERE sc_id = ? AND years = ? AND class_id = 6 AND stustatus <> 4'
+         WHERE sc_id = ? AND years = ? AND class_id = 6 AND stustatus <> 4 AND deleted_at IS NULL'
     );
     $gradStmt->execute([$scId, $fromYear]);
     $gradRows = $gradStmt->fetchAll();
@@ -52,7 +52,7 @@ function promote_school_year(PDO $pdo, string $scId, int $fromYear, int $toYear,
          SELECT stuid, stuname, sc_id, studentId, genderName, class_id + 1, rooms, stustatus,
                 0, 0, 0, 0, 0, 0, sethit1, sethit2, sethit3, ?, NOW()
          FROM students
-         WHERE sc_id = ? AND years = ? AND class_id BETWEEN 1 AND 5 AND stustatus <> 4'
+         WHERE sc_id = ? AND years = ? AND class_id BETWEEN 1 AND 5 AND stustatus <> 4 AND deleted_at IS NULL'
     );
     $ins->execute([$toYear, $scId, $fromYear]);
     $promoted  = $ins->rowCount();          // จำนวนแถวที่สร้างจริง (IGNORE ข้ามที่มีแล้ว)

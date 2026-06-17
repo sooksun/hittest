@@ -67,7 +67,7 @@ if ($area !== '') {
                 COALESCE(SUM(s.hit2tested),0) AS h2t, ROUND(AVG(CASE WHEN s.hit2tested=1 THEN s.hit2 END),2) AS h2avg, COALESCE(SUM(CASE WHEN s.hit2tested=1 AND s.hit2>=$p THEN 1 ELSE 0 END),0) AS h2pass,
                 COALESCE(SUM(s.hit3tested),0) AS h3t, ROUND(AVG(CASE WHEN s.hit3tested=1 THEN s.hit3 END),2) AS h3avg, COALESCE(SUM(CASE WHEN s.hit3tested=1 AND s.hit3>=$p THEN 1 ELSE 0 END),0) AS h3pass
             FROM schools sc
-            LEFT JOIN students s ON s.sc_id = sc.sc_id AND s.years = ?{$joinClass}
+            LEFT JOIN students s ON s.sc_id = sc.sc_id AND s.years = ? AND s.deleted_at IS NULL AND s.stustatus <> 4{$joinClass}
             WHERE sc.sc_smis LIKE ?
             GROUP BY sc.sc_id, sc.sc_smis, sc.sc_name
             ORDER BY sc.sc_smis";

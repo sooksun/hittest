@@ -26,3 +26,7 @@
 # pnpm side-effects ของ delegating package.json (ไม่มี dependency จริงใน repo นี้)
 /node_modules/
 /pnpm-lock.yaml
+# Claude Code local tooling config — เครื่องเฉพาะ ไม่ต้อง track
+/.claude/
+# คู่มือการใช้งาน (.docx) + ภาพ screenshots — ไฟล์ binary ใหญ่ (~45MB) เก็บไว้ใน local ไม่ขึ้น public repo
+/docsref/manual/

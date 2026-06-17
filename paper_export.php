@@ -25,7 +25,7 @@ if (!exam_is_open($hittest)) {
     die('รอบสอบ Hit-' . $hittest . ' ถูกปิดอยู่ — ดาวน์โหลดแบบกรอกคะแนนไม่ได้ (เปิดการสอบที่เมนู "จัดการสอบ" ก่อน)');
 }
 
-$stmt = db()->prepare('SELECT * FROM students WHERE sc_id = ? AND years = ? AND class_id = ? ORDER BY rooms, stuname');
+$stmt = db()->prepare('SELECT * FROM students WHERE sc_id = ? AND years = ? AND class_id = ? AND deleted_at IS NULL AND stustatus <> 4 ORDER BY rooms, stuname');
 $stmt->execute([current_sc_id(), current_year(), $class_id]);
 $students = $stmt->fetchAll();
 

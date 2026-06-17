@@ -99,3 +99,19 @@ php scripts/migrate_school_users.php --area=5703 --apply   # สร้าง use
 
 > **Phase 1–2 ไม่มีไฟล์ migration** โดยตั้งใจ — การเปลี่ยนแปลงเป็นโค้ด PHP + ค่าคงที่ ไม่แตะ schema
 > ดูรายละเอียดการออกแบบเต็มได้ที่ [`docs/dashboard-design.md`](../../docs/dashboard-design.md)
+
+## 012 — Soft delete นักเรียน (`deleted_at` / `deleted_by`) — สำหรับปุ่ม "🗑️ ลบ" ของโรงเรียน
+
+```bash
+"D:/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysql.exe" -uroot ssraexhi_hittest < database/migrations/012_student_soft_delete.sql
+```
+
+เพิ่มคอลัมน์ `deleted_at DATETIME NULL` + `deleted_by VARCHAR(50) NULL` ให้ `students` (รวมใน `setup_all_features.sql` / `server_mariadb_all.sql` แล้ว) · **Idempotent** (information_schema + PREPARE)
+
+- โรงเรียน (role โรงเรียน) ลบนักเรียนแบบ **soft delete** ได้ที่ `students_list.php` → `student_delete.php` (ตั้ง `deleted_at=NOW()`) — ไม่ลบแถวจริง เก็บประวัติ/ผลสอบไว้
+- **Invariant สำคัญ**: ทุกการอ่าน `students` ฝั่งผู้ใช้ต้องกรอง `deleted_at IS NULL` (ดู `find_student()` เป็น chokepoint หลัก + `students_list`/`menu`/`dashboard`/`area_results`/`paper`/`settings`/`exam_control`/`promote_lib`/`student_auth`) — เพิ่ม query ใหม่ที่อ่านนักเรียนเมื่อใด ต้องใส่เงื่อนไขนี้ด้วย
+- กู้คืนได้เฉพาะผู้ดูแลระบบ ที่ `admin_students_trash.php` (ถังขยะ → ♻️ กู้คืน → `deleted_at=NULL`)
+
+## เมนู "เลื่อนชั้นทั้งโรงเรียน" เปิด/ปิดได้ (ไม่ใช่ migration — เก็บใน `app_settings`)
+
+ผู้ดูแลระบบเปิด/ปิดเมนูเลื่อนชั้นสำหรับโรงเรียนได้ที่ `admin_config.php` (เก็บ `app_settings.promote_enabled` = `'1'`/`'0'`, ค่าเริ่มต้น = ปิด) · helper `promote_menu_enabled()` · `header.php`/`promote.php`/`promote_school.php`/`promote_rollback.php` เช็ค `is_admin() || promote_menu_enabled()` (ผู้ดูแลระบบใช้ได้เสมอ)
