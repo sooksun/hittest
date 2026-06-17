@@ -19,12 +19,23 @@ if (!exam_is_open($hittest)) {
     die('รอบสอบ Hit-' . (int)$hittest . ' ถูกปิดอยู่ — กรุณาเปิดการสอบที่เมนู "จัดการสอบ" ก่อน');
 }
 
+// ใช้รูปจริงของแต่ละคำจาก wordstest (รูปเดียวกับที่เกม/หน้าฝึกอ่านใช้) แทน placeholder เดิมใน words.image_path
 $stmt = db()->prepare(
-    'SELECT id, word, image_path FROM words
-     WHERE class_id = ? AND hittest = ? AND sethit = ? ORDER BY orders'
+    'SELECT w.id, w.word, wt.image_path AS wt_img, wt.image_status
+     FROM words w
+     LEFT JOIN wordstest wt ON wt.word = w.word COLLATE utf8mb4_bin
+     WHERE w.class_id = ? AND w.hittest = ? AND w.sethit = ? ORDER BY w.orders'
 );
 $stmt->execute([$class_id, $hittest, $sethit]);
-$words = $stmt->fetchAll();
+$words = array_map(function ($w) {
+    $img = '';
+    if (($w['image_status'] ?? '') === 'DONE' && !empty($w['wt_img'])) {
+        $d   = json_decode($w['wt_img'], true);
+        $raw = is_array($d) ? ($d['image_original'] ?? null) : null;
+        if ($raw) { $img = ltrim($raw, '/'); }   // เก็บใน DB เป็น "/media/..." → ทำเป็น relative ให้ทำงานใต้ /newhittest/
+    }
+    return ['id' => (int)$w['id'], 'word' => $w['word'], 'image_path' => $img];
+}, $stmt->fetchAll());
 
 $slides = array_map(fn($w) => array_merge($student, $w), $words);
 

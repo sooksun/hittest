@@ -4,6 +4,8 @@
 /database/*.sql
 /config/botnoi.php
 /config/media_gen.php
+# สำเนา backup ของ config (อาจมี DB creds) — ห้าม commit
+/config/bk/
 /docsref/students/
 # สื่อที่สร้าง/ย้ายเข้ามา (เสียง mp3 + ภาพ png) — ใหญ่+เป็นของแต่ละ environment ห้าม commit
 /media/

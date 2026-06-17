@@ -54,7 +54,9 @@
     function updateSlideDisplay() {
         var s = slides[currentIndex];
         el('currentWord').innerText = (currentIndex + 1) + '. ' + s.word;
-        el('image').src = s.image_path;
+        var imgEl = el('image');
+        if (s.image_path) { imgEl.src = s.image_path; imgEl.style.display = ''; }
+        else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
         el('stu_name').innerText = s.stuname;
         el('class').innerText = s.class_id;
         el('room').innerText = s.rooms;
