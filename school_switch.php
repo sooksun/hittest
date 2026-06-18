@@ -42,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $where[] = 'sc_smis LIKE ?';
             $args[]  = $area . '%';
-            // เฉพาะโรงเรียนที่ "สอบ hittest จริง" ในปีปัจจุบัน —
+            // เฉพาะโรงเรียนที่ "เคยสอบ hittest จริง" (ปีใดก็ได้) —
             // มีนักเรียน (ยังไม่ถูกลบ) ที่ถูกประเมินอย่างน้อย 1 รอบ
+            // ไม่ผูกปีปัจจุบัน: ต้นปีการศึกษาใหม่ยังไม่มีใครสอบ ข้อมูลจริงอยู่ปีก่อน
             $where[] = 'EXISTS (SELECT 1 FROM students s
-                               WHERE s.sc_id = schools.sc_id AND s.years = ? AND s.deleted_at IS NULL
+                               WHERE s.sc_id = schools.sc_id AND s.deleted_at IS NULL
                                  AND (s.hit1tested = 1 OR s.hit2tested = 1 OR s.hit3tested = 1))';
-            $args[]  = current_year();
         }
         if ($q !== '') {
             $where[] = '(sc_smis LIKE ? OR sc_name LIKE ?)';
