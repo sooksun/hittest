@@ -22,11 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_regenerate_id(true);
         $area = (string)($user['area_code'] ?? '');
         $scid = (string)($user['sc_id'] ?? '');
-        // saoadmin (ผูกเขต ไม่ผูกโรงเรียน) → เลือกโรงเรียนแรกในเขตเป็นบริบทเริ่มต้น (สลับได้ภายหลัง)
+        // saoadmin (ผูกเขต ไม่ผูกโรงเรียน) → เลือกโรงเรียนแรก "ที่มีข้อมูลสอบ" ในเขตเป็นบริบทเริ่มต้น
+        // (ถ้าทั้งเขตยังไม่มีใครสอบ → fallback โรงเรียนแรกตาม SMIS) — สลับได้ภายหลัง
         if ($scid === '' && $area !== '') {
-            $f = db()->prepare('SELECT sc_id FROM schools WHERE sc_smis LIKE ? ORDER BY sc_smis LIMIT 1');
-            $f->execute([$area . '%']);
+            $f = db()->prepare(
+                'SELECT sc.sc_id FROM schools sc
+                 WHERE sc.sc_smis LIKE ?
+                   AND EXISTS (SELECT 1 FROM students s
+                              WHERE s.sc_id = sc.sc_id AND s.years = ? AND s.deleted_at IS NULL
+                                AND (s.hit1tested = 1 OR s.hit2tested = 1 OR s.hit3tested = 1))
+                 ORDER BY sc.sc_smis LIMIT 1'
+            );
+            $f->execute([$area . '%', current_year()]);
             $scid = (string)($f->fetchColumn() ?: '');
+            if ($scid === '') {   // ทั้งเขตยังไม่มีใครสอบ → โรงเรียนแรกตาม SMIS
+                $f = db()->prepare('SELECT sc_id FROM schools WHERE sc_smis LIKE ? ORDER BY sc_smis LIMIT 1');
+                $f->execute([$area . '%']);
+                $scid = (string)($f->fetchColumn() ?: '');
+            }
         }
         // resolve บริบทโรงเรียน (ชื่อ/SMIS) จาก sc_id ถ้ามี
         $scSmis = (string)$user['username'];

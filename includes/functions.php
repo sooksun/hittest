@@ -192,22 +192,51 @@ function require_editor(): void
 }
 
 /**
- * ตรวจ username/password กับตาราง users — คืนแถว user ถ้าผ่าน (active + รหัสตรง), ไม่งั้น null
- * ทนกรณีตาราง users ยังไม่ถูกสร้าง (คืน null → login.php ไป fallback SMIS โรงเรียน)
+ * ตรวจ username/password — คืนแถว user (รูปทรงเดียวกับตาราง users) ถ้าผ่าน, ไม่งั้น null
+ *   1) ตาราง users (ถ้ามี) — รหัสเก็บเป็น hash
+ *   2) fallback: ผู้ดูแลเขต จาก master_saonew (login ด้วย user เช่น u5703 หรือ id เช่น 57030000;
+ *      รหัสเก็บเป็น plaintext) → คืนเป็น role=saoadmin, area_code = 4 หลักแรกของ id
+ * ทนกรณีตารางใดตารางหนึ่งยังไม่มี (คืน null → login.php ไป fallback SMIS โรงเรียน)
  */
 function user_authenticate(string $username, string $password, ?PDO $pdo = null): ?array
 {
     if ($username === '' || $password === '') {
         return null;
     }
+    $pdo = $pdo ?? db();
+
+    // 1) ตาราง users (บัญชีจริง — รหัส hash)
     try {
-        $st = ($pdo ?? db())->prepare('SELECT * FROM users WHERE username = ? AND is_active = 1 LIMIT 1');
+        $st = $pdo->prepare('SELECT * FROM users WHERE username = ? AND is_active = 1 LIMIT 1');
         $st->execute([$username]);
         $u = $st->fetch();
+        if ($u && password_verify($password, (string)$u['password_hash'])) {
+            return $u;
+        }
+    } catch (Throwable $e) {
+        // ตาราง users อาจยังไม่ถูกสร้าง — ตกไปลองเขตต่อ
+    }
+
+    // 2) ผู้ดูแลเขต จาก master_saonew (รหัส plaintext) — login ด้วย user หรือ id
+    try {
+        $st = $pdo->prepare('SELECT id, code, code_name, user, password FROM master_saonew WHERE user = ? OR id = ? LIMIT 1');
+        $st->execute([$username, $username]);
+        $r = $st->fetch();
     } catch (Throwable $e) {
         return null;
     }
-    return ($u && password_verify($password, (string)$u['password_hash'])) ? $u : null;
+    if ($r && (string)$r['password'] !== '' && hash_equals((string)$r['password'], $password)) {
+        $area4 = substr(preg_replace('/\D/', '', (string)$r['id']), 0, 4);
+        return [
+            'id'        => 0,                                              // ไม่มีแถวจริงใน users
+            'username'  => (string)($r['user'] ?: $r['id']),
+            'name'      => trim((string)($r['code'] ?: $r['code_name'])) ?: ('เขต ' . $area4),
+            'role'      => 'saoadmin',
+            'area_code' => $area4,
+            'sc_id'     => null,
+        ];
+    }
+    return null;
 }
 
 /** ดึงข้อมูลนักเรียน "ปีปัจจุบัน" จำกัดเฉพาะโรงเรียนที่ login — คืน null ถ้าไม่พบ/ไม่มีสิทธิ์/ถูกลบ (soft delete) */
@@ -243,9 +272,38 @@ function exam_windows(): array
     return $cache = $open;
 }
 
-/** รอบสอบนี้เปิดให้สอบอยู่ไหม (เฉพาะโรงเรียนที่ login) */
+/**
+ * คำสั่งบังคับเปิด/ปิดการสอบ "ทุกโรงเรียน" จากผู้ดูแลส่วนกลาง (app_settings.exam_global_h{N})
+ *   - 'open'   = บังคับเปิดทุกโรงเรียน (ทับค่าโรงเรียน)
+ *   - 'closed' = บังคับปิดทุกโรงเรียน (ทับค่าโรงเรียน)
+ *   - 'auto'   = ไม่บังคับ ปล่อยให้แต่ละโรงเรียนกำหนดเอง (ค่าเริ่มต้น)
+ */
+function exam_global_state(int $hittest): string
+{
+    $v = (string)app_setting('exam_global_h' . $hittest, 'auto');
+    return in_array($v, ['open', 'closed', 'auto'], true) ? $v : 'auto';
+}
+
+/** สถานะบังคับส่วนกลางทั้ง 3 รอบ — [1=>state, 2=>state, 3=>state] */
+function exam_global_states(): array
+{
+    $out = [];
+    foreach (HITTESTS as $h) {
+        $out[$h] = exam_global_state((int)$h);
+    }
+    return $out;
+}
+
+/** รอบสอบนี้เปิดให้สอบอยู่ไหม — คำสั่งส่วนกลางทับค่าโรงเรียน, ถ้า 'auto' ใช้ค่าโรงเรียนที่ login */
 function exam_is_open(int $hittest): bool
 {
+    $g = exam_global_state($hittest);
+    if ($g === 'closed') {
+        return false;
+    }
+    if ($g === 'open') {
+        return true;
+    }
     $w = exam_windows();
     return $w[$hittest] ?? true;
 }
