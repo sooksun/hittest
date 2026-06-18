@@ -36,28 +36,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $q = trim((string)($_POST['q'] ?? ''));
         $where  = [];
         $args   = [];
+        $join   = '';
         if (is_saoadmin()) {
             if ($area === '') {
                 json_response(['status' => 'ok', 'rows' => []]);
             }
-            $where[] = 'sc_smis LIKE ?';
-            $args[]  = $area . '%';
             // เฉพาะโรงเรียนที่ "เคยสอบ hittest จริง" (ปีใดก็ได้) — มีนักเรียนถูกประเมิน >=1 รอบ
-            // ไม่ผูกปีปัจจุบัน (ต้นปีการศึกษาใหม่ยังไม่มีใครสอบ) + ทนฐานเก่าที่ไม่มี deleted_at
-            $where[] = sql_school_has_exam('schools.sc_id', $pdo);
+            // JOIN กับเซ็ต sc_id ที่เคยสอบ (คำนวณครั้งเดียว) — เร็วกว่า correlated EXISTS ต่อโรงเรียนมาก
+            // ทนฐานเก่าที่ไม่มี deleted_at; ไม่ผูกปีปัจจุบัน (ต้นปีการศึกษาใหม่ยังไม่มีใครสอบ)
+            $del  = students_has_column('deleted_at', $pdo) ? ' AND s.deleted_at IS NULL' : '';
+            $join = "JOIN (SELECT s.sc_id FROM students s
+                          WHERE (s.hit1tested = 1 OR s.hit2tested = 1 OR s.hit3tested = 1){$del}
+                          GROUP BY s.sc_id) t ON t.sc_id = sc.sc_id";
+            $where[] = 'sc.sc_smis LIKE ?';
+            $args[]  = $area . '%';
         }
         if ($q !== '') {
-            $where[] = '(sc_smis LIKE ? OR sc_name LIKE ?)';
+            $where[] = '(sc.sc_smis LIKE ? OR sc.sc_name LIKE ?)';
             $args[]  = $q . '%';
             $args[]  = '%' . $q . '%';
         } elseif (!is_saoadmin()) {
             json_response(['status' => 'ok', 'rows' => [], 'hint' => 'พิมพ์เพื่อค้นหา']);  // ผู้ดูแลระบบต้องค้นก่อน (31k)
         }
-        $sql = 'SELECT sc_id, sc_smis, sc_name FROM schools';
+        $sql = "SELECT sc.sc_id, sc.sc_smis, sc.sc_name FROM schools sc {$join}";
         if ($where) {
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
-        $sql .= ' ORDER BY sc_smis LIMIT 50';
+        $sql .= ' ORDER BY sc.sc_smis LIMIT 50';
         $st = $pdo->prepare($sql);
         $st->execute($args);
         json_response(['status' => 'ok', 'rows' => $st->fetchAll()]);
