@@ -239,6 +239,38 @@ function user_authenticate(string $username, string $password, ?PDO $pdo = null)
     return null;
 }
 
+/**
+ * ตาราง students มีคอลัมน์นี้ไหม (cache ต่อ request) — ใช้ทำให้ query ทนฐานเก่าที่ยังไม่ migrate
+ * (เช่น ยังไม่มี deleted_at/years) โดยไม่ทำให้ทั้งระบบพัง
+ */
+function students_has_column(string $col, ?PDO $pdo = null): bool
+{
+    static $cache = [];
+    if (!array_key_exists($col, $cache)) {
+        try {
+            $st = ($pdo ?? db())->prepare('SHOW COLUMNS FROM students LIKE ?');
+            $st->execute([$col]);
+            $cache[$col] = (bool)$st->fetch();
+        } catch (Throwable $e) {
+            $cache[$col] = false;
+        }
+    }
+    return $cache[$col];
+}
+
+/**
+ * เงื่อนไข SQL ระบุว่า "โรงเรียนนี้เคยสอบ hittest จริง" — มีนักเรียนถูกประเมิน >=1 รอบ
+ *   $scCol = ชื่อคอลัมน์ sc_id ของตารางโรงเรียนใน query หลัก (เช่น 'schools.sc_id' หรือ 'sc.sc_id')
+ * กรอง deleted_at เฉพาะเมื่อฐานมีคอลัมน์นั้น (ฐานเก่าไม่มี) — คืน EXISTS(...) พร้อมใช้, ไม่ต้องผูก arg
+ */
+function sql_school_has_exam(string $scCol, ?PDO $pdo = null): string
+{
+    $del = students_has_column('deleted_at', $pdo) ? ' AND s.deleted_at IS NULL' : '';
+    return "EXISTS (SELECT 1 FROM students s
+                   WHERE s.sc_id = {$scCol}{$del}
+                     AND (s.hit1tested = 1 OR s.hit2tested = 1 OR s.hit3tested = 1))";
+}
+
 /** ดึงข้อมูลนักเรียน "ปีปัจจุบัน" จำกัดเฉพาะโรงเรียนที่ login — คืน null ถ้าไม่พบ/ไม่มีสิทธิ์/ถูกลบ (soft delete) */
 function find_student(string $stuid): ?array
 {

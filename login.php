@@ -27,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($scid === '' && $area !== '') {
             $f = db()->prepare(
                 'SELECT sc.sc_id FROM schools sc
-                 WHERE sc.sc_smis LIKE ?
-                   AND EXISTS (SELECT 1 FROM students s
-                              WHERE s.sc_id = sc.sc_id AND s.deleted_at IS NULL
-                                AND (s.hit1tested = 1 OR s.hit2tested = 1 OR s.hit3tested = 1))
+                 WHERE sc.sc_smis LIKE ? AND ' . sql_school_has_exam('sc.sc_id') . '
                  ORDER BY sc.sc_smis LIMIT 1'
             );
             $f->execute([$area . '%']);
