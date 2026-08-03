@@ -32,6 +32,9 @@ function fmt_be2(?string $dt): string
 
 $icons = [1 => '📕', 2 => '📗', 3 => '📘'];
 
+// คำสั่งบังคับจากผู้ดูแลส่วนกลาง (ทับค่าโรงเรียน) — ถ้า != 'auto' โรงเรียนแก้รอบนั้นเองไม่ได้
+$globalStates = exam_global_states();
+
 $page_title = 'จัดการสอบ';
 $active = 'examctl';
 require __DIR__ . '/includes/header.php';
@@ -42,8 +45,11 @@ require __DIR__ . '/includes/header.php';
 
 <div class="row g-4" style="max-width:980px">
 <?php foreach ([1, 2, 3] as $h):
-    $isOpen = isset($win[$h]) ? ((int)$win[$h]['is_open'] === 1) : true;   // ค่าเริ่มต้น = เปิด
-    $upd    = isset($win[$h]) ? fmt_be2($win[$h]['updated_at']) : '';
+    $schoolOpen = isset($win[$h]) ? ((int)$win[$h]['is_open'] === 1) : true;   // ค่าเริ่มต้น = เปิด
+    $gstate     = $globalStates[$h] ?? 'auto';
+    $forced     = $gstate !== 'auto';
+    $isOpen     = $forced ? ($gstate === 'open') : $schoolOpen;   // สถานะที่มีผลจริง
+    $upd        = isset($win[$h]) ? fmt_be2($win[$h]['updated_at']) : '';
 ?>
     <div class="col-md-4">
         <div class="ht-card exam-win h-100" data-hit="<?= $h ?>" data-open="<?= $isOpen ? 1 : 0 ?>">
@@ -55,9 +61,18 @@ require __DIR__ . '/includes/header.php';
             </div>
             <p class="text-muted mb-1">สอบแล้ว <b style="color:var(--c-green-ink)"><?= $testedByHit[$h] ?></b> / <?= $total ?> คน</p>
             <p class="text-muted mb-3" style="font-size:.85rem;min-height:1.2em"><?= htmlspecialchars($upd) ?></p>
-            <button class="ht-btn ht-btn--sm ht-btn--block js-toggle <?= $isOpen ? 'ht-btn--coral' : '' ?>" data-hit="<?= $h ?>">
-                <?= $isOpen ? 'ปิดการสอบ' : 'เปิดการสอบ' ?>
-            </button>
+            <?php if ($forced): ?>
+                <div class="ht-badge ht-badge--special mb-2" style="white-space:normal">🔧 ส่วนกลาง<?= $gstate === 'open' ? 'บังคับเปิด' : 'บังคับปิด' ?> รอบนี้ — ปรับเองไม่ได้</div>
+                <?php if (is_admin()): /* ผู้ดูแลระบบแก้คำสั่งส่วนกลางได้ — พาไปหน้านั้นแทนปุ่มตาย */ ?>
+                <a class="ht-btn ht-btn--sm ht-btn--block" href="admin_exam_control.php">🔧 ไปแก้คำสั่งส่วนกลาง</a>
+                <?php else: ?>
+                <button class="ht-btn ht-btn--sm ht-btn--block" disabled>🔒 ควบคุมโดยส่วนกลาง</button>
+                <?php endif; ?>
+            <?php else: ?>
+                <button class="ht-btn ht-btn--sm ht-btn--block js-toggle <?= $isOpen ? 'ht-btn--coral' : '' ?>" data-hit="<?= $h ?>">
+                    <?= $isOpen ? 'ปิดการสอบ' : 'เปิดการสอบ' ?>
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 <?php endforeach; ?>
